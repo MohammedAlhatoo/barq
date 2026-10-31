@@ -158,7 +158,13 @@ class _CompareCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     return BarqCard(
       color: BarqColors.ink,
-      onTap: () => context.push(Routes.compare),
+      // The address may have changed there, and the total depends on it.
+      onTap: () async {
+        final summary = context.read<CartSummaryCubit>();
+        final cart = context.read<CartCubit>();
+        await context.push(Routes.compare);
+        summary.refresh(cart.state);
+      },
       child: Row(
         children: [
           const BarqIconTile(BarqIcons.percent, tone: BarqTileTone.darkOrange),

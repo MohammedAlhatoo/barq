@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:barq_core/barq_core.dart';
 import 'package:barq_customer/app/app.dart';
 import 'package:barq_customer/app/di.dart';
 import 'package:barq_customer/app/locale_cubit.dart';
+import 'package:barq_customer/features/account/data/account_repository.dart';
+import 'package:barq_customer/features/account/data/avatar_picker.dart';
+import 'package:barq_customer/features/account/data/local_session.dart';
 import 'package:barq_customer/features/auth/data/auth_repository.dart';
 import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_repository.dart';
@@ -140,6 +144,13 @@ class FakeVendorActions implements VendorActions {
   }
 }
 
+class FakeAvatarPicker implements AvatarPicker {
+  File? file;
+
+  @override
+  Future<File?> pick() async => file;
+}
+
 const configJson = {
   'project': {'support_phone': '0592525487'},
   'delivery_confirmation': 'photo',
@@ -218,6 +229,12 @@ class TestApp {
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),
+      accountRepository: ApiAccountRepository(
+        api,
+        UploadService(api: api),
+        LocalSession(auth: auth, cart: cart, prefs: sharedPrefs),
+      ),
+      avatarPicker: FakeAvatarPicker(),
       prefs: sharedPrefs,
     );
     return TestApp._(deps, server, network, location);

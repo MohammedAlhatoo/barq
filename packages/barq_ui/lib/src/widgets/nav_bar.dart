@@ -63,6 +63,8 @@ class BarqNavBar extends StatelessWidget {
               BarqIcon(items[i].icon, size: BarqSizes.icon, color: c),
               const SizedBox(height: 4),
               Text(items[i].label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: BarqText.nav.copyWith(
                       color: c,
                       fontWeight: on ? FontWeight.w600 : FontWeight.w400)),

@@ -3,6 +3,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/account/state/account_cubit.dart';
+import '../features/account/state/address_form_cubit.dart';
+import '../features/account/state/addresses_cubit.dart';
+import '../features/account/state/delete_account_cubit.dart';
+import '../features/account/state/edit_profile_cubit.dart';
+import '../features/account/ui/account_screen.dart';
+import '../features/account/ui/address_form_screen.dart';
+import '../features/account/ui/addresses_screen.dart';
+import '../features/account/ui/delete_account_screen.dart';
+import '../features/account/ui/edit_profile_screen.dart';
 import '../features/auth/data/auth_models.dart';
 import '../features/auth/state/onboarding_cubit.dart';
 import '../features/auth/state/otp_cubit.dart';
@@ -54,6 +64,12 @@ abstract final class Routes {
   static const product = '/product/:id';
   static const vendor = '/vendor/:id';
   static const vendors = '/vendors';
+  static const accountEdit = '/account/edit';
+  static const accountDelete = '/account/delete';
+  static const addresses = '/addresses';
+  static const addressNew = '/addresses/new';
+  static const addressEdit = '/addresses/edit';
+  static const notifications = '/notifications';
 
   static String productOf(int id) => '/product/$id';
   static String vendorOf(int id) => '/vendor/$id';
@@ -70,6 +86,9 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     final path = state.matchedLocation;
     if (!auth.isLoggedIn && !Routes.public.contains(path)) return Routes.login;
     if (path == Routes.otp && state.extra is! OtpTicket) return Routes.login;
+    if (path == Routes.addressEdit && state.extra is! SavedAddress) {
+      return Routes.addresses;
+    }
     return null;
   },
   routes: [
@@ -213,6 +232,55 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: Routes.accountEdit,
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => EditProfileCubit(
+            repository: deps.accountRepository,
+            picker: deps.avatarPicker,
+            locale: deps.locale,
+          )..load(),
+          child: const EditProfileScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.accountDelete,
+      builder: (context, _) => BlocProvider(
+        create: (context) => DeleteAccountCubit(
+          context.read<AppDependencies>().accountRepository,
+        ),
+        child: const DeleteAccountScreen(),
+      ),
+    ),
+    GoRoute(
+      path: Routes.addresses,
+      builder: (context, _) => BlocProvider(
+        create: (context) =>
+            AddressesCubit(context.read<AppDependencies>().accountRepository)
+              ..load(),
+        child: const AddressesScreen(),
+      ),
+    ),
+    GoRoute(
+      path: Routes.addressNew,
+      builder: (context, _) => _addressForm(context, null),
+    ),
+    GoRoute(
+      path: Routes.addressEdit,
+      builder: (context, state) =>
+          _addressForm(context, state.extra! as SavedAddress),
+    ),
+    GoRoute(
+      path: Routes.notifications,
+      builder: (context, _) => PlaceholderScreen(
+        title: AppLocalizations.of(context).notificationsTitle,
+        design: 'design/06_account_06.png',
+        back: true,
+      ),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, shell) => MainShell(shell: shell),
       branches: [
@@ -225,6 +293,7 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
                   context.read<AppDependencies>().browseRepository,
                   context.read<AppDependencies>().userLocation,
                   context.read<AppDependencies>().scope,
+                  context.read<AppDependencies>().accountRepository.changes,
                 )..load(),
                 child: const HomeScreen(),
               ),
@@ -259,15 +328,39 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           'design/05_after_order_03.png',
           (l10n) => l10n.navOrders,
         ),
-        _tab(
-          Routes.account,
-          'design/06_account_01.png',
-          (l10n) => l10n.navAccount,
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.account,
+              builder: (context, _) => BlocProvider(
+                create: (context) => AccountCubit(
+                  context.read<AppDependencies>().accountRepository,
+                )..load(),
+                child: const AccountScreen(),
+              ),
+            ),
+          ],
         ),
       ],
     ),
   ],
 );
+
+Widget _addressForm(BuildContext context, SavedAddress? existing) {
+  final deps = context.read<AppDependencies>();
+  final l10n = AppLocalizations.of(context);
+  return BlocProvider(
+    create: (_) => AddressFormCubit(
+      repository: deps.accountRepository,
+      location: deps.locationRepository,
+      homeLabel: l10n.addressHome,
+      workLabel: l10n.addressWork,
+      otherLabel: l10n.addressOther,
+      existing: existing,
+    )..start(),
+    child: const AddressFormScreen(),
+  );
+}
 
 StatefulShellBranch _tab(
   String path,

@@ -144,41 +144,52 @@ class BarqAvatar extends StatelessWidget {
       {super.key,
       this.size = 48,
       this.dark = false,
+      this.light = false,
       this.border = 0,
       this.imageUrl,
+      this.image,
       this.badge});
   final String initial;
   final double size;
   final bool dark;
 
+  /// White circle with an orange letter (the account card).
+  final bool light;
+
   /// White ring width (profile header uses 4–5).
   final double border;
   final String? imageUrl;
+
+  /// A picked picture that is not uploaded yet. Wins over [imageUrl].
+  final ImageProvider? image;
 
   /// Small widget at the bottom-end (camera button on edit profile).
   final Widget? badge;
 
   @override
   Widget build(BuildContext context) {
+    final url = imageUrl;
+    final picture = image ?? (url != null ? NetworkImage(url) : null);
     final circle = Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: dark ? null : BarqGradients.orange,
-        color: dark ? BarqColors.ink : null,
+        gradient: dark || light ? null : BarqGradients.orange,
+        color: dark ? BarqColors.ink : (light ? Colors.white : null),
         border:
             border > 0 ? Border.all(color: Colors.white, width: border) : null,
-        image: imageUrl != null
-            ? DecorationImage(image: NetworkImage(imageUrl!), fit: BoxFit.cover)
+        image: picture != null
+            ? DecorationImage(image: picture, fit: BoxFit.cover)
             : null,
       ),
-      child: imageUrl != null
+      child: picture != null
           ? null
           : Text(initial,
-              style: BarqText.h2
-                  .copyWith(color: Colors.white, fontSize: size * .38)),
+              style: BarqText.h2.copyWith(
+                  color: light ? BarqColors.primary : Colors.white,
+                  fontSize: size * .38)),
     );
     if (badge == null) return circle;
     return Stack(clipBehavior: Clip.none, children: [

@@ -122,7 +122,10 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | `.map` + `.mpin` | `BarqMapBackground` + `BarqMapPin(style)` |
 | `.blob` + `.ill` | `BarqBlob` / `BarqIllustrationArea` |
 | `.wm` شعار "برق" | `BarqWordmark(size)` |
-| صورة الحرف (م / خ) | `BarqAvatar('م', dark)` |
+| صورة الحرف (م / خ) | `BarqAvatar('م', dark, light, image, badge)` |
+| الكرت البرتقالي بحسابي | `BarqProfileCard(initial, name, phone, stats, onEdit)` |
+| كرت عنوان محفوظ | `BarqAddressCard(icon, title, subtitle, badge, selected, onEdit, onDelete, trailing)` |
+| رسمة حذف الحساب · دبوس وسط الخريطة | `BarqDeleteAccountArt` · `BarqMapCenterPin(hint)` |
 | شاشات الحالات (خارج المنطقة، فارغ، صيانة…) | `BarqStateView(...)` + `BarqIconCard` |
 | بانر ملون (عرض، أرباح، النقد) | `BarqBanner(gradient: BarqGradients.orange/green/cash)` |
 | `.i.i-NAME` | `BarqIcon(BarqIcons.NAME, size: BarqSizes.iconM)` |

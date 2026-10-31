@@ -43,13 +43,15 @@ class AuthSession {
   bool get needsProfile => isNewUser || (name?.trim().isEmpty ?? true);
 }
 
-/// The fields of the `Address` schema that the welcome screen uses.
+/// The `Address` schema.
 class SavedAddress {
   const SavedAddress({
     required this.id,
     required this.label,
     required this.lat,
     required this.lng,
+    this.details,
+    this.isDefault = false,
   });
 
   factory SavedAddress.fromJson(Map<String, dynamic> json) => SavedAddress(
@@ -57,10 +59,14 @@ class SavedAddress {
     label: json['label'] as String?,
     lat: (json['lat'] as num).toDouble(),
     lng: (json['lng'] as num).toDouble(),
+    details: json['details'] as String?,
+    isDefault: json['is_default'] as bool? ?? false,
   );
 
   final int id;
   final String? label;
   final double lat;
   final double lng;
+  final String? details;
+  final bool isDefault;
 }

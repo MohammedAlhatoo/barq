@@ -542,4 +542,164 @@ class AppLocalizationsAr extends AppLocalizations {
   String compareSave(String price) {
     return 'وفّر $price';
   }
+
+  @override
+  String get accountTitle => 'حسابي';
+
+  @override
+  String get accountOrders => 'طلب';
+
+  @override
+  String get accountAddresses => 'عناوين';
+
+  @override
+  String get accountNoName => 'بدون اسم';
+
+  @override
+  String get accountMyAddresses => 'عناويني';
+
+  @override
+  String get accountNotifications => 'الإشعارات';
+
+  @override
+  String get accountLanguage => 'اللغة';
+
+  @override
+  String get accountLanguageName => 'العربية';
+
+  @override
+  String get accountHelp => 'المساعدة والدعم';
+
+  @override
+  String get accountLogout => 'تسجيل الخروج';
+
+  @override
+  String get accountLogoutBody => 'بنمسح سلتك وعمليات البحث من هذا الجهاز.';
+
+  @override
+  String get commonCancel => 'إلغاء';
+
+  @override
+  String get profileTitle => 'الملف الشخصي';
+
+  @override
+  String get profileName => 'الاسم';
+
+  @override
+  String get profilePhone => 'رقم الجوال';
+
+  @override
+  String get profilePhoneHelper => 'لتغيير الرقم تواصل مع الدعم';
+
+  @override
+  String get profileLanguage => 'لغة التطبيق';
+
+  @override
+  String get profileAddressesBody => 'المنطقة بتتحدد من موقع العنوان';
+
+  @override
+  String get profileSave => 'حفظ التغييرات';
+
+  @override
+  String get profileDelete => 'حذف الحساب';
+
+  @override
+  String get deleteTitle => 'حذف الحساب نهائيًا؟';
+
+  @override
+  String get deleteBody => 'لا يمكن التراجع عن هذه الخطوة.';
+
+  @override
+  String get deleteNameAddresses => 'سيُحذف اسمك وعناوينك المحفوظة';
+
+  @override
+  String get deleteOrders => 'لن تتمكن من رؤية طلباتك السابقة';
+
+  @override
+  String get deleteActive => 'الطلبات الجارية يجب أن تنتهي أولًا';
+
+  @override
+  String get deleteUnderstand => 'أفهم أن حذف الحساب نهائي';
+
+  @override
+  String get deleteConfirm => 'حذف الحساب';
+
+  @override
+  String get addressesTitle => 'عناويني';
+
+  @override
+  String get addressesDefault => 'الافتراضي';
+
+  @override
+  String get addressesAdd => 'إضافة عنوان جديد';
+
+  @override
+  String get addressesEmpty => 'ما عندك عناوين محفوظة';
+
+  @override
+  String get addressesEmptyBody =>
+      'أضف عنوانك عشان نعرض لك المتاجر اللي بتوصّلك.';
+
+  @override
+  String get addressDeleteTitle => 'حذف هذا العنوان؟';
+
+  @override
+  String get addressDeleteBody => 'الطلبات السابقة تحتفظ بنسخة منه.';
+
+  @override
+  String get addressDeleteConfirm => 'حذف العنوان';
+
+  @override
+  String get addressUnnamed => 'عنوان';
+
+  @override
+  String get addressPickerTitle => 'اختر عنوان التوصيل';
+
+  @override
+  String get addressFormTitle => 'تفاصيل العنوان';
+
+  @override
+  String get addressMapHint => 'حرّك الخريطة لتحديد الموقع';
+
+  @override
+  String get addressHome => 'البيت';
+
+  @override
+  String get addressWork => 'العمل';
+
+  @override
+  String get addressOther => 'أخرى';
+
+  @override
+  String get addressOtherHint => 'اسم العنوان (مثل: بيت أهلي)';
+
+  @override
+  String get addressDetailsHint => 'الشارع، أقرب معلم، العمارة، الطابق';
+
+  @override
+  String get addressZoneUnknown => 'نتحقق من المنطقة عند الحفظ';
+
+  @override
+  String get addressZoneLabel => 'موقع العنوان';
+
+  @override
+  String get addressInZone => 'داخل الخدمة';
+
+  @override
+  String get addressOutOfZone => 'خارج الخدمة';
+
+  @override
+  String get addressMakeDefault => 'اجعله العنوان الافتراضي';
+
+  @override
+  String get addressSave => 'حفظ العنوان';
+
+  @override
+  String get addressLocateFailed => 'تعذّر تحديد موقعك. حرّك الخريطة يدويًا.';
+
+  @override
+  String get addressMapCredit => '© OpenStreetMap';
+
+  @override
+  String get notificationsTitle => 'الإشعارات';
 }

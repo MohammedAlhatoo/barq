@@ -6,6 +6,8 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>برق يستخدم صورك لتغيير صورة ملفك الشخصي.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>برق يستخدم موقعك لعرض المتاجر التي توصّل إلى منطقتك.</string>
 	<key>CFBundleDisplayName</key>

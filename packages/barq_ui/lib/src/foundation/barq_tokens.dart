@@ -30,6 +30,10 @@ abstract final class BarqColors {
   static const grab = Color(0xFFE8DAD2);
   static const toggleOff = Color(0xFFE3D7D0);
   static const mapBg = Color(0xFFF4EEE8);
+  static const onOrangeTint = Color(0x1AFFFFFF); // circle on the profile card
+  static const onOrangePanel = Color(0x2EFFFFFF); // stats on the profile card
+  static const onOrangeMuted = Color(0xFFFFE3D1); // small text on orange
+  static const addressAction = Color(0xFFF6EEE9); // edit button on address
   static const dotRed = Color(0xFFFF4D2E);
 
   // Semantic
@@ -150,6 +154,8 @@ abstract final class BarqRadius {
   static const input = 20.0;
   static const otp = 20.0;
   static const iconTile = 16.0;
+  static const profileCard = 30.0;
+  static const profileStat = 18.0;
   static const sheet = 34.0;
   static const phone = 48.0;
   static const pill = 999.0;
@@ -231,6 +237,19 @@ abstract final class BarqSizes {
   static const homeVendorCard = 200.0;
   static const homeVendorCardHeight = 156.0;
   static const vendorRowLogo = 62.0;
+
+  // Account.
+  static const profileAvatar = 58.0;
+  static const profileAvatarLarge = 104.0;
+  static const profileAvatarBadge = 34.0;
+  static const profileAvatarArea = 150.0;
+  static const addressAction = 40.0;
+  static const addressMapPin = 110.0;
+  static const addressMapMin = 110.0;
+  static const addressPickerList = 320.0;
+  static const deleteAccountArt = 210.0;
+  static const deleteAccountBlob = 180.0;
+  static const deleteAccountIcon = 110.0;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)
   static const iconS = 16.0;

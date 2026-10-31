@@ -1063,6 +1063,324 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وفّر {price}'**
   String compareSave(String price);
+
+  /// No description provided for @accountTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسابي'**
+  String get accountTitle;
+
+  /// No description provided for @accountOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب'**
+  String get accountOrders;
+
+  /// No description provided for @accountAddresses.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناوين'**
+  String get accountAddresses;
+
+  /// No description provided for @accountNoName.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون اسم'**
+  String get accountNoName;
+
+  /// No description provided for @accountMyAddresses.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناويني'**
+  String get accountMyAddresses;
+
+  /// No description provided for @accountNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get accountNotifications;
+
+  /// No description provided for @accountLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get accountLanguage;
+
+  /// No description provided for @accountLanguageName.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get accountLanguageName;
+
+  /// No description provided for @accountHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'المساعدة والدعم'**
+  String get accountHelp;
+
+  /// No description provided for @accountLogout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get accountLogout;
+
+  /// No description provided for @accountLogoutBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنمسح سلتك وعمليات البحث من هذا الجهاز.'**
+  String get accountLogoutBody;
+
+  /// No description provided for @commonCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء'**
+  String get commonCancel;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الملف الشخصي'**
+  String get profileTitle;
+
+  /// No description provided for @profileName.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاسم'**
+  String get profileName;
+
+  /// No description provided for @profilePhone.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الجوال'**
+  String get profilePhone;
+
+  /// No description provided for @profilePhoneHelper.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتغيير الرقم تواصل مع الدعم'**
+  String get profilePhoneHelper;
+
+  /// No description provided for @profileLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'لغة التطبيق'**
+  String get profileLanguage;
+
+  /// No description provided for @profileAddressesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنطقة بتتحدد من موقع العنوان'**
+  String get profileAddressesBody;
+
+  /// No description provided for @profileSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ التغييرات'**
+  String get profileSave;
+
+  /// No description provided for @profileDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الحساب'**
+  String get profileDelete;
+
+  /// No description provided for @deleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الحساب نهائيًا؟'**
+  String get deleteTitle;
+
+  /// No description provided for @deleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن التراجع عن هذه الخطوة.'**
+  String get deleteBody;
+
+  /// No description provided for @deleteNameAddresses.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيُحذف اسمك وعناوينك المحفوظة'**
+  String get deleteNameAddresses;
+
+  /// No description provided for @deleteOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'لن تتمكن من رؤية طلباتك السابقة'**
+  String get deleteOrders;
+
+  /// No description provided for @deleteActive.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات الجارية يجب أن تنتهي أولًا'**
+  String get deleteActive;
+
+  /// No description provided for @deleteUnderstand.
+  ///
+  /// In ar, this message translates to:
+  /// **'أفهم أن حذف الحساب نهائي'**
+  String get deleteUnderstand;
+
+  /// No description provided for @deleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الحساب'**
+  String get deleteConfirm;
+
+  /// No description provided for @addressesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عناويني'**
+  String get addressesTitle;
+
+  /// No description provided for @addressesDefault.
+  ///
+  /// In ar, this message translates to:
+  /// **'الافتراضي'**
+  String get addressesDefault;
+
+  /// No description provided for @addressesAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عنوان جديد'**
+  String get addressesAdd;
+
+  /// No description provided for @addressesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك عناوين محفوظة'**
+  String get addressesEmpty;
+
+  /// No description provided for @addressesEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف عنوانك عشان نعرض لك المتاجر اللي بتوصّلك.'**
+  String get addressesEmptyBody;
+
+  /// No description provided for @addressDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف هذا العنوان؟'**
+  String get addressDeleteTitle;
+
+  /// No description provided for @addressDeleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات السابقة تحتفظ بنسخة منه.'**
+  String get addressDeleteBody;
+
+  /// No description provided for @addressDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف العنوان'**
+  String get addressDeleteConfirm;
+
+  /// No description provided for @addressUnnamed.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان'**
+  String get addressUnnamed;
+
+  /// No description provided for @addressPickerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر عنوان التوصيل'**
+  String get addressPickerTitle;
+
+  /// No description provided for @addressFormTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل العنوان'**
+  String get addressFormTitle;
+
+  /// No description provided for @addressMapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'حرّك الخريطة لتحديد الموقع'**
+  String get addressMapHint;
+
+  /// No description provided for @addressHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'البيت'**
+  String get addressHome;
+
+  /// No description provided for @addressWork.
+  ///
+  /// In ar, this message translates to:
+  /// **'العمل'**
+  String get addressWork;
+
+  /// No description provided for @addressOther.
+  ///
+  /// In ar, this message translates to:
+  /// **'أخرى'**
+  String get addressOther;
+
+  /// No description provided for @addressOtherHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اسم العنوان (مثل: بيت أهلي)'**
+  String get addressOtherHint;
+
+  /// No description provided for @addressDetailsHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشارع، أقرب معلم، العمارة، الطابق'**
+  String get addressDetailsHint;
+
+  /// No description provided for @addressZoneUnknown.
+  ///
+  /// In ar, this message translates to:
+  /// **'نتحقق من المنطقة عند الحفظ'**
+  String get addressZoneUnknown;
+
+  /// No description provided for @addressZoneLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقع العنوان'**
+  String get addressZoneLabel;
+
+  /// No description provided for @addressInZone.
+  ///
+  /// In ar, this message translates to:
+  /// **'داخل الخدمة'**
+  String get addressInZone;
+
+  /// No description provided for @addressOutOfZone.
+  ///
+  /// In ar, this message translates to:
+  /// **'خارج الخدمة'**
+  String get addressOutOfZone;
+
+  /// No description provided for @addressMakeDefault.
+  ///
+  /// In ar, this message translates to:
+  /// **'اجعله العنوان الافتراضي'**
+  String get addressMakeDefault;
+
+  /// No description provided for @addressSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ العنوان'**
+  String get addressSave;
+
+  /// No description provided for @addressLocateFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحديد موقعك. حرّك الخريطة يدويًا.'**
+  String get addressLocateFailed;
+
+  /// No description provided for @addressMapCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'© OpenStreetMap'**
+  String get addressMapCredit;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get notificationsTitle;
 }
 
 class _AppLocalizationsDelegate

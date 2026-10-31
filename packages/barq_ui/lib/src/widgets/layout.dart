@@ -187,6 +187,7 @@ class BarqListTile extends StatelessWidget {
     this.showDivider = true,
     this.titleColor,
     this.value,
+    this.badge,
   });
 
   final String title;
@@ -202,6 +203,9 @@ class BarqListTile extends StatelessWidget {
 
   /// Small grey value before the chevron ("العربية", "دراجة نارية").
   final String? value;
+
+  /// Small pill before the chevron (unread notifications).
+  final Widget? badge;
 
   @override
   Widget build(BuildContext context) {
@@ -239,6 +243,7 @@ class BarqListTile extends StatelessWidget {
               Text(value!, style: BarqText.xs.copyWith(color: p.textMuted)),
               const SizedBox(width: 8)
             ],
+            if (badge != null) ...[badge!, const SizedBox(width: 8)],
             if (trailing != null)
               trailing!
             else if (showChevron)

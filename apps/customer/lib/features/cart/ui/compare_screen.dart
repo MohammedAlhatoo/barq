@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/di.dart';
 import '../../../app/router.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../account/ui/widgets/address_picker_sheet.dart';
 import '../data/cart_models.dart';
 import '../state/cart_cubit.dart';
 import '../state/compare_cubit.dart';
@@ -18,13 +20,31 @@ import 'widgets/out_of_zone_view.dart';
 class CompareScreen extends StatelessWidget {
   const CompareScreen({super.key});
 
+  /// The comparison uses the default address, so the chosen one becomes it.
+  /// If the server refuses, the reload shows out of zone again.
+  Future<void> _changeAddress(BuildContext context) async {
+    final cubit = context.read<CompareCubit>();
+    final account = context.read<AppDependencies>().accountRepository;
+    final address = await AddressPickerSheet.show(context);
+    if (address == null) return;
+    try {
+      if (!address.isDefault) await account.makeDefault(address);
+    } on ApiException catch (e) {
+      debugPrint('Address not made default: ${e.code}');
+    }
+    await cubit.load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CompareCubit, CompareState>(
       builder: (context, state) {
         final comparison = state.comparison;
         return switch (state.status) {
-          CompareStatus.outOfZone => OutOfZoneView(code: state.errorCode),
+          CompareStatus.outOfZone => OutOfZoneView(
+            code: state.errorCode,
+            onChangeAddress: () => _changeAddress(context),
+          ),
           CompareStatus.ready
               when comparison != null &&
                   comparison.stores.isNotEmpty &&
@@ -56,8 +76,11 @@ class _MessageScreen extends StatelessWidget {
         message: l10n.noAddressBody,
         icon: BarqIcons.pin,
         actionLabel: l10n.noAddressAdd,
-        // The addresses screen itself comes in phase 4.
-        onAction: () => context.go(Routes.account),
+        onAction: () async {
+          final cubit = context.read<CompareCubit>();
+          await context.push(Routes.addressNew);
+          await cubit.load();
+        },
       ),
       CompareStatus.ready => BarqMessageView(
         title: l10n.noStoresTitle,

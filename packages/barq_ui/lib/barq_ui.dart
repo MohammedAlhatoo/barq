@@ -21,6 +21,7 @@ export 'src/foundation/barq_asset_names.dart';
 export 'src/foundation/barq_assets.dart';
 export 'src/foundation/barq_theme.dart';
 export 'src/foundation/barq_tokens.dart';
+export 'src/widgets/account.dart';
 export 'src/widgets/buttons.dart' hide BarqIconsInternal;
 export 'src/widgets/indicators.dart';
 export 'src/widgets/inputs.dart';

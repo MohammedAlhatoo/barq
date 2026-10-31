@@ -29,15 +29,24 @@ class HomeState {
 }
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._repository, this._location, this._shop)
-    : super(const HomeState()) {
+  HomeCubit(
+    this._repository,
+    this._location,
+    this._shop,
+    Stream<void> accountChanges,
+  ) : super(const HomeState()) {
     _scope = _shop.stream.listen((_) => _scopeChanged());
+    _account = accountChanges.listen((_) => load());
   }
 
   final BrowseRepository _repository;
   final UserLocation _location;
   final ShopScopeCubit _shop;
   late final StreamSubscription<ShopScope> _scope;
+
+  /// A new default address changes the nearest stores, and a new name changes
+  /// the greeting. Home stays alive behind the tabs, so it must hear about it.
+  late final StreamSubscription<void> _account;
 
   /// The nearest open store, or null when no location is known.
   int? _nearest;
@@ -127,6 +136,7 @@ class HomeCubit extends Cubit<HomeState> {
   @override
   Future<void> close() {
     _scope.cancel();
+    _account.cancel();
     return super.close();
   }
 

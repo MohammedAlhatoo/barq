@@ -546,4 +546,169 @@ class AppLocalizationsEn extends AppLocalizations {
   String compareSave(String price) {
     return 'Save $price';
   }
+
+  @override
+  String get accountTitle => 'My account';
+
+  @override
+  String get accountOrders => 'Orders';
+
+  @override
+  String get accountAddresses => 'Addresses';
+
+  @override
+  String get accountNoName => 'No name';
+
+  @override
+  String get accountMyAddresses => 'My addresses';
+
+  @override
+  String get accountNotifications => 'Notifications';
+
+  @override
+  String get accountLanguage => 'Language';
+
+  @override
+  String get accountLanguageName => 'English';
+
+  @override
+  String get accountHelp => 'Help & support';
+
+  @override
+  String get accountLogout => 'Log out';
+
+  @override
+  String get accountLogoutBody =>
+      'Your cart and searches will be removed from this phone.';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileName => 'Name';
+
+  @override
+  String get profilePhone => 'Phone number';
+
+  @override
+  String get profilePhoneHelper => 'To change your number, contact support';
+
+  @override
+  String get profileLanguage => 'App language';
+
+  @override
+  String get profileAddressesBody =>
+      'Your area comes from the address location';
+
+  @override
+  String get profileSave => 'Save changes';
+
+  @override
+  String get profileDelete => 'Delete account';
+
+  @override
+  String get deleteTitle => 'Delete your account for good?';
+
+  @override
+  String get deleteBody => 'This cannot be undone.';
+
+  @override
+  String get deleteNameAddresses =>
+      'Your name and saved addresses will be deleted';
+
+  @override
+  String get deleteOrders => 'You will no longer see your past orders';
+
+  @override
+  String get deleteActive => 'Running orders must finish first';
+
+  @override
+  String get deleteUnderstand =>
+      'I understand that deleting my account is final';
+
+  @override
+  String get deleteConfirm => 'Delete account';
+
+  @override
+  String get addressesTitle => 'My addresses';
+
+  @override
+  String get addressesDefault => 'Default';
+
+  @override
+  String get addressesAdd => 'Add a new address';
+
+  @override
+  String get addressesEmpty => 'You have no saved addresses';
+
+  @override
+  String get addressesEmptyBody =>
+      'Add your address so we can show the stores that deliver to you.';
+
+  @override
+  String get addressDeleteTitle => 'Delete this address?';
+
+  @override
+  String get addressDeleteBody => 'Past orders keep their own copy.';
+
+  @override
+  String get addressDeleteConfirm => 'Delete address';
+
+  @override
+  String get addressUnnamed => 'Address';
+
+  @override
+  String get addressPickerTitle => 'Choose a delivery address';
+
+  @override
+  String get addressFormTitle => 'Address details';
+
+  @override
+  String get addressMapHint => 'Move the map to set the location';
+
+  @override
+  String get addressHome => 'Home';
+
+  @override
+  String get addressWork => 'Work';
+
+  @override
+  String get addressOther => 'Other';
+
+  @override
+  String get addressOtherHint => 'Address name (e.g. Parents\' home)';
+
+  @override
+  String get addressDetailsHint => 'Street, landmark, building, floor';
+
+  @override
+  String get addressZoneUnknown => 'We check the area when you save';
+
+  @override
+  String get addressZoneLabel => 'Address location';
+
+  @override
+  String get addressInZone => 'In service area';
+
+  @override
+  String get addressOutOfZone => 'Out of service area';
+
+  @override
+  String get addressMakeDefault => 'Make this my default address';
+
+  @override
+  String get addressSave => 'Save address';
+
+  @override
+  String get addressLocateFailed =>
+      'Could not find your location. Move the map by hand.';
+
+  @override
+  String get addressMapCredit => '© OpenStreetMap';
+
+  @override
+  String get notificationsTitle => 'Notifications';
 }

@@ -69,14 +69,14 @@ class SearchCubit extends Cubit<SearchState> {
     this._location,
     ShopScopeCubit scope,
   ) : _vendorId = scope.state.filterVendorId,
-      super(SearchState(recent: _prefs.getStringList(_recentKey) ?? const [])) {
+      super(SearchState(recent: _prefs.getStringList(recentKey) ?? const [])) {
     _scope = scope.stream
         .map((s) => s.filterVendorId)
         .distinct()
         .listen(_scopeTo);
   }
 
-  static const _recentKey = 'barq_recent_searches';
+  static const recentKey = 'barq_recent_searches';
   static const _recentCount = 3;
   static const _debounce = Duration(milliseconds: 400);
 
@@ -193,7 +193,7 @@ class SearchCubit extends Cubit<SearchState> {
       query,
       ...state.recent.where((word) => word != query),
     ].take(_recentCount).toList();
-    await _prefs.setStringList(_recentKey, recent);
+    await _prefs.setStringList(recentKey, recent);
     if (isClosed) return;
     emit(
       state.copyWith(

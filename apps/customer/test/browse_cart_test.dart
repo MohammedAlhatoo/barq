@@ -1437,6 +1437,45 @@ void main() {
       expect(find.text('422 out_of_zone'), findsOneWidget);
     });
 
+    testWidgets('out of zone: the picked address becomes the default', (
+      tester,
+    ) async {
+      const other = {
+        'id': 43,
+        'label': 'العمل',
+        'lat': 31.41,
+        'lng': 34.35,
+        'details': 'شارع البحر',
+        'is_default': false,
+      };
+      final replies = _server(
+        compare: const Reply(null, status: 422, error: 'out_of_zone'),
+      );
+      replies['GET /addresses'] = const Reply([_address, other]);
+      replies['PUT /addresses/43'] = const Reply(other);
+      final app = await _open(tester, replies: replies);
+      _addToCart(app);
+      await _go(tester, app, Routes.compare);
+
+      await tester.tap(find.text('تغيير العنوان'));
+      await app.settle(tester);
+      expect(find.text('اختر عنوان التوصيل'), findsOneWidget);
+      await tester.tap(find.text('العمل'));
+      await app.settle(tester);
+
+      expect(app.server.bodies['PUT /addresses/43'], {
+        'label': 'العمل',
+        'lat': 31.41,
+        'lng': 34.35,
+        'details': 'شارع البحر',
+        'is_default': true,
+      });
+      expect(
+        app.server.calls.where((call) => call == 'POST /baskets/compare'),
+        hasLength(2),
+      );
+    });
+
     testWidgets('no address asks for one', (tester) async {
       final replies = _server();
       replies['GET /addresses'] = const Reply(<Object>[]);

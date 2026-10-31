@@ -4,6 +4,7 @@ import '../foundation/barq_asset_names.dart';
 import '../foundation/barq_assets.dart';
 import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
+import '../widgets/account.dart';
 import '../widgets/buttons.dart';
 import '../widgets/indicators.dart';
 import '../widgets/inputs.dart';
@@ -400,6 +401,36 @@ class _BarqGalleryState extends State<BarqGallery> {
                         ]),
                       ),
                       label('BarqCard · BarqListTile · BarqIconTile(tone)'),
+                      BarqProfileCard(
+                        initial: 'م',
+                        name: 'محمد أحمد',
+                        phone: '059 912 3456',
+                        onEdit: () {},
+                        stats: const [
+                          (value: '12', label: 'طلب'),
+                          (value: '3', label: 'عناوين'),
+                        ],
+                      ),
+                      label('BarqProfileCard'),
+                      BarqAddressCard(
+                        icon: BarqIcons.home,
+                        title: 'البيت',
+                        subtitle: 'قرب مسجد الهدى · ط2',
+                        badge: 'الافتراضي',
+                        selected: true,
+                        onEdit: () {},
+                        onDelete: () {},
+                      ),
+                      label('BarqAddressCard'),
+                      const BarqDeleteAccountArt(),
+                      label('BarqDeleteAccountArt'),
+                      const SizedBox(
+                        height: 220,
+                        child: BarqMapBackground(children: [
+                          BarqMapCenterPin(hint: 'حرّك الخريطة لتحديد الموقع'),
+                        ]),
+                      ),
+                      label('BarqMapCenterPin'),
                       const BarqCard(
                         child: BarqGap(gap: 8, children: [
                           BarqSummaryRow('المنتجات (4)', '₪44'),

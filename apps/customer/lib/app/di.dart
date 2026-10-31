@@ -2,6 +2,9 @@ import 'package:barq_core/barq_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../features/account/data/account_repository.dart';
+import '../features/account/data/avatar_picker.dart';
+import '../features/account/data/local_session.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/location_repository.dart';
 import '../features/browse/data/browse_repository.dart';
@@ -39,7 +42,10 @@ class AppDependencies {
     required this.cartRepository,
     required this.cart,
     required this.scope,
+    required this.accountRepository,
+    required this.avatarPicker,
     required this.prefs,
+    this.mapTileUrl,
   });
 
   final AuthStore auth;
@@ -56,7 +62,12 @@ class AppDependencies {
   final CartRepository cartRepository;
   final CartCubit cart;
   final ShopScopeCubit scope;
+  final AccountRepository accountRepository;
+  final AvatarPicker avatarPicker;
   final SharedPreferences prefs;
+
+  /// Null draws the map with no tiles, so tests never call the tile server.
+  final String? mapTileUrl;
 
   static Future<AppDependencies> create() async {
     final prefs = await SharedPreferences.getInstance();
@@ -96,7 +107,14 @@ class AppDependencies {
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),
+      accountRepository: ApiAccountRepository(
+        api,
+        UploadService(api: api),
+        LocalSession(auth: auth, cart: cart, prefs: prefs),
+      ),
+      avatarPicker: GalleryAvatarPicker(),
       prefs: prefs,
+      mapTileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     );
   }
 }

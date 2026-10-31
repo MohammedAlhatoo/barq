@@ -1,15 +1,14 @@
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../../../app/router.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
 class OutOfZoneView extends StatelessWidget {
-  const OutOfZoneView({super.key, this.code});
+  const OutOfZoneView({super.key, this.code, required this.onChangeAddress});
 
   /// Like "422 out_of_zone".
   final String? code;
+  final VoidCallback onChangeAddress;
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +22,7 @@ class OutOfZoneView extends StatelessWidget {
           message: l10n.outOfZoneBody,
           code: code,
           actions: [
-            BarqButton(
-              label: l10n.outOfZoneChange,
-              // The addresses screen itself comes in phase 4.
-              onPressed: () => context.go(Routes.account),
-            ),
+            BarqButton(label: l10n.outOfZoneChange, onPressed: onChangeAddress),
           ],
         ),
       ),
