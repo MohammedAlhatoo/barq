@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../app/countdown.dart';
 import '../../auth/data/auth_models.dart';
 import '../../browse/data/browse_repository.dart';
+import '../../cart/data/cart_repository.dart';
 import '../../cart/state/cart_cubit.dart';
 import '../data/checkout_models.dart';
 import '../data/checkout_repository.dart';
@@ -15,6 +16,7 @@ class CheckoutState {
     this.emptyCart = false,
     this.noAddress = false,
     this.outOfZone = false,
+    this.storeOutOfZone = false,
     this.error,
     this.address,
     this.quote,
@@ -35,6 +37,9 @@ class CheckoutState {
   final bool emptyCart;
   final bool noAddress;
   final bool outOfZone;
+
+  /// The address is served, but not by the cart's store.
+  final bool storeOutOfZone;
 
   /// The server's reason when no price could be loaded.
   final String? error;
@@ -68,6 +73,7 @@ class CheckoutState {
     bool? emptyCart,
     bool? noAddress,
     bool? outOfZone,
+    bool? storeOutOfZone,
     String? error,
     SavedAddress? address,
     OrderQuote? quote,
@@ -87,6 +93,7 @@ class CheckoutState {
     emptyCart: emptyCart ?? false,
     noAddress: noAddress ?? false,
     outOfZone: outOfZone ?? false,
+    storeOutOfZone: storeOutOfZone ?? false,
     error: error,
     address: address ?? this.address,
     quote: quote ?? this.quote,
@@ -109,12 +116,18 @@ class CheckoutCubit extends Cubit<CheckoutState> {
   CheckoutCubit({
     required this._repository,
     required this._browse,
+    required this._carts,
     required this._cart,
+    required this._compareEnabled,
   }) : super(const CheckoutState());
 
   final CheckoutRepository _repository;
   final BrowseRepository _browse;
+  final CartRepository _carts;
   final CartCubit _cart;
+
+  /// False when the project has no `basket_compare` module to ask.
+  final bool Function() _compareEnabled;
   late final _countdown = Countdown(
     onTick: (left) => emit(_withSeconds(left)),
     onDone: _onPriceEnded,
@@ -158,16 +171,45 @@ class CheckoutCubit extends Cubit<CheckoutState> {
         return;
       }
       emit(state.copyWith(loading: true, address: address));
-      _showQuote(await _fetchQuote());
+      if (await _storeDelivers(address)) {
+        _showQuote(await _fetchQuote());
+      } else {
+        _blockStore();
+      }
     } on ApiException catch (e) {
       _failed(e);
     }
   }
 
+  /// `POST /orders/quote` and `POST /orders` accept a store that does not
+  /// deliver to the address. `POST /baskets/compare` lists only the ones that
+  /// do, so a cart whose store is missing there must not reach them.
+  Future<bool> _storeDelivers(SavedAddress address) async {
+    final vendorId = _cart.state.vendorId;
+    if (vendorId == null || !_compareEnabled()) return true;
+    final comparison = await _carts.compare(
+      lines: _cart.state.lines,
+      addressId: address.id,
+    );
+    return comparison.storeOf(vendorId) != null;
+  }
+
+  void _blockStore() {
+    _countdown.stop();
+    _idempotencyKey = null;
+    emit(
+      state.copyWith(
+        storeOutOfZone: true,
+        pricing: false,
+        checkingCoupon: false,
+      ),
+    );
+  }
+
   Future<void> changeAddress(SavedAddress address) async {
     _countdown.stop();
     emit(state.copyWith(loading: true, address: address));
-    await _requote();
+    await _requote(checkStore: true);
   }
 
   /// The server keeps this choice in the quote, and refuses an order that
@@ -250,9 +292,13 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     coupon: coupon ?? state.coupon,
   );
 
-  Future<void> _requote() async {
+  Future<void> _requote({bool checkStore = false}) async {
     final request = ++_quoteRequest;
     try {
+      if (checkStore && !await _storeDelivers(state.address!)) {
+        if (request == _quoteRequest) _blockStore();
+        return;
+      }
       final quote = await _fetchQuote();
       if (request == _quoteRequest) _showQuote(quote);
     } on ApiException catch (e) {

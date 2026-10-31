@@ -195,6 +195,8 @@
   "noStoresTitle": "No stores deliver to your address yet",
   "outOfZoneTitle": "We don't deliver here yet",
   "outOfZoneBody": "Your address is outside Barq's service areas. Choose another address inside the delivery area.",
+  "outOfZoneStoreBody": "This store doesn't deliver to your address. Compare your cart at stores that do, or choose another address.",
+  "outOfZoneCompare": "Compare your cart at nearby stores",
   "outOfZoneChange": "Change address",
   "noAddressTitle": "You have no delivery address",
   "noAddressBody": "Add your address so we can compare your cart with stores that deliver to you.",

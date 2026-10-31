@@ -473,6 +473,13 @@ class AppLocalizationsAr extends AppLocalizations {
       'عنوانك خارج مناطق خدمة برق حاليًا. اختر عنوانًا آخر داخل منطقة التوصيل.';
 
   @override
+  String get outOfZoneStoreBody =>
+      'هذا المتجر ما بيوصّل لعنوانك. قارن سلتك بالمتاجر اللي بتوصّلك، أو اختر عنوانًا آخر.';
+
+  @override
+  String get outOfZoneCompare => 'مقارنة السلة بالمتاجر القريبة';
+
+  @override
   String get outOfZoneChange => 'تغيير العنوان';
 
   @override

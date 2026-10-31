@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:barq_customer/app/countdown.dart';
 import 'package:barq_customer/app/router.dart';
+import 'package:barq_customer/features/cart/ui/compare_screen.dart';
 import 'package:barq_customer/features/cart/ui/widgets/empty_cart_view.dart';
 import 'package:barq_customer/features/cart/ui/widgets/out_of_zone_view.dart';
 import 'package:barq_customer/features/checkout/ui/checkout_screen.dart';
@@ -313,6 +314,105 @@ void main() {
       await app.settle(tester);
       expect(find.byType(OutOfZoneView), findsNothing);
       expect(_bodyOf(app, 'POST /orders/quote')['dropoff_address_id'], 2);
+    });
+
+    group('store outside the address zone', () {
+      Reply comparison({required List<int> vendors}) => Reply({
+        'zone': {'id': 1, 'name': 'النصيرات'},
+        'cheapest_vendor_id': vendors.isEmpty ? null : vendors.first,
+        'stores': [
+          for (final id in vendors)
+            {
+              'vendor': {'id': id, 'name': 'متجر $id', 'open_now': true},
+              'cheapest': true,
+              'complete': true,
+              'missing_count': 0,
+              'items_total': _money(1300),
+              'lines': <Object>[],
+            },
+        ],
+      });
+
+      Map<String, Reply> guarded(Reply compare) => {
+        ..._server(),
+        'GET /app/config': Reply({
+          ..._config,
+          'modules': ['coupons', 'basket_compare'],
+        }),
+        'POST /baskets/compare': compare,
+      };
+
+      _test('blocks checkout before any quote', (tester) async {
+        final app = await _open(
+          tester,
+          Routes.checkout,
+          replies: guarded(comparison(vendors: [16])),
+        );
+        expect(find.byType(OutOfZoneView), findsOneWidget);
+        expect(find.textContaining('هذا المتجر ما بيوصّل'), findsOneWidget);
+        expect(app.server.calls, isNot(contains('POST /orders/quote')));
+      });
+
+      _test('a store in the list goes on as usual', (tester) async {
+        final app = await _open(
+          tester,
+          Routes.checkout,
+          replies: guarded(comparison(vendors: [16, 7])),
+        );
+        expect(find.byType(OutOfZoneView), findsNothing);
+        expect(app.server.calls, contains('POST /orders/quote'));
+      });
+
+      _test('a failed compare never lets the cart through', (tester) async {
+        final app = await _open(
+          tester,
+          Routes.checkout,
+          replies: guarded(const Reply(null, status: 500, error: 'x')),
+        );
+        expect(find.text('رسالة السيرفر'), findsOneWidget);
+        expect(app.server.calls, isNot(contains('POST /orders/quote')));
+      });
+
+      _test('a new address is checked again', (tester) async {
+        final app = await _open(
+          tester,
+          Routes.checkout,
+          replies: guarded(comparison(vendors: [16])),
+        );
+        app.server.replies['POST /baskets/compare'] = comparison(vendors: [7]);
+        await _tap(tester, app, 'تغيير العنوان');
+        await tester.tap(find.text('العمل'));
+        await app.settle(tester);
+        expect(find.byType(OutOfZoneView), findsNothing);
+        expect(_bodyOf(app, 'POST /baskets/compare')['dropoff_address_id'], 2);
+        expect(_bodyOf(app, 'POST /orders/quote')['dropoff_address_id'], 2);
+      });
+
+      _test('the button compares for the chosen address', (tester) async {
+        final app = await _open(
+          tester,
+          Routes.checkout,
+          replies: guarded(comparison(vendors: [7])),
+        );
+        expect(find.byType(OutOfZoneView), findsNothing);
+
+        app.server.replies['POST /baskets/compare'] = comparison(vendors: [16]);
+        await tester.tap(find.text('تغيير'));
+        await app.settle(tester);
+        await tester.tap(find.text('العمل'));
+        await app.settle(tester);
+        expect(find.byType(OutOfZoneView), findsOneWidget);
+
+        await _tap(tester, app, 'مقارنة السلة بالمتاجر القريبة');
+        expect(find.byType(CompareScreen), findsOneWidget);
+        expect(_bodyOf(app, 'POST /baskets/compare')['dropoff_address_id'], 2);
+      });
+
+      _test('with no compare module checkout does not ask', (tester) async {
+        final app = await _open(tester, Routes.checkout);
+        expect(find.byType(OutOfZoneView), findsNothing);
+        expect(app.server.calls, isNot(contains('POST /baskets/compare')));
+      });
     });
 
     _test('a failed quote shows the reason and can retry', (tester) async {

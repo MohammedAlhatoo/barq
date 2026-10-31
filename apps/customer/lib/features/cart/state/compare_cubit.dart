@@ -63,11 +63,15 @@ class CompareCubit extends Cubit<CompareState> {
     required this._browse,
     required this._cart,
     required this._current,
+    this._address,
   }) : super(const CompareState());
 
   final BrowseRepository _browse;
   final CartRepository _cart;
   final Cart _current;
+
+  /// Checkout's chosen address. Null compares for the default one.
+  SavedAddress? _address;
 
   /// How many stores the cart is compared with. Each is a quote request.
   static const _comparedStores = 3;
@@ -78,10 +82,12 @@ class CompareCubit extends Cubit<CompareState> {
     if (!isClosed) super.emit(state);
   }
 
+  void useDefaultAddress() => _address = null;
+
   Future<void> load() async {
     emit(const CompareState());
     try {
-      final address = await _browse.defaultAddress();
+      final address = _address ?? await _browse.defaultAddress();
       if (address == null) {
         emit(const CompareState(status: CompareStatus.noAddress));
         return;

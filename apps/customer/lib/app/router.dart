@@ -184,13 +184,15 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     ),
     GoRoute(
       path: Routes.compare,
-      builder: (context, _) {
+      builder: (context, state) {
         final deps = context.read<AppDependencies>();
+        final address = state.extra;
         return BlocProvider(
           create: (_) => CompareCubit(
             browse: deps.browseRepository,
             cart: deps.cartRepository,
             current: context.read<CartCubit>().state,
+            address: address is SavedAddress ? address : null,
           )..load(),
           child: const CompareScreen(),
         );
@@ -204,7 +206,10 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           create: (_) => CheckoutCubit(
             repository: deps.checkoutRepository,
             browse: deps.browseRepository,
+            carts: deps.cartRepository,
             cart: deps.cart,
+            compareEnabled: () =>
+                deps.config.config.hasModule('basket_compare'),
           )..start(),
           child: const CheckoutScreen(),
         );

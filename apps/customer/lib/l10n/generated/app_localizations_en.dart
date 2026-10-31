@@ -476,6 +476,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your address is outside Barq\'s service areas. Choose another address inside the delivery area.';
 
   @override
+  String get outOfZoneStoreBody =>
+      'This store doesn\'t deliver to your address. Compare your cart at stores that do, or choose another address.';
+
+  @override
+  String get outOfZoneCompare => 'Compare your cart at nearby stores';
+
+  @override
   String get outOfZoneChange => 'Change address';
 
   @override

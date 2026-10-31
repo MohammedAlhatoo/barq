@@ -932,6 +932,18 @@ abstract class AppLocalizations {
   /// **'عنوانك خارج مناطق خدمة برق حاليًا. اختر عنوانًا آخر داخل منطقة التوصيل.'**
   String get outOfZoneBody;
 
+  /// No description provided for @outOfZoneStoreBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا المتجر ما بيوصّل لعنوانك. قارن سلتك بالمتاجر اللي بتوصّلك، أو اختر عنوانًا آخر.'**
+  String get outOfZoneStoreBody;
+
+  /// No description provided for @outOfZoneCompare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مقارنة السلة بالمتاجر القريبة'**
+  String get outOfZoneCompare;
+
   /// No description provided for @outOfZoneChange.
   ///
   /// In ar, this message translates to:

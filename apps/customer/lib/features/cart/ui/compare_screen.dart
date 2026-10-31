@@ -32,6 +32,7 @@ class CompareScreen extends StatelessWidget {
     } on ApiException catch (e) {
       debugPrint('Address not made default: ${e.code}');
     }
+    cubit.useDefaultAddress();
     await cubit.load();
   }
 

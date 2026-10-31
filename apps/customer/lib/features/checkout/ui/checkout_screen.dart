@@ -44,6 +44,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     if (address != null) await cubit.changeAddress(address);
   }
 
+  /// Picking a store there changes the cart, so it is checked again here.
+  Future<void> _openCompare() async {
+    final cubit = context.read<CheckoutCubit>();
+    await context.push(Routes.compare, extra: cubit.state.address);
+    if (mounted) await cubit.start();
+  }
+
   Future<void> _showExpired(Repricing repricing) async {
     if (_sheetOpen) return;
     _sheetOpen = true;
@@ -77,6 +84,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           return OutOfZoneView(
             code: '422 out_of_zone',
             onChangeAddress: _pickAddress,
+          );
+        }
+        if (state.storeOutOfZone) {
+          return OutOfZoneView(
+            onChangeAddress: _pickAddress,
+            onCompare: _openCompare,
           );
         }
         final Widget body = switch (state) {
