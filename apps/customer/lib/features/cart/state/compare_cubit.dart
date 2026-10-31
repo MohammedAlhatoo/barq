@@ -16,6 +16,10 @@ class CompareState {
     this.totals = const {},
     this.bestVendorId,
     this.selectedVendorId,
+    this.cartVendorId,
+    this.cartVendorName,
+    this.cartTotal,
+    this.cartIsCheapest = false,
     this.error,
     this.errorCode,
   });
@@ -23,36 +27,49 @@ class CompareState {
   final CompareStatus status;
   final BasketComparison? comparison;
 
-  /// The nearest complete stores, best first.
+  /// The nearest complete stores other than the cart's, cheapest first.
   final List<BasketStore> ranked;
 
   /// Vendor id → the server's total with delivery. A store is missing here if
   /// it was not quoted or its quote failed.
   final Map<int, Money> totals;
 
-  /// The store marked "الأوفر".
+  /// The store marked "الأوفر": cheaper than the cart, by the server's totals.
   final int? bestVendorId;
   final int? selectedVendorId;
+
+  /// The first row, "سلتك الحالية".
+  final int? cartVendorId;
+  final String? cartVendorName;
+
+  /// The server's total with delivery. Null if that quote failed.
+  final Money? cartTotal;
+
+  /// True once other stores were priced and none beats the cart.
+  final bool cartIsCheapest;
   final String? error;
 
   /// Shown on the out-of-zone screen, like "422 out_of_zone".
   final String? errorCode;
 
-  BasketStore? get selected => comparison?.storeOf(selectedVendorId);
+  /// The other store picked. Null means staying with the cart as it is.
+  BasketStore? get selected => selectedVendorId == cartVendorId
+      ? null
+      : comparison?.storeOf(selectedVendorId);
 }
 
 class CompareCubit extends Cubit<CompareState> {
   CompareCubit({
     required this._browse,
     required this._cart,
-    required this._lines,
+    required this._current,
   }) : super(const CompareState());
 
   final BrowseRepository _browse;
   final CartRepository _cart;
-  final List<CartLine> _lines;
+  final Cart _current;
 
-  /// How many stores the screen compares. Each one is a quote request.
+  /// How many stores the cart is compared with. Each is a quote request.
   static const _comparedStores = 3;
 
   /// A request can end after the user left the screen.
@@ -70,14 +87,20 @@ class CompareCubit extends Cubit<CompareState> {
         return;
       }
       final comparison = await _cart.compare(
-        lines: _lines,
+        lines: _current.lines,
         addressId: address.id,
       );
-      final stores = comparison.stores;
+      final vendorId = _current.vendorId;
+      final cartQuote = await _quoteCart(address);
       final compared = await _nearestComplete(comparison, address);
       final totals = await _quote(compared, address);
-      final ranked = _rank(compared, stores, totals);
-      final best = ranked.isEmpty ? null : ranked.first.vendorId;
+      final ranked = _rank(compared, comparison.stores, totals);
+      final cheapest = ranked.isNotEmpty ? totals[ranked.first.vendorId] : null;
+      final cartTotal = cartQuote?.total;
+      final beatsCart =
+          cheapest != null &&
+          (cartTotal == null || cheapest.amount < cartTotal.amount);
+      final best = beatsCart ? ranked.first.vendorId : null;
       emit(
         CompareState(
           status: CompareStatus.ready,
@@ -85,8 +108,11 @@ class CompareCubit extends Cubit<CompareState> {
           ranked: ranked,
           totals: totals,
           bestVendorId: best,
-          selectedVendorId:
-              best ?? (stores.isEmpty ? null : stores.first.vendorId),
+          selectedVendorId: best ?? _startingChoice(comparison),
+          cartVendorId: vendorId,
+          cartVendorName: await _vendorName(comparison),
+          cartTotal: cartTotal,
+          cartIsCheapest: cheapest != null && !beatsCart,
         ),
       );
     } on ApiException catch (e) {
@@ -102,13 +128,52 @@ class CompareCubit extends Cubit<CompareState> {
     }
   }
 
+  /// The cart, unless no store is complete: that screen needs a store to offer.
+  int? _startingChoice(BasketComparison comparison) {
+    final vendorId = _current.vendorId;
+    if (comparison.cheapestVendorId != null) return vendorId;
+    for (final store in comparison.stores) {
+      if (store.vendorId != vendorId) return store.vendorId;
+    }
+    return vendorId;
+  }
+
+  /// A failed quote keeps the screen: the row then says delivery comes later.
+  Future<Quote?> _quoteCart(SavedAddress address) async {
+    final vendorId = _current.vendorId;
+    if (vendorId == null) return null;
+    try {
+      return await _cart.quoteCart(
+        vendorId: vendorId,
+        lines: _current.lines,
+        addressId: address.id,
+      );
+    } on ApiException {
+      return null;
+    }
+  }
+
+  /// The cart's store may be outside the comparison, so it has its own lookup.
+  Future<String?> _vendorName(BasketComparison comparison) async {
+    final vendorId = _current.vendorId;
+    final known = comparison.storeOf(vendorId)?.vendorName;
+    if (known != null || vendorId == null) return known;
+    try {
+      return (await _browse.vendor(vendorId)).name;
+    } on ApiException {
+      return null;
+    }
+  }
+
   /// The nearest complete stores. `POST /baskets/compare` has no distance, so
   /// it comes from `GET /vendors`. Without it the server's order decides.
   Future<List<BasketStore>> _nearestComplete(
     BasketComparison comparison,
     SavedAddress address,
   ) async {
-    final complete = comparison.stores.where((s) => s.complete).toList();
+    final complete = comparison.stores
+        .where((s) => s.complete && s.vendorId != _current.vendorId)
+        .toList();
     var distances = <int, double>{};
     try {
       final vendors = await _browse.vendors(lat: address.lat, lng: address.lng);
@@ -138,8 +203,8 @@ class CompareCubit extends Cubit<CompareState> {
     final answers = await Future.wait([
       for (final store in stores)
         _cart
-            .quotedTotal(store: store, addressId: address.id)
-            .then<Money?>((total) => total)
+            .quoteStore(store: store, addressId: address.id)
+            .then<Money?>((quote) => quote.total)
             .catchError((Object _) => null, test: (e) => e is ApiException),
     ]);
     return {
@@ -181,6 +246,10 @@ class CompareCubit extends Cubit<CompareState> {
       totals: state.totals,
       bestVendorId: state.bestVendorId,
       selectedVendorId: vendorId,
+      cartVendorId: state.cartVendorId,
+      cartVendorName: state.cartVendorName,
+      cartTotal: state.cartTotal,
+      cartIsCheapest: state.cartIsCheapest,
     ),
   );
 }

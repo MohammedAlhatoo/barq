@@ -525,4 +525,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get vendorCallFailed => 'تعذّر فتح الاتصال';
+
+  @override
+  String get cartWithDelivery => 'الإجمالي مع التوصيل';
+
+  @override
+  String get compareCurrentCart => 'سلتك الحالية';
+
+  @override
+  String get compareCurrentIsBest => 'متجرك الحالي هو الأوفر';
+
+  @override
+  String get compareKeepCart => 'متابعة بسلتي الحالية';
+
+  @override
+  String compareSave(String price) {
+    return 'وفّر $price';
+  }
 }

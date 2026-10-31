@@ -91,10 +91,6 @@ class Cart {
   /// The number on the cart button.
   int get count => lines.length;
 
-  /// `POST /baskets/compare` takes no options, so its total can't be trusted
-  /// for such a cart.
-  bool get hasOptions => lines.any((line) => line.options.isNotEmpty);
-
   int qtyOf(int productId) => lines
       .where((line) => line.productId == productId)
       .fold(0, (sum, line) => sum + line.qty);
@@ -103,6 +99,23 @@ class Cart {
     'vendor_id': vendorId,
     'lines': [for (final line in lines) line.toJson()],
   };
+}
+
+/// The fields of `POST /orders/quote` that the cart and compare screens show.
+class Quote {
+  const Quote({required this.itemsTotal, required this.total});
+
+  factory Quote.fromJson(Map<String, dynamic> json) => Quote(
+    itemsTotal: Money.fromJson(
+      (json['items_total'] as Map).cast<String, dynamic>(),
+    ),
+    total: Money.fromJson((json['total'] as Map).cast<String, dynamic>()),
+  );
+
+  final Money itemsTotal;
+
+  /// Items plus delivery.
+  final Money total;
 }
 
 class BasketLine {

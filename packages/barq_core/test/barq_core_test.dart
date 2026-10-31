@@ -515,4 +515,12 @@ void main() {
     expect(find.text('label accepted'), findsOneWidget);
     expect(find.text('label cancelled'), findsNothing);
   });
+
+  test('savedAgainst formats the difference of two server totals', () {
+    const cart = Money(amount: 2650, formatted: '26.50 ₪');
+    const cheaper = Money(amount: 2250, formatted: '22.50 ₪');
+    final saved = cheaper.savedAgainst(cart, symbol: '₪', minorUnits: 2);
+    expect(saved.amount, 400);
+    expect(saved.formatted, '4.00 ₪');
+  });
 }

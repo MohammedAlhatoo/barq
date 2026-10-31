@@ -528,4 +528,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get vendorCallFailed => 'Couldn\'t start the call';
+
+  @override
+  String get cartWithDelivery => 'Total with delivery';
+
+  @override
+  String get compareCurrentCart => 'Your current cart';
+
+  @override
+  String get compareCurrentIsBest => 'Your current store is the cheapest';
+
+  @override
+  String get compareKeepCart => 'Continue with my cart';
+
+  @override
+  String compareSave(String price) {
+    return 'Save $price';
+  }
 }

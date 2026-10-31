@@ -9,4 +9,23 @@ class Money {
 
   final int amount;
   final String formatted;
+
+  /// The one sanctioned price calculation: how much two server totals differ
+  /// ("وفّر ₪X"). Decided by the team as an exception to "never calculate".
+  /// It changes nothing that is charged. Only the display uses it.
+  Money savedAgainst(
+    Money other, {
+    required String symbol,
+    required int minorUnits,
+  }) {
+    final saved = other.amount - amount;
+    var scale = 1;
+    for (var i = 0; i < minorUnits; i++) {
+      scale *= 10;
+    }
+    return Money(
+      amount: saved,
+      formatted: '${(saved / scale).toStringAsFixed(minorUnits)} $symbol',
+    );
+  }
 }

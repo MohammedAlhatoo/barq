@@ -1033,6 +1033,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر فتح الاتصال'**
   String get vendorCallFailed;
+
+  /// No description provided for @cartWithDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي مع التوصيل'**
+  String get cartWithDelivery;
+
+  /// No description provided for @compareCurrentCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتك الحالية'**
+  String get compareCurrentCart;
+
+  /// No description provided for @compareCurrentIsBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'متجرك الحالي هو الأوفر'**
+  String get compareCurrentIsBest;
+
+  /// No description provided for @compareKeepCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة بسلتي الحالية'**
+  String get compareKeepCart;
+
+  /// No description provided for @compareSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّر {price}'**
+  String compareSave(String price);
 }
 
 class _AppLocalizationsDelegate

@@ -133,7 +133,6 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           create: (_) => CartSummaryCubit(
             browse: deps.browseRepository,
             cart: deps.cartRepository,
-            compareEnabled: deps.config.config.hasModule('basket_compare'),
           )..refresh(deps.cart.state),
           child: const CartScreen(),
         );
@@ -147,7 +146,7 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           create: (_) => CompareCubit(
             browse: deps.browseRepository,
             cart: deps.cartRepository,
-            lines: context.read<CartCubit>().state.lines,
+            current: context.read<CartCubit>().state,
           )..load(),
           child: const CompareScreen(),
         );

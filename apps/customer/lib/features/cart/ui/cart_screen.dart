@@ -198,22 +198,28 @@ class _CartSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final total = context.select<CartSummaryCubit, Money?>(
-      (summary) => summary.state.total,
+    final quote = context.select<CartSummaryCubit, Quote?>(
+      (summary) => summary.state.quote,
     );
     return BarqSheet(
       showGrab: false,
       gap: BarqSpacing.gap,
       children: [
-        if (total == null)
-          BarqSummaryRow(l10n.cartTotal, l10n.cartAtCheckout)
-        else
-          BarqSummaryRow(l10n.cartTotal, total.formatted, total: true),
-        BarqSummaryRow(l10n.cartDelivery, l10n.cartAtCheckout),
+        if (quote == null) ...[
+          BarqSummaryRow(l10n.cartTotal, l10n.cartAtCheckout),
+          BarqSummaryRow(l10n.cartDelivery, l10n.cartAtCheckout),
+        ] else ...[
+          BarqSummaryRow(l10n.cartTotal, quote.itemsTotal.formatted),
+          BarqSummaryRow(
+            l10n.cartWithDelivery,
+            quote.total.formatted,
+            total: true,
+          ),
+        ],
         BarqButton(
-          label: total == null
+          label: quote == null
               ? l10n.cartContinue
-              : l10n.cartContinueTotal(total.formatted),
+              : l10n.cartContinueTotal(quote.total.formatted),
           onPressed: () => context.push(Routes.checkout),
         ),
       ],

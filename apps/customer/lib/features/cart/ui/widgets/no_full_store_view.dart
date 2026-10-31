@@ -7,6 +7,7 @@ import '../../../../l10n/generated/app_localizations.dart';
 import '../../data/cart_models.dart';
 import '../../state/cart_cubit.dart';
 import '../../state/compare_cubit.dart';
+import 'current_cart_row.dart';
 import 'missing_pill.dart';
 
 /// No store has the whole cart: pick one to continue with what it has.
@@ -58,6 +59,10 @@ class NoFullStoreView extends StatelessWidget {
                     gap: BarqSpacing.md,
                     padding: const EdgeInsets.all(BarqSpacing.page),
                     children: [
+                      CurrentCartRow(
+                        name: state.cartVendorName,
+                        total: state.cartTotal,
+                      ),
                       for (final store in comparison.stores)
                         _StoreCard(store: store, selected: store == selected),
                     ],

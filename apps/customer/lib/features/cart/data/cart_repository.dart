@@ -8,8 +8,15 @@ abstract class CartRepository {
     required int addressId,
   });
 
-  /// The server's total for buying from [store]: items plus delivery.
-  Future<Money> quotedTotal({
+  /// The server's price of the cart as it is, from its own store.
+  Future<Quote> quoteCart({
+    required int vendorId,
+    required List<CartLine> lines,
+    required int addressId,
+  });
+
+  /// The server's price of the same items at another [store].
+  Future<Quote> quoteStore({
     required BasketStore store,
     required int addressId,
   });
@@ -45,22 +52,42 @@ class ApiCartRepository implements CartRepository {
   }
 
   @override
-  Future<Money> quotedTotal({
+  Future<Quote> quoteCart({
+    required int vendorId,
+    required List<CartLine> lines,
+    required int addressId,
+  }) => _quote(vendorId, addressId, [
+    for (final line in lines)
+      {
+        'product_id': line.productId,
+        'qty': line.qty,
+        if (line.options.isNotEmpty) 'options': line.options,
+      },
+  ]);
+
+  @override
+  Future<Quote> quoteStore({
     required BasketStore store,
     required int addressId,
-  }) async {
+  }) => _quote(store.vendorId, addressId, [
+    // Each store sells the product under its own id.
+    for (final line in store.lines)
+      {'product_id': line.storeProductId, 'qty': line.qty},
+  ]);
+
+  Future<Quote> _quote(
+    int vendorId,
+    int addressId,
+    List<Map<String, Object?>> cart,
+  ) async {
     final data = await _api.post(
       '/orders/quote',
       body: {
-        'vendor_id': store.vendorId,
-        // Each store sells the product under its own id.
-        'cart': [
-          for (final line in store.lines)
-            {'product_id': line.storeProductId, 'qty': line.qty},
-        ],
+        'vendor_id': vendorId,
+        'cart': cart,
         'dropoff_address_id': addressId,
       },
     );
-    return Money.fromJson(((data as Map)['total'] as Map).cast());
+    return Quote.fromJson((data as Map).cast<String, dynamic>());
   }
 }

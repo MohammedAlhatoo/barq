@@ -216,5 +216,14 @@
   "vendorsEmpty": "لا توجد متاجر حاليًا",
   "vendorNew": "جديد",
   "vendorCategoryGrocery": "بقالة",
-  "vendorCallFailed": "تعذّر فتح الاتصال"
+  "vendorCallFailed": "تعذّر فتح الاتصال",
+
+  "cartWithDelivery": "الإجمالي مع التوصيل",
+  "compareCurrentCart": "سلتك الحالية",
+  "compareCurrentIsBest": "متجرك الحالي هو الأوفر",
+  "compareKeepCart": "متابعة بسلتي الحالية",
+  "compareSave": "وفّر {price}",
+  "@compareSave": {
+    "placeholders": { "price": { "type": "String" } }
+  }
 }

@@ -120,9 +120,12 @@ void main() {
     expect(zoneStores.length, lessThan(nearby.length));
 
     final store = comparison.stores.firstWhere((s) => s.complete);
-    final total = await carts.quotedTotal(store: store, addressId: address.id);
-    expect(total.amount, greaterThanOrEqualTo(store.itemsTotal.amount));
-    debugPrint('items=${store.itemsTotal.formatted} total=${total.formatted}');
+    final quote = await carts.quoteStore(store: store, addressId: address.id);
+    expect(quote.itemsTotal.amount, store.itemsTotal.amount);
+    expect(quote.total.amount, greaterThanOrEqualTo(quote.itemsTotal.amount));
+    debugPrint(
+      'items=${quote.itemsTotal.formatted} total=${quote.total.formatted}',
+    );
 
     // Out of every zone, without saving an address on the account.
     await expectLater(

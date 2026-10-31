@@ -9,6 +9,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../data/cart_models.dart';
 import '../state/cart_cubit.dart';
 import '../state/compare_cubit.dart';
+import 'widgets/current_cart_row.dart';
 import 'widgets/no_full_store_view.dart';
 import 'widgets/out_of_zone_view.dart';
 
@@ -30,7 +31,8 @@ class CompareScreen extends StatelessWidget {
                   comparison.cheapestVendorId == null =>
             NoFullStoreView(comparison: comparison, state: state),
           CompareStatus.ready
-              when comparison != null && comparison.stores.isNotEmpty =>
+              when comparison != null &&
+                  (comparison.stores.isNotEmpty || state.cartTotal != null) =>
             _StoresView(comparison: comparison, state: state),
           _ => _MessageScreen(state: state),
         };
@@ -104,6 +106,16 @@ class _StoresView extends StatelessWidget {
     final cubit = context.read<CompareCubit>();
     final best = comparison.storeOf(state.bestVendorId);
     final others = state.ranked.where((s) => s != best).toList();
+    final bestTotal = best == null ? null : state.totals[best.vendorId];
+    final cartTotal = state.cartTotal;
+    final config = ConfigScope.of(context).config;
+    final saved = bestTotal == null || cartTotal == null
+        ? null
+        : bestTotal.savedAgainst(
+            cartTotal,
+            symbol: config.currencySymbol,
+            minorUnits: config.currencyMinorUnits,
+          );
     final selected = state.selected;
     final count = context.read<CartCubit>().state.count;
     return DesignOverlay(
@@ -139,10 +151,18 @@ class _StoresView extends StatelessWidget {
                       BarqSpacing.section,
                     ),
                     children: [
+                      CurrentCartRow(
+                        name: state.cartVendorName,
+                        total: cartTotal,
+                        selected: state.selectedVendorId == state.cartVendorId,
+                        isCheapest: state.cartIsCheapest,
+                        onTap: () => cubit.select(state.cartVendorId!),
+                      ),
                       if (best != null)
                         _BestCard(
                           store: best,
-                          total: state.totals[best.vendorId],
+                          total: bestTotal,
+                          saved: saved,
                           onTap: () => cubit.select(best.vendorId),
                         ),
                       if (others.isNotEmpty)
@@ -168,7 +188,12 @@ class _StoresView extends StatelessWidget {
                 BarqSpacing.stateBottom,
               ),
               children: [
-                if (selected != null)
+                if (selected == null)
+                  BarqButton(
+                    label: l10n.compareKeepCart,
+                    onPressed: () => context.pop(),
+                  )
+                else
                   BarqButton(
                     label: selected == best
                         ? l10n.comparePickBest(_shown(state, selected))
@@ -194,16 +219,21 @@ class _BestCard extends StatelessWidget {
   const _BestCard({
     required this.store,
     required this.total,
+    required this.saved,
     required this.onTap,
   });
 
   final BasketStore store;
   final Money? total;
+
+  /// Against the cart. Null if the cart has no total.
+  final Money? saved;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final amount = saved;
     return BarqCard(
       padding: EdgeInsets.zero,
       clip: true,
@@ -262,16 +292,29 @@ class _BestCard extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(BarqSpacing.gap),
-            child: BarqMetaRow(
-              items: [
-                (
-                  icon: BarqIcons.check,
-                  text: l10n.compareAvailable(
-                    store.availableCount,
-                    store.lines.length,
-                  ),
-                  iconColor: BarqColors.successText,
+            child: BarqGap(
+              gap: BarqSpacing.xs,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BarqMetaRow(
+                  items: [
+                    (
+                      icon: BarqIcons.check,
+                      text: l10n.compareAvailable(
+                        store.availableCount,
+                        store.lines.length,
+                      ),
+                      iconColor: BarqColors.successText,
+                    ),
+                  ],
                 ),
+                if (amount != null)
+                  Text(
+                    l10n.compareSave(amount.formatted),
+                    style: BarqText.tBold.copyWith(
+                      color: BarqColors.successText,
+                    ),
+                  ),
               ],
             ),
           ),

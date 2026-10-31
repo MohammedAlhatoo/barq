@@ -216,5 +216,14 @@
   "vendorsEmpty": "No stores right now",
   "vendorNew": "New",
   "vendorCategoryGrocery": "Grocery",
-  "vendorCallFailed": "Couldn't start the call"
+  "vendorCallFailed": "Couldn't start the call",
+
+  "cartWithDelivery": "Total with delivery",
+  "compareCurrentCart": "Your current cart",
+  "compareCurrentIsBest": "Your current store is the cheapest",
+  "compareKeepCart": "Continue with my cart",
+  "compareSave": "Save {price}",
+  "@compareSave": {
+    "placeholders": { "price": { "type": "String" } }
+  }
 }
