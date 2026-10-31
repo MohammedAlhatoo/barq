@@ -206,7 +206,6 @@ Map<String, Reply> _server({
   'POST /orders': Reply(_order(), status: 201),
   'GET /orders/55': Reply(_order()),
   'GET /orders/55/offer': const Reply(null, status: 404, error: 'not_found'),
-  'PUT /me/fcm-token': const Reply(null),
 };
 
 Future<TestApp> _open(

@@ -8,7 +8,7 @@
   **كلها بيضيفها `ApiClient` تلقائيًا — ما تضيفها بإيدك.**
 - شكل الرد الناجح: `{ success, message, data, meta?, request_id }` → `ApiClient` بيرجعلك `data`.
 - الأسعار: `Money { amount (بالأغورة), formatted ("8.90 ₪") }` → **اعرض `formatted` بس**.
-- ما في WebSocket: التحديث بالـ polling (المدد من `config.polling`) والإشعارات بـ FCM.
+- ما في WebSocket: التحديث بالـ polling (المدد من `config.polling`). الإشعارات قائمة داخل التطبيق من الـ API، وما في إشعارات فورية (FCM) بقرار من المدرّس.
 
 ## 2) الأخطاء
 شكل الخطأ: `{ success:false, message, error:{ code, details, hint:{ar,en} }, request_id }` → بيصير `ApiException`.

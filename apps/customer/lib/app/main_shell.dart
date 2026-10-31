@@ -27,7 +27,6 @@ class _MainShellState extends State<MainShell> {
   @override
   void initState() {
     super.initState();
-    _startPush();
     final deps = context.read<AppDependencies>();
     deps.scope.loadName();
     _unread = deps.unread..start();
@@ -37,14 +36,6 @@ class _MainShellState extends State<MainShell> {
   void dispose() {
     _unread.stop();
     super.dispose();
-  }
-
-  /// Only after login, because the token is saved on the user's account.
-  Future<void> _startPush() async {
-    final deps = context.read<AppDependencies>();
-    if (!await deps.authRepository.notificationsEnabled()) return;
-    await deps.push.init();
-    await deps.push.registerToken();
   }
 
   @override

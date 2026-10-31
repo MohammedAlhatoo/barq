@@ -236,7 +236,6 @@ class TestApp {
       auth: auth,
       api: api,
       config: config,
-      push: PushService(api: api, app: BarqAppKind.customer),
       locale: locale,
       system: SystemCubit(
         api: api,

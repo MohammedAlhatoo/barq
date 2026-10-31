@@ -18,7 +18,7 @@ API base: `https://masar.toldpath.com/api/v1` · OpenAPI: `docs/api/openapi.json
 apps/customer/            customer app
 apps/driver/              driver app
 packages/barq_ui/         design system — ALL visuals (colors, fonts, icons, widgets)
-packages/barq_core/       API client, auth, config, uploads, FCM, polling, status widgets
+packages/barq_core/       API client, auth, config, uploads, polling, status widgets
 docs/PLAN.md              the build order (phases) — always work from here
 docs/tasks/0N_*.md        detailed specs per area (screens, endpoints, notes)
 docs/notes/phase-N.md     Arabic explanation of each finished phase (written by you)
@@ -40,7 +40,7 @@ docs/ARCHITECTURE.md      folder structure, state management, barq_core contract
    - Durations (quote expiry, offer TTL, geofence, polling) from responses/config, never constants.
 5. **Every screen has loading, empty and error states.** Errors show `ApiException.messageAr`.
 6. Arabic first, RTL. All user-visible strings in the app's `.arb` files (Arabic + English).
-7. Wrap every screen with `DesignOverlay(image: 'design/<screen>.png', child: …)` and compare with the PNG before calling it done.
+7. Wrap every screen with `DesignOverlay(image: 'design/<screen>.png', child: …)` and compare with the PNG before calling it done. `design/` is not in the apps' pubspec, so add it back while comparing and never ship it in a release build.
 8. **Never commit the project key** (`pk_test_…`). It comes from `--dart-define=BARQ_PROJECT_KEY`.
 9. Simple, readable code: small widgets, no clever abstractions, no new packages without asking the user.
 10. After each task: `flutter analyze` clean and `dart format .`.
@@ -49,6 +49,7 @@ docs/ARCHITECTURE.md      folder structure, state management, barq_core contract
 - `delivery_confirmation = "photo"`: driver photo → `POST /uploads` (purpose `proof_photo`) → `POST /driver/orders/{id}/deliver` with `upload_ids`. **No delivery code/OTP is shown to the customer.**
 - Driver login = **phone + password**. Customer login = phone + OTP.
 - Payment: `cash_on_delivery` only.
+- No push notifications and no Firebase (instructor decision). Notifications are the in-app list from the API.
 - Weighed products: `awaiting_pricing` → `priced`; customer approves/rejects the offer before `expires_at`.
 - Brand: barq_ui colors (orange `#FF7A21`). Ignore `project.colors` from config.
 

@@ -190,7 +190,7 @@ void main() {
     });
   });
 
-  test('orderIdOf reads numbers and FCM text', () {
+  test('orderIdOf reads numbers and text', () {
     expect(orderIdOf({'order_id': 92}), 92);
     expect(orderIdOf({'order_id': '92'}), 92);
     expect(orderIdOf({}), isNull);

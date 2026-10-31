@@ -15,7 +15,7 @@ barq/
 │  └─ driver/                ← تطبيق السائق (برق كابتن)
 ├─ packages/
 │  ├─ barq_ui/               ← الشكل: ألوان، خطوط، أيقونات، widgets (جاهزة ✅)
-│  └─ barq_core/             ← المنطق المشترك: API، الدخول، الإعدادات، الرفع، FCM، التحديث الدوري، عرض الحالة
+│  └─ barq_core/             ← المنطق المشترك: API، الدخول، الإعدادات، الرفع، التحديث الدوري، عرض الحالة
 └─ docs/
    ├─ design/screens  html  overlay
    ├─ api/            openapi.json · postman · API_NOTES.md
@@ -35,7 +35,6 @@ barq/
 | `shared_preferences` | كاش الإعدادات + السلة | barq_core / customer |
 | `uuid` | Idempotency-Key | barq_core |
 | `connectivity_plus` | كشف انقطاع النت | barq_core |
-| `firebase_core` + `firebase_messaging` | الإشعارات | barq_core |
 | `image_picker` | الكاميرا وصورة الملف | التطبيقين |
 | `flutter_map` + `latlong2` | الخريطة (مجانية بدون مفتاح) | التطبيقين |
 | `geolocator` | موقع السائق والزبون | التطبيقين |
@@ -156,7 +155,6 @@ class Poller {  // بيوقف لحاله لما التطبيق بالخلفية
 }
 
 // ── الإشعارات ──
-class PushService { Future<void> init(); Future<void> registerToken(); Stream<PushMessage> get onOpen; }
 
 // ── عرض الحالة ── (في barq_core/lib/src/status/ ويستخدم BarqPill/BarqTimeline)
 class OrderStatusPill extends StatelessWidget { const OrderStatusPill(String statusKey); }
