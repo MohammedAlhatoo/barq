@@ -43,15 +43,24 @@ import '../features/cart/ui/cart_screen.dart';
 import '../features/cart/ui/compare_screen.dart';
 import '../features/checkout/state/checkout_cubit.dart';
 import '../features/checkout/ui/checkout_screen.dart';
+import '../features/notifications/state/notifications_cubit.dart';
+import '../features/notifications/ui/notifications_screen.dart';
 import '../features/offer/state/offer_cubit.dart';
 import '../features/offer/ui/offer_screen.dart';
 import '../features/orders/state/order_waiting_cubit.dart';
+import '../features/orders/state/orders_cubit.dart';
+import '../features/orders/state/rate_cubit.dart';
+import '../features/orders/state/receipt_cubit.dart';
+import '../features/orders/state/tracking_cubit.dart';
 import '../features/orders/ui/order_waiting_screen.dart';
+import '../features/orders/ui/orders_screen.dart';
+import '../features/orders/ui/rate_screen.dart';
+import '../features/orders/ui/receipt_screen.dart';
+import '../features/orders/ui/tracking_screen.dart';
 import '../features/system/state/system_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
 import 'main_shell.dart';
-import 'placeholder_screen.dart';
 
 abstract final class Routes {
   static const splash = '/splash';
@@ -78,11 +87,17 @@ abstract final class Routes {
   static const notifications = '/notifications';
   static const order = '/orders/:id';
   static const offer = '/orders/:id/offer';
+  static const track = '/orders/:id/track';
+  static const rate = '/orders/:id/rate';
+  static const receipt = '/orders/:id/receipt';
 
   static String productOf(int id) => '/product/$id';
   static String vendorOf(int id) => '/vendor/$id';
   static String orderOf(int id) => '/orders/$id';
   static String offerOf(int id) => '/orders/$id/offer';
+  static String trackOf(int id) => '/orders/$id/track';
+  static String rateOf(int id) => '/orders/$id/rate';
+  static String receiptOf(int id) => '/orders/$id/receipt';
   static String categoryOf(int id) => '$categories?category=$id';
 
   /// Routes that work without a login.
@@ -202,10 +217,11 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
         final deps = context.read<AppDependencies>();
         return BlocProvider(
           create: (_) => OrderWaitingCubit(
-            repository: deps.offerRepository,
+            orders: deps.ordersRepository,
+            offers: deps.offerRepository,
             orderId: id,
             pollSeconds:
-                deps.config.config.polling.trackingSeconds ?? Poller.minSeconds,
+                deps.config.config.polling.eventsSeconds ?? Poller.minSeconds,
           )..start(),
           child: OrderWaitingScreen(orderId: id),
         );
@@ -223,6 +239,50 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
             orderId: id,
           )..load(),
           child: OfferScreen(orderId: id),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.track,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => TrackingCubit(
+            repository: deps.ordersRepository,
+            orderId: id,
+            pollSeconds:
+                deps.config.config.polling.trackingSeconds ?? Poller.minSeconds,
+          )..start(),
+          child: TrackingScreen(orderId: id),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.rate,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BlocProvider(
+          create: (context) => RateCubit(
+            repository: context.read<AppDependencies>().ordersRepository,
+            orderId: id,
+          )..load(),
+          child: const RateScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.receipt,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => ReceiptCubit(
+            repository: deps.ordersRepository,
+            cart: deps.cart,
+            orderId: id,
+          )..load(),
+          child: const ReceiptScreen(),
         );
       },
     ),
@@ -322,11 +382,16 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     ),
     GoRoute(
       path: Routes.notifications,
-      builder: (context, _) => PlaceholderScreen(
-        title: AppLocalizations.of(context).notificationsTitle,
-        design: 'design/06_account_06.png',
-        back: true,
-      ),
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => NotificationsCubit(
+            repository: deps.ordersRepository,
+            unread: deps.unread,
+          )..load(),
+          child: const NotificationsScreen(),
+        );
+      },
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, shell) => MainShell(shell: shell),
@@ -370,10 +435,22 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
             ),
           ],
         ),
-        _tab(
-          Routes.orders,
-          'design/05_after_order_03.png',
-          (l10n) => l10n.navOrders,
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.orders,
+              builder: (context, _) {
+                final deps = context.read<AppDependencies>();
+                return BlocProvider(
+                  create: (_) => OrdersCubit(
+                    repository: deps.ordersRepository,
+                    cart: deps.cart,
+                  )..load(),
+                  child: const OrdersScreen(),
+                );
+              },
+            ),
+          ],
         ),
         StatefulShellBranch(
           routes: [
@@ -408,19 +485,3 @@ Widget _addressForm(BuildContext context, SavedAddress? existing) {
     child: const AddressFormScreen(),
   );
 }
-
-StatefulShellBranch _tab(
-  String path,
-  String design,
-  String Function(AppLocalizations) title,
-) => StatefulShellBranch(
-  routes: [
-    GoRoute(
-      path: path,
-      builder: (context, _) => PlaceholderScreen(
-        title: title(AppLocalizations.of(context)),
-        design: design,
-      ),
-    ),
-  ],
-);

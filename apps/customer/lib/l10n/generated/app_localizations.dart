@@ -1604,12 +1604,6 @@ abstract class AppLocalizations {
   /// **'استبدال السلة'**
   String get reorderReplaceConfirm;
 
-  /// No description provided for @orderWaitingTitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'وصل طلبك، ورح نفتح عرض السعر فور ما يسعّره المتجر.'**
-  String get orderWaitingTitle;
-
   /// No description provided for @orderSandboxAdvance.
   ///
   /// In ar, this message translates to:
@@ -1687,6 +1681,354 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count} من الأصناف ما عادت متوفرة بالمتجر.'**
   String reorderMissing(int count);
+
+  /// No description provided for @orderWaitingBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرسلنا طلبك لـ {store}، ورح نخبرك بكل جديد.'**
+  String orderWaitingBody(String store);
+
+  /// No description provided for @orderWaitingBodyPlain.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل طلبك، ورح نخبرك بكل جديد.'**
+  String get orderWaitingBodyPlain;
+
+  /// No description provided for @orderCancelledBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم إلغاء هذا الطلب. لم يُخصم أي مبلغ.'**
+  String get orderCancelledBody;
+
+  /// No description provided for @orderNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن'**
+  String get orderNow;
+
+  /// No description provided for @orderPhotoNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند التسليم، السائق بيصوّر الطلب على بابك كإثبات استلام.'**
+  String get orderPhotoNote;
+
+  /// No description provided for @trackingPhotoNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق بيصوّر الطلب عند بابك كإثبات تسليم'**
+  String get trackingPhotoNote;
+
+  /// No description provided for @trackingEta.
+  ///
+  /// In ar, this message translates to:
+  /// **'يصل خلال {minutes} دقيقة'**
+  String trackingEta(int minutes);
+
+  /// No description provided for @trackingNoDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'رح يظهر السائق هون فور ما يقبل الطلب.'**
+  String get trackingNoDriver;
+
+  /// No description provided for @trackingShare.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة رابط التتبع'**
+  String get trackingShare;
+
+  /// No description provided for @trackingCancel.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب'**
+  String get trackingCancel;
+
+  /// No description provided for @shareLinkBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي شخص معه الرابط بيقدر يتابع حالة الطلب بدون تسجيل دخول.'**
+  String get shareLinkBody;
+
+  /// No description provided for @shareLinkSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة الرابط'**
+  String get shareLinkSend;
+
+  /// No description provided for @shareLinkStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف الرابط'**
+  String get shareLinkStop;
+
+  /// No description provided for @mapCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'© OpenStreetMap'**
+  String get mapCredit;
+
+  /// No description provided for @vehicleMotorcycle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراجة نارية'**
+  String get vehicleMotorcycle;
+
+  /// No description provided for @vehicleCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيارة'**
+  String get vehicleCar;
+
+  /// No description provided for @vehicleBicycle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراجة هوائية'**
+  String get vehicleBicycle;
+
+  /// No description provided for @vehicleVan.
+  ///
+  /// In ar, this message translates to:
+  /// **'فان'**
+  String get vehicleVan;
+
+  /// No description provided for @vehicleTukTuk.
+  ///
+  /// In ar, this message translates to:
+  /// **'توك توك'**
+  String get vehicleTukTuk;
+
+  /// No description provided for @vehicleOnFoot.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشيًا'**
+  String get vehicleOnFoot;
+
+  /// No description provided for @cancelTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلغاء الطلب؟'**
+  String get cancelTitle;
+
+  /// No description provided for @cancelBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'ممكن تلغي قبل ما يستلم السائق الطلب'**
+  String get cancelBody;
+
+  /// No description provided for @cancelWhy.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليش بدك تلغي؟'**
+  String get cancelWhy;
+
+  /// No description provided for @cancelConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الإلغاء'**
+  String get cancelConfirm;
+
+  /// No description provided for @cancelBack.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراجع'**
+  String get cancelBack;
+
+  /// No description provided for @rateDeliveredTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل طلبك، بالهنا والشفا!'**
+  String get rateDeliveredTitle;
+
+  /// No description provided for @rateDeliveredAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التوصيل {time}'**
+  String rateDeliveredAt(String time);
+
+  /// No description provided for @ratePaid.
+  ///
+  /// In ar, this message translates to:
+  /// **'دفعت {total}'**
+  String ratePaid(String total);
+
+  /// No description provided for @rateSaved.
+  ///
+  /// In ar, this message translates to:
+  /// **'وفّرت {amount}'**
+  String rateSaved(String amount);
+
+  /// No description provided for @rateTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم تجربتك'**
+  String get rateTitle;
+
+  /// No description provided for @rateDriver.
+  ///
+  /// In ar, this message translates to:
+  /// **'السائق'**
+  String get rateDriver;
+
+  /// No description provided for @rateStore.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتجر'**
+  String get rateStore;
+
+  /// No description provided for @rateComment.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب تعليقك (اختياري)'**
+  String get rateComment;
+
+  /// No description provided for @rateSend.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال التقييم'**
+  String get rateSend;
+
+  /// No description provided for @rateSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطّي'**
+  String get rateSkip;
+
+  /// No description provided for @ordersTabCurrent.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالية'**
+  String get ordersTabCurrent;
+
+  /// No description provided for @ordersTabCurrentCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'الحالية ({count})'**
+  String ordersTabCurrentCount(int count);
+
+  /// No description provided for @ordersTabPast.
+  ///
+  /// In ar, this message translates to:
+  /// **'السابقة'**
+  String get ordersTabPast;
+
+  /// No description provided for @ordersEmptyCurrent.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك طلبات حالية'**
+  String get ordersEmptyCurrent;
+
+  /// No description provided for @ordersEmptyPast.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك طلبات سابقة'**
+  String get ordersEmptyPast;
+
+  /// No description provided for @ordersItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} منتجات · {total}'**
+  String ordersItems(int count, String total);
+
+  /// No description provided for @ordersFollow.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الطلب'**
+  String get ordersFollow;
+
+  /// No description provided for @ordersReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الطلب'**
+  String get ordersReorder;
+
+  /// No description provided for @receiptTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفاتورة'**
+  String get receiptTitle;
+
+  /// No description provided for @receiptPaidCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'مدفوع نقدًا'**
+  String get receiptPaidCash;
+
+  /// No description provided for @receiptCashOnDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدفع عند الاستلام'**
+  String get receiptCashOnDelivery;
+
+  /// No description provided for @receiptTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get receiptTotal;
+
+  /// No description provided for @receiptReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة نفس الطلب'**
+  String get receiptReorder;
+
+  /// No description provided for @receiptShareText.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتورة طلب {code}: {total}'**
+  String receiptShareText(String code, String total);
+
+  /// No description provided for @notificationsReadAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة الكل'**
+  String get notificationsReadAll;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في إشعارات'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get notificationsToday;
+
+  /// No description provided for @notificationsYesterday.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمس'**
+  String get notificationsYesterday;
+
+  /// No description provided for @notificationsEarlier.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقدم'**
+  String get notificationsEarlier;
+
+  /// No description provided for @timeNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآن'**
+  String get timeNow;
+
+  /// No description provided for @timeMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ {count} د'**
+  String timeMinutes(int count);
+
+  /// No description provided for @timeHours.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ {count} س'**
+  String timeHours(int count);
+
+  /// No description provided for @timeDays.
+  ///
+  /// In ar, this message translates to:
+  /// **'منذ {count} يوم'**
+  String timeDays(int count);
 }
 
 class _AppLocalizationsDelegate

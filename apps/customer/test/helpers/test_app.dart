@@ -19,7 +19,9 @@ import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_customer/features/cart/state/shop_scope_cubit.dart';
 import 'package:barq_customer/features/checkout/data/checkout_repository.dart';
+import 'package:barq_customer/features/notifications/state/unread_cubit.dart';
 import 'package:barq_customer/features/offer/data/offer_repository.dart';
+import 'package:barq_customer/features/orders/data/orders_repository.dart';
 import 'package:barq_customer/features/system/state/system_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -229,6 +231,7 @@ class TestApp {
     final location = FakeLocation();
     final browse = ApiBrowseRepository(api);
     final cart = CartCubit(prefs: sharedPrefs, config: config, browse: browse);
+    final orders = ApiOrdersRepository(api);
     final deps = AppDependencies(
       auth: auth,
       api: api,
@@ -253,6 +256,8 @@ class TestApp {
       scope: ShopScopeCubit(cart: cart, browse: browse),
       checkoutRepository: ApiCheckoutRepository(api),
       offerRepository: ApiOfferRepository(api),
+      ordersRepository: orders,
+      unread: UnreadCubit(repository: orders, pollSeconds: () => null),
       accountRepository: ApiAccountRepository(
         api,
         UploadService(api: api),

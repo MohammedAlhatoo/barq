@@ -830,10 +830,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reorderReplaceConfirm => 'Replace cart';
 
   @override
-  String get orderWaitingTitle =>
-      'Your order arrived. The offer opens as soon as the store prices it.';
-
-  @override
   String get orderSandboxAdvance => 'Test: next store step';
 
   @override
@@ -894,5 +890,208 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String reorderMissing(int count) {
     return '$count of the items are no longer in the store.';
+  }
+
+  @override
+  String orderWaitingBody(String store) {
+    return 'We sent your order to $store and will keep you posted.';
+  }
+
+  @override
+  String get orderWaitingBodyPlain =>
+      'We received your order and will keep you posted.';
+
+  @override
+  String get orderCancelledBody =>
+      'This order was cancelled. Nothing was charged.';
+
+  @override
+  String get orderNow => 'Now';
+
+  @override
+  String get orderPhotoNote =>
+      'At delivery, the driver takes a photo of the order at your door as proof.';
+
+  @override
+  String get trackingPhotoNote =>
+      'The driver photographs the order at your door as proof of delivery';
+
+  @override
+  String trackingEta(int minutes) {
+    return 'Arrives in $minutes min';
+  }
+
+  @override
+  String get trackingNoDriver =>
+      'The driver will show here once the order is accepted.';
+
+  @override
+  String get trackingShare => 'Share tracking link';
+
+  @override
+  String get trackingCancel => 'Cancel order';
+
+  @override
+  String get shareLinkBody =>
+      'Anyone with this link can follow the order without logging in.';
+
+  @override
+  String get shareLinkSend => 'Share link';
+
+  @override
+  String get shareLinkStop => 'Stop the link';
+
+  @override
+  String get mapCredit => '© OpenStreetMap';
+
+  @override
+  String get vehicleMotorcycle => 'Motorcycle';
+
+  @override
+  String get vehicleCar => 'Car';
+
+  @override
+  String get vehicleBicycle => 'Bicycle';
+
+  @override
+  String get vehicleVan => 'Van';
+
+  @override
+  String get vehicleTukTuk => 'Tuk-tuk';
+
+  @override
+  String get vehicleOnFoot => 'On foot';
+
+  @override
+  String get cancelTitle => 'Cancel the order?';
+
+  @override
+  String get cancelBody =>
+      'You can cancel before the driver picks up the order';
+
+  @override
+  String get cancelWhy => 'Why do you want to cancel?';
+
+  @override
+  String get cancelConfirm => 'Confirm cancellation';
+
+  @override
+  String get cancelBack => 'Go back';
+
+  @override
+  String get rateDeliveredTitle => 'Your order arrived, enjoy!';
+
+  @override
+  String rateDeliveredAt(String time) {
+    return 'Delivered $time';
+  }
+
+  @override
+  String ratePaid(String total) {
+    return 'You paid $total';
+  }
+
+  @override
+  String rateSaved(String amount) {
+    return 'You saved $amount';
+  }
+
+  @override
+  String get rateTitle => 'Rate your experience';
+
+  @override
+  String get rateDriver => 'Driver';
+
+  @override
+  String get rateStore => 'Store';
+
+  @override
+  String get rateComment => 'Write a comment (optional)';
+
+  @override
+  String get rateSend => 'Send rating';
+
+  @override
+  String get rateSkip => 'Skip';
+
+  @override
+  String get ordersTabCurrent => 'Current';
+
+  @override
+  String ordersTabCurrentCount(int count) {
+    return 'Current ($count)';
+  }
+
+  @override
+  String get ordersTabPast => 'Past';
+
+  @override
+  String get ordersEmptyCurrent => 'You have no current orders';
+
+  @override
+  String get ordersEmptyPast => 'You have no past orders';
+
+  @override
+  String ordersItems(int count, String total) {
+    return '$count items · $total';
+  }
+
+  @override
+  String get ordersFollow => 'Follow order';
+
+  @override
+  String get ordersReorder => 'Reorder';
+
+  @override
+  String get receiptTitle => 'Receipt';
+
+  @override
+  String get receiptPaidCash => 'Paid in cash';
+
+  @override
+  String get receiptCashOnDelivery => 'Cash on delivery';
+
+  @override
+  String get receiptTotal => 'Total';
+
+  @override
+  String get receiptReorder => 'Order the same again';
+
+  @override
+  String receiptShareText(String code, String total) {
+    return 'Receipt for order $code: $total';
+  }
+
+  @override
+  String get notificationsReadAll => 'Read all';
+
+  @override
+  String get notificationsEmpty => 'No notifications';
+
+  @override
+  String get notificationsToday => 'Today';
+
+  @override
+  String get notificationsYesterday => 'Yesterday';
+
+  @override
+  String get notificationsEarlier => 'Earlier';
+
+  @override
+  String get timeNow => 'Just now';
+
+  @override
+  String timeMinutes(int count) {
+    return '$count min ago';
+  }
+
+  @override
+  String timeHours(int count) {
+    return '$count h ago';
+  }
+
+  @override
+  String timeDays(int count) {
+    return '$count d ago';
   }
 }

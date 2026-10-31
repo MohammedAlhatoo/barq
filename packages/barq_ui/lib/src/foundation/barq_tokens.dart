@@ -11,6 +11,7 @@ abstract final class BarqColors {
   static const primaryText = Color(0xFFC9520A); // .or-t, .lnk
   static const primarySoft = Color(0xFFFFEDE2); // .pill.or / .btn.lt bg
   static const primarySoftText = Color(0xFFB34A08);
+  static const primaryBorder = Color(0xFFFFD2B5); // active order card
   static const primaryTint = Color(0xFFFFF0E6); // .ti bg
   static const primaryTint2 = Color(0xFFFFF3EB); // info rows
 
@@ -255,6 +256,15 @@ abstract final class BarqSizes {
   static const checkoutSegment = 36.0;
   static const checkoutPin = 44.0;
   static const offerStore = 54.0;
+  static const waitingArt = 200.0;
+  static const waitingOuter = 190.0;
+  static const waitingInner = 140.0;
+  static const waitingBadge = 96.0;
+  static const waitingStore = 72.0;
+  static const deliveredArtHeight = 250.0;
+  static const deliveredCircle = 220.0;
+  static const deliveredBox = 210.0;
+  static const unreadDot = 8.0;
   static const offerExpiredArt = 300.0;
   static const offerExpiredBlob = 230.0;
   static const offerExpiredIcon = 130.0;

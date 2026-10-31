@@ -14,7 +14,9 @@ import '../features/cart/data/cart_repository.dart';
 import '../features/cart/state/cart_cubit.dart';
 import '../features/cart/state/shop_scope_cubit.dart';
 import '../features/checkout/data/checkout_repository.dart';
+import '../features/notifications/state/unread_cubit.dart';
 import '../features/offer/data/offer_repository.dart';
+import '../features/orders/data/orders_repository.dart';
 import '../features/system/state/system_cubit.dart';
 import 'locale_cubit.dart';
 
@@ -46,6 +48,8 @@ class AppDependencies {
     required this.scope,
     required this.checkoutRepository,
     required this.offerRepository,
+    required this.ordersRepository,
+    required this.unread,
     required this.accountRepository,
     required this.avatarPicker,
     required this.prefs,
@@ -68,6 +72,8 @@ class AppDependencies {
   final ShopScopeCubit scope;
   final CheckoutRepository checkoutRepository;
   final OfferRepository offerRepository;
+  final OrdersRepository ordersRepository;
+  final UnreadCubit unread;
   final AccountRepository accountRepository;
   final AvatarPicker avatarPicker;
   final SharedPreferences prefs;
@@ -98,6 +104,7 @@ class AppDependencies {
     final browse = ApiBrowseRepository(api);
     final location = GeolocatorLocationRepository();
     final cart = CartCubit(prefs: prefs, config: config, browse: browse);
+    final orders = ApiOrdersRepository(api);
     return AppDependencies(
       auth: auth,
       api: api,
@@ -115,6 +122,12 @@ class AppDependencies {
       scope: ShopScopeCubit(cart: cart, browse: browse),
       checkoutRepository: ApiCheckoutRepository(api),
       offerRepository: ApiOfferRepository(api),
+      ordersRepository: orders,
+      unread: UnreadCubit(
+        repository: orders,
+        pollSeconds: () =>
+            config.isLoaded ? config.config.polling.notificationsSeconds : null,
+      ),
       accountRepository: ApiAccountRepository(
         api,
         UploadService(api: api),

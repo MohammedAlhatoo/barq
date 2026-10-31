@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/cart/state/cart_cubit.dart';
+import '../features/notifications/state/unread_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
 import 'router.dart';
@@ -19,11 +20,23 @@ class MainShell extends StatefulWidget {
 }
 
 class _MainShellState extends State<MainShell> {
+  static const _ordersTab = 2;
+
+  late final UnreadCubit _unread;
+
   @override
   void initState() {
     super.initState();
     _startPush();
-    context.read<AppDependencies>().scope.loadName();
+    final deps = context.read<AppDependencies>();
+    deps.scope.loadName();
+    _unread = deps.unread..start();
+  }
+
+  @override
+  void dispose() {
+    _unread.stop();
+    super.dispose();
   }
 
   /// Only after login, because the token is saved on the user's account.
@@ -50,10 +63,15 @@ class _MainShellState extends State<MainShell> {
           BarqNavItem(icon: BarqIcons.user, label: l10n.navAccount),
         ],
         currentIndex: widget.shell.currentIndex,
-        onTap: (index) => widget.shell.goBranch(
-          index,
-          initialLocation: index == widget.shell.currentIndex,
-        ),
+        onTap: (index) {
+          if (index == _ordersTab) {
+            context.read<AppDependencies>().ordersRepository.ordersChanged();
+          }
+          widget.shell.goBranch(
+            index,
+            initialLocation: index == widget.shell.currentIndex,
+          );
+        },
         fabIcon: BarqIcons.bag,
         fabBadge: cartCount,
         onFab: () => context.push(Routes.cart),

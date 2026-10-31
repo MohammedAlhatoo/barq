@@ -313,6 +313,21 @@ class BarqDivider extends StatelessWidget {
   }
 }
 
+/// Small orange dot on something the user has not read.
+class BarqUnreadDot extends StatelessWidget {
+  const BarqUnreadDot({super.key});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: BarqSizes.unreadDot,
+        height: BarqSizes.unreadDot,
+        decoration: const BoxDecoration(
+          color: BarqColors.primary,
+          shape: BoxShape.circle,
+        ),
+      );
+}
+
 /// 5-star rating (read-only or tappable).
 class BarqStars extends StatelessWidget {
   const BarqStars(

@@ -124,6 +124,7 @@ Map<String, Object?> _order({
           'formatted': '-4.60 ₪',
         },
     ],
+    'discount': _money(discount ? 460 : 0),
     'total': _money(2000),
   },
   'available_actions': [
@@ -553,7 +554,13 @@ void main() {
 
       app.server.replies['GET /orders/55'] = Reply(_order(status: 'priced'));
       app.server.replies['GET /orders/55/offer'] = Reply(_offer());
-      await tester.pump(const Duration(seconds: 31));
+      app.server.replies['GET /orders/55/events'] = const Reply(
+        [
+          {'id': 2, 'type': 'status.changed', 'payload': <String, Object>{}},
+        ],
+        meta: {'next_since': 2, 'next_poll_seconds': 5},
+      );
+      await tester.pump(const Duration(seconds: 6));
       await app.settle(tester);
       expect(find.byType(OfferScreen), findsOneWidget);
     });
@@ -615,7 +622,7 @@ void main() {
         isNotNull,
       );
       expect(find.byType(OfferScreen), findsNothing);
-      expect(find.text('حالة awaiting_vendor'), findsOneWidget);
+      expect(find.text('حالة awaiting_vendor'), findsWidgets);
     });
 
     _test('a lost answer approves again with the same key', (tester) async {
@@ -671,7 +678,7 @@ void main() {
       await tester.tap(find.text('رفض العرض').last);
       await app.settle(tester);
       expect(find.byType(OfferScreen), findsNothing);
-      expect(find.text('حالة cancelled'), findsOneWidget);
+      expect(find.text('حالة cancelled'), findsWidgets);
     });
 
     _test('offer_expired while approving shows the expired view', (
@@ -722,7 +729,7 @@ void main() {
       expect(find.textContaining('خلال 60 دقيقة'), findsOneWidget);
       expect(find.text('طلب BR-000055'), findsOneWidget);
       expect(find.text('1 منتج · كان الإجمالي 20.00 ₪'), findsOneWidget);
-      expect(find.text('حالة cancelled'), findsOneWidget);
+      expect(find.text('حالة cancelled'), findsWidgets);
     });
 
     _test('order again fills the cart and opens it', (tester) async {

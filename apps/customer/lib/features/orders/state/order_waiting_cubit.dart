@@ -1,8 +1,9 @@
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../offer/data/offer_models.dart';
 import '../../offer/data/offer_repository.dart';
+import '../data/orders_models.dart';
+import '../data/orders_repository.dart';
 
 class OrderWaitingState {
   const OrderWaitingState({
@@ -16,7 +17,7 @@ class OrderWaitingState {
 
   final bool loading;
   final String? error;
-  final OrderInfo? order;
+  final Order? order;
 
   /// An offer is waiting for an answer, or it has expired.
   final bool openOffer;
@@ -24,26 +25,23 @@ class OrderWaitingState {
   final String? advanceError;
 }
 
-/// Follows a new order until the store prices it. Phase 6 replaces this with
-/// the full "waiting for the store" screen.
+/// Loads the order once, then asks only for what happened since. The whole
+/// order is loaded again when something new happened.
 class OrderWaitingCubit extends Cubit<OrderWaitingState> {
   OrderWaitingCubit({
-    required this._repository,
+    required this._orders,
+    required this._offers,
     required this._orderId,
     required int pollSeconds,
   }) : super(const OrderWaitingState()) {
-    _poller = Poller(
-      tick: () async {
-        await refresh();
-        return null;
-      },
-      defaultSeconds: pollSeconds,
-    );
+    _poller = Poller(tick: _checkEvents, defaultSeconds: pollSeconds);
   }
 
-  final OfferRepository _repository;
+  final OrdersRepository _orders;
+  final OfferRepository _offers;
   final int _orderId;
   late final Poller _poller;
+  int _since = 0;
 
   /// A request can end after the user left the screen.
   @override
@@ -53,13 +51,20 @@ class OrderWaitingCubit extends Cubit<OrderWaitingState> {
 
   Future<void> start() async {
     await refresh();
-    if (!isClosed) _poller.start();
+    if (!isClosed && state.order?.isTerminal != true) _poller.start();
+  }
+
+  Future<int?> _checkEvents() async {
+    final events = await _orders.events(_orderId, since: _since);
+    _since = events.nextSince;
+    if (events.hasNews) await refresh();
+    return events.nextPollSeconds;
   }
 
   Future<void> refresh() async {
     try {
-      final order = await _repository.order(_orderId);
-      final offer = await _repository.offer(_orderId);
+      final order = await _orders.order(_orderId);
+      final offer = await _offers.offer(_orderId);
       emit(
         OrderWaitingState(
           loading: false,
@@ -86,7 +91,7 @@ class OrderWaitingCubit extends Cubit<OrderWaitingState> {
       ),
     );
     try {
-      await _repository.advanceInSandbox(_orderId);
+      await _offers.advanceInSandbox(_orderId);
       await refresh();
     } on ApiException catch (e) {
       emit(

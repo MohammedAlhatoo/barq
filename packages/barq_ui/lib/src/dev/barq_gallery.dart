@@ -542,6 +542,12 @@ class _BarqGalleryState extends State<BarqGallery> {
                       label('BarqBasketArt'),
                       const BarqOfferExpiredArt(label: 'انتهت المهلة'),
                       label('BarqOfferExpiredArt'),
+                      const BarqWaitingArt(),
+                      label('BarqWaitingArt'),
+                      const BarqDeliveredArt(),
+                      label('BarqDeliveredArt'),
+                      const BarqUnreadDot(),
+                      label('BarqUnreadDot'),
                       const BarqMessageView(
                           title: 'لا نتائج', actionLabel: 'إعادة المحاولة'),
                       label('BarqMessageView'),

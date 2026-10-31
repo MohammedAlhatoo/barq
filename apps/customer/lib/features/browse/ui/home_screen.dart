@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
+import '../../notifications/state/unread_cubit.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/browse_models.dart';
 import '../state/home_cubit.dart';
@@ -135,8 +136,11 @@ class _HomeHeader extends StatelessWidget {
           ),
         ],
       ),
-      // Opens the notifications screen in phase 6.
-      trailing: const BarqIconButton(icon: BarqIcons.bell),
+      trailing: BarqIconButton(
+        icon: BarqIcons.bell,
+        showDot: context.watch<UnreadCubit>().state > 0,
+        onPressed: () => context.push(Routes.notifications),
+      ),
       bottom: Row(
         children: [
           Expanded(

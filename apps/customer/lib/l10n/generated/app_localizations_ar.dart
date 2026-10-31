@@ -819,10 +819,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reorderReplaceConfirm => 'استبدال السلة';
 
   @override
-  String get orderWaitingTitle =>
-      'وصل طلبك، ورح نفتح عرض السعر فور ما يسعّره المتجر.';
-
-  @override
   String get orderSandboxAdvance => 'تجربة: خطوة المتجر التالية';
 
   @override
@@ -883,5 +879,203 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String reorderMissing(int count) {
     return '$count من الأصناف ما عادت متوفرة بالمتجر.';
+  }
+
+  @override
+  String orderWaitingBody(String store) {
+    return 'أرسلنا طلبك لـ $store، ورح نخبرك بكل جديد.';
+  }
+
+  @override
+  String get orderWaitingBodyPlain => 'وصل طلبك، ورح نخبرك بكل جديد.';
+
+  @override
+  String get orderCancelledBody => 'تم إلغاء هذا الطلب. لم يُخصم أي مبلغ.';
+
+  @override
+  String get orderNow => 'الآن';
+
+  @override
+  String get orderPhotoNote =>
+      'عند التسليم، السائق بيصوّر الطلب على بابك كإثبات استلام.';
+
+  @override
+  String get trackingPhotoNote => 'السائق بيصوّر الطلب عند بابك كإثبات تسليم';
+
+  @override
+  String trackingEta(int minutes) {
+    return 'يصل خلال $minutes دقيقة';
+  }
+
+  @override
+  String get trackingNoDriver => 'رح يظهر السائق هون فور ما يقبل الطلب.';
+
+  @override
+  String get trackingShare => 'مشاركة رابط التتبع';
+
+  @override
+  String get trackingCancel => 'إلغاء الطلب';
+
+  @override
+  String get shareLinkBody =>
+      'أي شخص معه الرابط بيقدر يتابع حالة الطلب بدون تسجيل دخول.';
+
+  @override
+  String get shareLinkSend => 'مشاركة الرابط';
+
+  @override
+  String get shareLinkStop => 'إيقاف الرابط';
+
+  @override
+  String get mapCredit => '© OpenStreetMap';
+
+  @override
+  String get vehicleMotorcycle => 'دراجة نارية';
+
+  @override
+  String get vehicleCar => 'سيارة';
+
+  @override
+  String get vehicleBicycle => 'دراجة هوائية';
+
+  @override
+  String get vehicleVan => 'فان';
+
+  @override
+  String get vehicleTukTuk => 'توك توك';
+
+  @override
+  String get vehicleOnFoot => 'مشيًا';
+
+  @override
+  String get cancelTitle => 'إلغاء الطلب؟';
+
+  @override
+  String get cancelBody => 'ممكن تلغي قبل ما يستلم السائق الطلب';
+
+  @override
+  String get cancelWhy => 'ليش بدك تلغي؟';
+
+  @override
+  String get cancelConfirm => 'تأكيد الإلغاء';
+
+  @override
+  String get cancelBack => 'تراجع';
+
+  @override
+  String get rateDeliveredTitle => 'وصل طلبك، بالهنا والشفا!';
+
+  @override
+  String rateDeliveredAt(String time) {
+    return 'تم التوصيل $time';
+  }
+
+  @override
+  String ratePaid(String total) {
+    return 'دفعت $total';
+  }
+
+  @override
+  String rateSaved(String amount) {
+    return 'وفّرت $amount';
+  }
+
+  @override
+  String get rateTitle => 'قيّم تجربتك';
+
+  @override
+  String get rateDriver => 'السائق';
+
+  @override
+  String get rateStore => 'المتجر';
+
+  @override
+  String get rateComment => 'اكتب تعليقك (اختياري)';
+
+  @override
+  String get rateSend => 'إرسال التقييم';
+
+  @override
+  String get rateSkip => 'تخطّي';
+
+  @override
+  String get ordersTabCurrent => 'الحالية';
+
+  @override
+  String ordersTabCurrentCount(int count) {
+    return 'الحالية ($count)';
+  }
+
+  @override
+  String get ordersTabPast => 'السابقة';
+
+  @override
+  String get ordersEmptyCurrent => 'ما عندك طلبات حالية';
+
+  @override
+  String get ordersEmptyPast => 'ما عندك طلبات سابقة';
+
+  @override
+  String ordersItems(int count, String total) {
+    return '$count منتجات · $total';
+  }
+
+  @override
+  String get ordersFollow => 'متابعة الطلب';
+
+  @override
+  String get ordersReorder => 'إعادة الطلب';
+
+  @override
+  String get receiptTitle => 'الفاتورة';
+
+  @override
+  String get receiptPaidCash => 'مدفوع نقدًا';
+
+  @override
+  String get receiptCashOnDelivery => 'الدفع عند الاستلام';
+
+  @override
+  String get receiptTotal => 'الإجمالي';
+
+  @override
+  String get receiptReorder => 'إعادة نفس الطلب';
+
+  @override
+  String receiptShareText(String code, String total) {
+    return 'فاتورة طلب $code: $total';
+  }
+
+  @override
+  String get notificationsReadAll => 'قراءة الكل';
+
+  @override
+  String get notificationsEmpty => 'ما في إشعارات';
+
+  @override
+  String get notificationsToday => 'اليوم';
+
+  @override
+  String get notificationsYesterday => 'أمس';
+
+  @override
+  String get notificationsEarlier => 'أقدم';
+
+  @override
+  String get timeNow => 'الآن';
+
+  @override
+  String timeMinutes(int count) {
+    return 'منذ $count د';
+  }
+
+  @override
+  String timeHours(int count) {
+    return 'منذ $count س';
+  }
+
+  @override
+  String timeDays(int count) {
+    return 'منذ $count يوم';
   }
 }

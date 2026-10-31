@@ -475,6 +475,110 @@ class BarqOfferExpiredArt extends StatelessWidget {
       );
 }
 
+/// Rings around a store: the customer's "waiting for the store" screen.
+class BarqWaitingArt extends StatelessWidget {
+  const BarqWaitingArt({super.key});
+
+  Widget _ring(double size, Color color) => Container(
+        width: size,
+        height: size,
+        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+      );
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        height: BarqSizes.waitingArt,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            _ring(BarqSizes.waitingOuter, const Color(0x14FF7A21)),
+            _ring(BarqSizes.waitingInner, const Color(0x24FF7A21)),
+            Container(
+              width: BarqSizes.waitingBadge,
+              height: BarqSizes.waitingBadge,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color(0xCCFF7A21),
+                    offset: Offset(0, 16),
+                    blurRadius: 30,
+                    spreadRadius: -14,
+                  ),
+                ],
+              ),
+              child: const BarqIllustration(
+                'storefront',
+                width: BarqSizes.waitingStore,
+                height: BarqSizes.waitingStore,
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+/// A box on a green circle with confetti: the "delivered" screen.
+class BarqDeliveredArt extends StatelessWidget {
+  const BarqDeliveredArt({super.key});
+
+  Widget _confetti(double width, double height, Color color, double angle) =>
+      Transform.rotate(
+        angle: angle,
+        child: Container(
+          width: width,
+          height: height,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      );
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        height: BarqSizes.deliveredArtHeight,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: BarqSizes.deliveredCircle,
+              height: BarqSizes.deliveredCircle,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  center: Alignment(-.3, -.4),
+                  colors: [Color(0xFFDDF5E5), Color(0xFFB9EBC9)],
+                ),
+              ),
+            ),
+            const BarqIllustration(
+              'box',
+              width: BarqSizes.deliveredBox,
+              height: BarqSizes.deliveredBox,
+            ),
+            Positioned(
+              top: 40,
+              right: 70,
+              child: _confetti(12, 12, BarqColors.primary, .35),
+            ),
+            Positioned(
+              top: 70,
+              left: 66,
+              child: _confetti(10, 10, const Color(0xFFFFC21A), 0),
+            ),
+            Positioned(
+              bottom: 40,
+              right: 56,
+              child: _confetti(9, 16, const Color(0xFF1E9E55), -.5),
+            ),
+          ],
+        ),
+      );
+}
+
 /// Thin bar above a list: what the list is limited to, and a link to change it
 /// ("تتسوّق من: ميني ماركت النور · كل المتاجر").
 class BarqScopeBar extends StatelessWidget {

@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/orders/data/orders_models.dart';
 import '../features/system/ui/system_gate.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
@@ -22,6 +25,16 @@ class BarqCustomerApp extends StatefulWidget {
 
 class _BarqCustomerAppState extends State<BarqCustomerApp> {
   late final GoRouter _router = createRouter(widget.deps.auth);
+  StreamSubscription<PushMessage>? _pushOpened;
+
+  @override
+  void initState() {
+    super.initState();
+    _pushOpened = widget.deps.push.onOpen.listen((message) {
+      final orderId = orderIdOf(message.data);
+      if (orderId != null) _router.go(Routes.orderOf(orderId));
+    });
+  }
 
   /// Labels from the server depend on the language.
   Future<void> _reloadConfig() async {
@@ -34,6 +47,7 @@ class _BarqCustomerAppState extends State<BarqCustomerApp> {
 
   @override
   void dispose() {
+    _pushOpened?.cancel();
     _router.dispose();
     super.dispose();
   }
@@ -49,6 +63,7 @@ class _BarqCustomerAppState extends State<BarqCustomerApp> {
           BlocProvider.value(value: deps.system),
           BlocProvider.value(value: deps.cart),
           BlocProvider.value(value: deps.scope),
+          BlocProvider.value(value: deps.unread),
         ],
         child: ConfigScope(
           store: deps.config,

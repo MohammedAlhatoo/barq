@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router.dart';
 import '../../../../l10n/generated/app_localizations.dart';
-import '../../../cart/state/cart_cubit.dart';
+import '../../../orders/ui/reorder_flow.dart';
 import '../../data/offer_models.dart';
 import '../../state/offer_cubit.dart';
 
@@ -16,48 +16,6 @@ class OfferExpiredView extends StatelessWidget {
 
   final OrderInfo order;
   final Offer offer;
-
-  Future<void> _reorder(BuildContext context) async {
-    final l10n = AppLocalizations.of(context);
-    final router = GoRouter.of(context);
-    final cubit = context.read<OfferCubit>();
-    if (!context.read<CartCubit>().state.isEmpty) {
-      final replace = await showBarqSheet<bool>(
-        context,
-        children: [
-          Text(l10n.reorderReplaceTitle, style: BarqText.h2),
-          Text(l10n.reorderReplaceBody, style: BarqText.body),
-          BarqButton(
-            label: l10n.reorderReplaceConfirm,
-            onPressed: () => closeBarqSheet(context, true),
-          ),
-          BarqButton(
-            label: l10n.commonKeepCart,
-            variant: BarqButtonVariant.light,
-            onPressed: () => closeBarqSheet(context, false),
-          ),
-        ],
-      );
-      if (replace != true) return;
-    }
-    final missing = await cubit.reorder();
-    if (missing == null || !context.mounted) return;
-    if (missing > 0) {
-      await showBarqSheet<void>(
-        context,
-        children: [
-          Text(l10n.reorderMissing(missing), style: BarqText.h3),
-          BarqButton(
-            label: l10n.commonOk,
-            onPressed: () => closeBarqSheet<void>(context),
-          ),
-        ],
-      );
-    }
-    router
-      ..go(Routes.home)
-      ..push(Routes.cart);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +49,10 @@ class OfferExpiredView extends StatelessWidget {
                     label: l10n.offerExpiredReorder,
                     icon: BarqIcons.refresh,
                     loading: state.reordering,
-                    onPressed: () => _reorder(context),
+                    onPressed: () => reorderToCart(
+                      context,
+                      context.read<OfferCubit>().reorder,
+                    ),
                   ),
                 BarqButton(
                   label: l10n.offerExpiredHome,

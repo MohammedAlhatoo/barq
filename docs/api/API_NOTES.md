@@ -81,7 +81,7 @@
 - `GET /app/config`: شكل `zones[].polygon` مش موضّح بـ `openapi.json` (`additionalProperties: true`).
 - مش موضّح بـ `openapi.json`: شو بيصير للافتراضي لما ينحذف العنوان الافتراضي، ولما المستخدم يبعت `is_default: false` على عنوانه الوحيد. `test/live_account_test.dart` بيطبع الأول.
 - `DELETE /me`: `openapi.json` ما بيذكر كود الخطأ لما يكون في طلب جاري، مع إن التصميم بيقول «الطلبات الجارية يجب أن تنتهي أولًا». التطبيق بيعرض `messageAr` لأي رفض.
-- **`POST /orders/{id}/offer/approve` مش شغال (بيوقف المراحل 6 و 7 و 8):** `openapi.json` ما فيه body، و Postman فيها `{}`، والسيرفر بيرجع `422 validation_failed` «offer id مطلوب». مع `offer_id` بيرجع `422 invalid_transition` من `priced` لـ `pending`، والمسموح `awaiting_vendor` و `cancelled`. مجرّب مرة على طلب مفتوح بمتجر 16، وما في بالـ openapi حقل ثاني نبعته. إذا هاد عام، الطلب ما بيكمل بعد `priced` وما بيوصل للسائق.
+- `POST /orders/{id}/offer/approve`: انحلت مشكلة `invalid_transition`، ومجرّب بالمرحلة 6: الطلب بيروح من `priced` لـ `pending` مباشرة. لسا `openapi.json` ما بيذكر `offer_id` المطلوب بالـ body.
 - كل الطلبات بتبدأ بـ `awaiting_pricing` (حتى لو كل المنتجات `price_mode: fixed`)، مش بس منتجات الوزن. وما لقينا أي منتج بالوزن بأول 5 صفحات من `GET /products`.
 - `Offer` ما فيه خصم، مع إن `total` شامل الكوبون، فالتطبيق بياخد سطر الخصم من `order.price.breakdown`.
 - `breakdown`: سطر الخصم `amount` موجب و `formatted` سالب. و `discount.formatted` بالرد موجب.
@@ -92,3 +92,13 @@
 - كوبون `BARQ5` تبع التصميم مش موجود بالـ sandbox. للتجربة: `WELCOME10` (10% لأول طلب، حد أدنى 30.00 ₪).
 - `POST /orders/quote` ما بيرجع سعر لكل منتج، فشاشة انتهاء السعر بتقارن من `GET /products/{id}`.
 - `currency.minor_units` هو عدد الوحدات الصغيرة بالوحدة الكبيرة (100 أغورة بالشيكل)، مش عدد الخانات العشرية. `openapi.json` بيقول `integer` بس بدون شرح.
+- `GET /orders/{id}/events`: `meta` فيها `next_since` و `has_more` و `status` و `next_poll_seconds`. مكتوب بالوصف `next_since` بس.
+- `GET /notifications`: `meta.unread` فيها عدد غير المقروءة، و `data` فيها `order_id` و `status` و `type`. مش مكتوبين بـ `openapi.json`.
+- `OrderSummary` ما فيه اسم المتجر ولا `eta_minutes` ولا `available_actions`، مع إن شاشة طلباتي بالتصميم بتعرضهم.
+- `Receipt` ما فيه اسم المتجر ولا رابط PDF، و `items` بدون سعر، فالفاتورة بتجيب المتجر من `GET /orders/{id}` وزر PDF مخفي.
+- `GET /cancel-reasons` بيرجع 11 سبب، منها أسباب للسائق زي «تعطل المركبة»، والتصميم فيه 5. التطبيق بيعرض اللي بيرجع.
+- `POST /orders/{id}/rate` قبل التوصيل بيرجع `409 conflict` مع `reason: not_delivered`.
+- `POST /sandbox/orders/{id}/advance` بعد `pending` بيرجع `409 conflict`، مش `nothing_to_do` زي الوصف.
+- `Tracking` ما فيه المسافة المتبقية، فملصق «2.1 كم» مخفي. وما في API لمحادثة السائق.
+- `payment.status` بيرجع `cash_on_delivery` حتى بعد الإلغاء، فملصق «مدفوع نقدًا» بنعرضه للطلب الموصّل بس.
+- `config_version` صار 5 على الـ sandbox.
