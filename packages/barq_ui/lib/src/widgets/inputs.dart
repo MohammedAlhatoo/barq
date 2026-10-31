@@ -45,6 +45,7 @@ class BarqInput extends StatefulWidget {
     this.onSubmitted,
     this.inputFormatters,
     this.height = BarqSizes.input,
+    this.radius = BarqRadius.input,
     this.maxLines = 1,
     this.focusNode,
     this.textInputAction,
@@ -77,6 +78,7 @@ class BarqInput extends StatefulWidget {
   final ValueChanged<String>? onSubmitted;
   final List<TextInputFormatter>? inputFormatters;
   final double height;
+  final double radius;
   final int maxLines;
   final FocusNode? focusNode;
   final TextInputAction? textInputAction;
@@ -123,7 +125,7 @@ class _BarqInputState extends State<BarqInput> {
         color: grey
             ? (p.isDark ? BarqColors.darkChip : const Color(0xFFF8F3F0))
             : p.input,
-        borderRadius: BorderRadius.circular(BarqRadius.input),
+        borderRadius: BorderRadius.circular(widget.radius),
         border: Border.all(color: borderColor, width: 1.5),
         boxShadow: focused && !hasError ? BarqShadows.focusRing : null,
       ),

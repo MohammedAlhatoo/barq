@@ -279,5 +279,93 @@
   "addressSave": "حفظ العنوان",
   "addressLocateFailed": "تعذّر تحديد موقعك. حرّك الخريطة يدويًا.",
   "addressMapCredit": "© OpenStreetMap",
-  "notificationsTitle": "الإشعارات"
+  "notificationsTitle": "الإشعارات",
+
+  "checkoutNoAddressBody": "أضف عنوانك عشان نحسب سعر الطلب والتوصيل.",
+  "checkoutCash": "نقدًا عند الاستلام",
+  "checkoutSubstitutions": "إذا نفد صنف",
+  "subCallMe": "اتصلوا بي",
+  "subSimilar": "بديل مشابه",
+  "subSkip": "احذفوه",
+  "checkoutCouponHint": "كود الخصم",
+  "checkoutCouponApply": "تطبيق",
+  "checkoutCouponApplied": "تم تطبيقه",
+  "checkoutNoteHint": "ملاحظة للمتجر أو السائق",
+  "checkoutTotal": "الإجمالي",
+  "checkoutChange": "تغيير",
+  "checkoutPriceHeld": "السعر محجوز لك لمدة",
+  "quoteExpiredTitle": "انتهت صلاحية السعر",
+  "quoteExpiredChanged": "طلبنا تسعيرة جديدة، وهاي الأسعار اللي تغيّرت:",
+  "quoteExpiredSame": "طلبنا تسعيرة جديدة، والأسعار ما تغيّرت.",
+  "quoteExpiredNewTotal": "الإجمالي الجديد",
+  "quoteExpiredContinue": "متابعة بالسعر الجديد",
+  "quoteExpiredReview": "مراجعة السلة",
+  "offerTitle": "عرض السعر",
+  "offerNotReadyTitle": "المتجر لسا ما سعّر طلبك",
+  "offerNotReadyBody": "رح يوصلك العرض هون فور تجهيزه.",
+  "offerPricedTitle": "تم تسعير طلبك",
+  "offerPricedBody": "المنتجات بالوزن تُسعّر بعد التجهيز",
+  "offerUnavailable": "غير متوفر",
+  "offerItemsTotal": "المنتجات",
+  "offerDelivery": "التوصيل",
+  "offerActionRefused": "ما قدرنا ننفّذ هاد الطلب. جرّب مرة ثانية أو تواصل مع الدعم.",
+  "offerApprove": "الموافقة على العرض",
+  "offerExpiredPill": "انتهت المهلة",
+  "offerExpiredTitle": "انتهت صلاحية العرض",
+  "offerExpiredBodyPlain": "لم تتم الموافقة على عرض السعر، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.",
+  "offerExpiredReorder": "اطلب نفس السلة من جديد",
+  "offerExpiredHome": "العودة للرئيسية",
+  "reorderReplaceTitle": "في سلة حاليًا",
+  "reorderReplaceBody": "إعادة الطلب رح تستبدل سلتك الحالية.",
+  "reorderReplaceConfirm": "استبدال السلة",
+  "orderWaitingTitle": "وصل طلبك، ورح نفتح عرض السعر فور ما يسعّره المتجر.",
+  "orderSandboxAdvance": "تجربة: خطوة المتجر التالية",
+  "checkoutConfirm": "تأكيد الطلب · {total}",
+  "@checkoutConfirm": {
+    "placeholders": { "total": { "type": "String" } }
+  },
+  "checkoutDistance": "{km} كم",
+  "@checkoutDistance": {
+    "placeholders": { "km": { "type": "String" } }
+  },
+  "quoteExpiredPassed": "مرّت {minutes} دقيقة على التسعيرة",
+  "@quoteExpiredPassed": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "lineWithQty": "{name} × {qty}",
+  "@lineWithQty": {
+    "placeholders": { "name": { "type": "String" }, "qty": { "type": "int" } }
+  },
+  "offerUnitPrice": "{price} للوحدة",
+  "@offerUnitPrice": {
+    "placeholders": { "price": { "type": "String" } }
+  },
+  "offerSubstitute": "البديل: {name} · {price} للوحدة",
+  "@offerSubstitute": {
+    "placeholders": { "name": { "type": "String" }, "price": { "type": "String" } }
+  },
+  "offerStoreNote": "ملاحظة المتجر: {note}",
+  "@offerStoreNote": {
+    "placeholders": { "note": { "type": "String" } }
+  },
+  "offerDeadline": "إذا لم توافق خلال {minutes} دقيقة، يُلغى الطلب تلقائيًا.",
+  "@offerDeadline": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "offerExpiredBody": "لم تتم الموافقة على عرض السعر خلال {minutes} دقيقة، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.",
+  "@offerExpiredBody": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "offerExpiredSummary": "{count} منتج · كان الإجمالي {total}",
+  "@offerExpiredSummary": {
+    "placeholders": { "count": { "type": "int" }, "total": { "type": "String" } }
+  },
+  "orderTitle": "طلب {code}",
+  "@orderTitle": {
+    "placeholders": { "code": { "type": "String" } }
+  },
+  "reorderMissing": "{count} من الأصناف ما عادت متوفرة بالمتجر.",
+  "@reorderMissing": {
+    "placeholders": { "count": { "type": "int" } }
+  }
 }

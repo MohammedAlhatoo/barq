@@ -1381,6 +1381,312 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الإشعارات'**
   String get notificationsTitle;
+
+  /// No description provided for @checkoutNoAddressBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف عنوانك عشان نحسب سعر الطلب والتوصيل.'**
+  String get checkoutNoAddressBody;
+
+  /// No description provided for @checkoutCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقدًا عند الاستلام'**
+  String get checkoutCash;
+
+  /// No description provided for @checkoutSubstitutions.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا نفد صنف'**
+  String get checkoutSubstitutions;
+
+  /// No description provided for @subCallMe.
+  ///
+  /// In ar, this message translates to:
+  /// **'اتصلوا بي'**
+  String get subCallMe;
+
+  /// No description provided for @subSimilar.
+  ///
+  /// In ar, this message translates to:
+  /// **'بديل مشابه'**
+  String get subSimilar;
+
+  /// No description provided for @subSkip.
+  ///
+  /// In ar, this message translates to:
+  /// **'احذفوه'**
+  String get subSkip;
+
+  /// No description provided for @checkoutCouponHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'كود الخصم'**
+  String get checkoutCouponHint;
+
+  /// No description provided for @checkoutCouponApply.
+  ///
+  /// In ar, this message translates to:
+  /// **'تطبيق'**
+  String get checkoutCouponApply;
+
+  /// No description provided for @checkoutCouponApplied.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تطبيقه'**
+  String get checkoutCouponApplied;
+
+  /// No description provided for @checkoutNoteHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة للمتجر أو السائق'**
+  String get checkoutNoteHint;
+
+  /// No description provided for @checkoutTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي'**
+  String get checkoutTotal;
+
+  /// No description provided for @checkoutChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير'**
+  String get checkoutChange;
+
+  /// No description provided for @checkoutPriceHeld.
+  ///
+  /// In ar, this message translates to:
+  /// **'السعر محجوز لك لمدة'**
+  String get checkoutPriceHeld;
+
+  /// No description provided for @quoteExpiredTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت صلاحية السعر'**
+  String get quoteExpiredTitle;
+
+  /// No description provided for @quoteExpiredChanged.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبنا تسعيرة جديدة، وهاي الأسعار اللي تغيّرت:'**
+  String get quoteExpiredChanged;
+
+  /// No description provided for @quoteExpiredSame.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبنا تسعيرة جديدة، والأسعار ما تغيّرت.'**
+  String get quoteExpiredSame;
+
+  /// No description provided for @quoteExpiredNewTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإجمالي الجديد'**
+  String get quoteExpiredNewTotal;
+
+  /// No description provided for @quoteExpiredContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة بالسعر الجديد'**
+  String get quoteExpiredContinue;
+
+  /// No description provided for @quoteExpiredReview.
+  ///
+  /// In ar, this message translates to:
+  /// **'مراجعة السلة'**
+  String get quoteExpiredReview;
+
+  /// No description provided for @offerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض السعر'**
+  String get offerTitle;
+
+  /// No description provided for @offerNotReadyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتجر لسا ما سعّر طلبك'**
+  String get offerNotReadyTitle;
+
+  /// No description provided for @offerNotReadyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'رح يوصلك العرض هون فور تجهيزه.'**
+  String get offerNotReadyBody;
+
+  /// No description provided for @offerPricedTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم تسعير طلبك'**
+  String get offerPricedTitle;
+
+  /// No description provided for @offerPricedBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتجات بالوزن تُسعّر بعد التجهيز'**
+  String get offerPricedBody;
+
+  /// No description provided for @offerUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متوفر'**
+  String get offerUnavailable;
+
+  /// No description provided for @offerItemsTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنتجات'**
+  String get offerItemsTotal;
+
+  /// No description provided for @offerDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوصيل'**
+  String get offerDelivery;
+
+  /// No description provided for @offerActionRefused.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما قدرنا ننفّذ هاد الطلب. جرّب مرة ثانية أو تواصل مع الدعم.'**
+  String get offerActionRefused;
+
+  /// No description provided for @offerApprove.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموافقة على العرض'**
+  String get offerApprove;
+
+  /// No description provided for @offerExpiredPill.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت المهلة'**
+  String get offerExpiredPill;
+
+  /// No description provided for @offerExpiredTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتهت صلاحية العرض'**
+  String get offerExpiredTitle;
+
+  /// No description provided for @offerExpiredBodyPlain.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تتم الموافقة على عرض السعر، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.'**
+  String get offerExpiredBodyPlain;
+
+  /// No description provided for @offerExpiredReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب نفس السلة من جديد'**
+  String get offerExpiredReorder;
+
+  /// No description provided for @offerExpiredHome.
+  ///
+  /// In ar, this message translates to:
+  /// **'العودة للرئيسية'**
+  String get offerExpiredHome;
+
+  /// No description provided for @reorderReplaceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'في سلة حاليًا'**
+  String get reorderReplaceTitle;
+
+  /// No description provided for @reorderReplaceBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة الطلب رح تستبدل سلتك الحالية.'**
+  String get reorderReplaceBody;
+
+  /// No description provided for @reorderReplaceConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدال السلة'**
+  String get reorderReplaceConfirm;
+
+  /// No description provided for @orderWaitingTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصل طلبك، ورح نفتح عرض السعر فور ما يسعّره المتجر.'**
+  String get orderWaitingTitle;
+
+  /// No description provided for @orderSandboxAdvance.
+  ///
+  /// In ar, this message translates to:
+  /// **'تجربة: خطوة المتجر التالية'**
+  String get orderSandboxAdvance;
+
+  /// No description provided for @checkoutConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الطلب · {total}'**
+  String checkoutConfirm(String total);
+
+  /// No description provided for @checkoutDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'{km} كم'**
+  String checkoutDistance(String km);
+
+  /// No description provided for @quoteExpiredPassed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مرّت {minutes} دقيقة على التسعيرة'**
+  String quoteExpiredPassed(int minutes);
+
+  /// No description provided for @lineWithQty.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} × {qty}'**
+  String lineWithQty(String name, int qty);
+
+  /// No description provided for @offerUnitPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'{price} للوحدة'**
+  String offerUnitPrice(String price);
+
+  /// No description provided for @offerSubstitute.
+  ///
+  /// In ar, this message translates to:
+  /// **'البديل: {name} · {price} للوحدة'**
+  String offerSubstitute(String name, String price);
+
+  /// No description provided for @offerStoreNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملاحظة المتجر: {note}'**
+  String offerStoreNote(String note);
+
+  /// No description provided for @offerDeadline.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا لم توافق خلال {minutes} دقيقة، يُلغى الطلب تلقائيًا.'**
+  String offerDeadline(int minutes);
+
+  /// No description provided for @offerExpiredBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم تتم الموافقة على عرض السعر خلال {minutes} دقيقة، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.'**
+  String offerExpiredBody(int minutes);
+
+  /// No description provided for @offerExpiredSummary.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} منتج · كان الإجمالي {total}'**
+  String offerExpiredSummary(int count, String total);
+
+  /// No description provided for @orderTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلب {code}'**
+  String orderTitle(String code);
+
+  /// No description provided for @reorderMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} من الأصناف ما عادت متوفرة بالمتجر.'**
+  String reorderMissing(int count);
 }
 
 class _AppLocalizationsDelegate

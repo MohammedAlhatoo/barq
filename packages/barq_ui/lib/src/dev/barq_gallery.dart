@@ -540,6 +540,8 @@ class _BarqGalleryState extends State<BarqGallery> {
                       label('BarqOutOfZoneArt'),
                       const BarqBasketArt(label: 'ناقص أصناف'),
                       label('BarqBasketArt'),
+                      const BarqOfferExpiredArt(label: 'انتهت المهلة'),
+                      label('BarqOfferExpiredArt'),
                       const BarqMessageView(
                           title: 'لا نتائج', actionLabel: 'إعادة المحاولة'),
                       label('BarqMessageView'),

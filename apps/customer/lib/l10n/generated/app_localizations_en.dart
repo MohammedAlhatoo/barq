@@ -711,4 +711,188 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsTitle => 'Notifications';
+
+  @override
+  String get checkoutNoAddressBody =>
+      'Add your address so we can price the order and delivery.';
+
+  @override
+  String get checkoutCash => 'Cash on delivery';
+
+  @override
+  String get checkoutSubstitutions => 'If an item runs out';
+
+  @override
+  String get subCallMe => 'Call me';
+
+  @override
+  String get subSimilar => 'Similar item';
+
+  @override
+  String get subSkip => 'Remove it';
+
+  @override
+  String get checkoutCouponHint => 'Discount code';
+
+  @override
+  String get checkoutCouponApply => 'Apply';
+
+  @override
+  String get checkoutCouponApplied => 'Applied';
+
+  @override
+  String get checkoutNoteHint => 'Note for the store or driver';
+
+  @override
+  String get checkoutTotal => 'Total';
+
+  @override
+  String get checkoutChange => 'Change';
+
+  @override
+  String get checkoutPriceHeld => 'Price reserved for';
+
+  @override
+  String get quoteExpiredTitle => 'The price has expired';
+
+  @override
+  String get quoteExpiredChanged =>
+      'We asked for a new price, and these changed:';
+
+  @override
+  String get quoteExpiredSame =>
+      'We asked for a new price, and nothing changed.';
+
+  @override
+  String get quoteExpiredNewTotal => 'New total';
+
+  @override
+  String get quoteExpiredContinue => 'Continue with the new price';
+
+  @override
+  String get quoteExpiredReview => 'Review cart';
+
+  @override
+  String get offerTitle => 'Price offer';
+
+  @override
+  String get offerNotReadyTitle => 'The store has not priced your order yet';
+
+  @override
+  String get offerNotReadyBody => 'The offer will show here once it is ready.';
+
+  @override
+  String get offerPricedTitle => 'Your order is priced';
+
+  @override
+  String get offerPricedBody => 'Weighed items are priced after preparation';
+
+  @override
+  String get offerUnavailable => 'Unavailable';
+
+  @override
+  String get offerItemsTotal => 'Items';
+
+  @override
+  String get offerDelivery => 'Delivery';
+
+  @override
+  String get offerActionRefused =>
+      'We could not do that. Try again or contact support.';
+
+  @override
+  String get offerApprove => 'Approve the offer';
+
+  @override
+  String get offerExpiredPill => 'Time is up';
+
+  @override
+  String get offerExpiredTitle => 'The offer has expired';
+
+  @override
+  String get offerExpiredBodyPlain =>
+      'The offer was not approved, so the order was cancelled. Nothing was charged.';
+
+  @override
+  String get offerExpiredReorder => 'Order the same cart again';
+
+  @override
+  String get offerExpiredHome => 'Back to home';
+
+  @override
+  String get reorderReplaceTitle => 'You already have a cart';
+
+  @override
+  String get reorderReplaceBody =>
+      'Ordering again will replace your current cart.';
+
+  @override
+  String get reorderReplaceConfirm => 'Replace cart';
+
+  @override
+  String get orderWaitingTitle =>
+      'Your order arrived. The offer opens as soon as the store prices it.';
+
+  @override
+  String get orderSandboxAdvance => 'Test: next store step';
+
+  @override
+  String checkoutConfirm(String total) {
+    return 'Confirm order · $total';
+  }
+
+  @override
+  String checkoutDistance(String km) {
+    return '$km km';
+  }
+
+  @override
+  String quoteExpiredPassed(int minutes) {
+    return '$minutes minutes passed since the price';
+  }
+
+  @override
+  String lineWithQty(String name, int qty) {
+    return '$name × $qty';
+  }
+
+  @override
+  String offerUnitPrice(String price) {
+    return '$price per unit';
+  }
+
+  @override
+  String offerSubstitute(String name, String price) {
+    return 'Substitute: $name · $price per unit';
+  }
+
+  @override
+  String offerStoreNote(String note) {
+    return 'Store note: $note';
+  }
+
+  @override
+  String offerDeadline(int minutes) {
+    return 'If you do not approve within $minutes minutes, the order is cancelled.';
+  }
+
+  @override
+  String offerExpiredBody(int minutes) {
+    return 'The offer was not approved within $minutes minutes, so the order was cancelled. Nothing was charged.';
+  }
+
+  @override
+  String offerExpiredSummary(int count, String total) {
+    return '$count items · the total was $total';
+  }
+
+  @override
+  String orderTitle(String code) {
+    return 'Order $code';
+  }
+
+  @override
+  String reorderMissing(int count) {
+    return '$count of the items are no longer in the store.';
+  }
 }

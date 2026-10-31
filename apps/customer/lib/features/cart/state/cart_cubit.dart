@@ -113,6 +113,17 @@ class CartCubit extends Cubit<Cart> {
 
   void clear() => emit(const Cart());
 
+  /// Shows the prices the server gave in a new quote, by product id.
+  void updatePrices(Map<int, Money> prices) => emit(
+    Cart(
+      vendorId: state.vendorId,
+      lines: [
+        for (final line in state.lines)
+          line.copyWith(unitPrice: prices[line.productId]),
+      ],
+    ),
+  );
+
   /// Moves the cart to [store], keeping only what it has, at its prices.
   void switchStore(BasketStore store) {
     final lines = <CartLine>[];

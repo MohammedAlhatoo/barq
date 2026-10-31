@@ -4,6 +4,7 @@ library;
 export 'src/api/api_client.dart';
 export 'src/api/api_exception.dart';
 export 'src/api/barq_env.dart';
+export 'src/api/idempotency_key.dart';
 export 'src/api/paged.dart';
 export 'src/auth/auth_store.dart';
 export 'src/config/app_config.dart';

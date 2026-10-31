@@ -18,6 +18,8 @@ import 'package:barq_customer/features/browse/data/vendor_actions.dart';
 import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_customer/features/cart/state/shop_scope_cubit.dart';
+import 'package:barq_customer/features/checkout/data/checkout_repository.dart';
+import 'package:barq_customer/features/offer/data/offer_repository.dart';
 import 'package:barq_customer/features/system/state/system_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -27,12 +29,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// One server answer. [error] makes it the standard failure shape.
 class Reply {
-  const Reply(this.data, {this.status = 200, this.error, this.meta});
+  const Reply(
+    this.data, {
+    this.status = 200,
+    this.error,
+    this.meta,
+    this.details,
+  });
 
   final Object? data;
   final int status;
   final String? error;
   final Map<String, Object>? meta;
+  final Map<String, Object?>? details;
 }
 
 /// Plays the server: maps "POST /auth/send-otp" to a [Reply].
@@ -43,12 +52,16 @@ class FakeServer implements HttpClientAdapter {
   final List<String> calls = [];
   final Map<String, Object?> bodies = {};
   final Map<String, Map<String, dynamic>> queries = {};
+  final Map<String, Map<String, dynamic>> headers = {};
 
   /// For a request whose answer depends on its body. Wins over [replies].
   final Map<String, Reply Function(Object? body)> handlers = {};
 
   /// True makes every request fail like a dead connection.
   bool offline = false;
+
+  /// The next this many POSTs reach the server, but their answer never returns.
+  int lostAnswers = 0;
 
   Map<String, dynamic>? lastQueryOf(String key) => queries[key];
 
@@ -64,11 +77,20 @@ class FakeServer implements HttpClientAdapter {
         reason: 'offline',
       );
     }
+    final lost = lostAnswers > 0 && options.method == 'POST';
     final key = '${options.method} ${Uri.parse(options.path).path}'
         .replaceFirst('/api/v1', '');
     calls.add(key);
     bodies[key] = options.data;
     queries[key] = options.queryParameters;
+    headers[key] = options.headers;
+    if (lost) {
+      lostAnswers--;
+      throw DioException.connectionError(
+        requestOptions: options,
+        reason: 'answer lost',
+      );
+    }
     final reply =
         handlers[key]?.call(options.data) ??
         replies[key] ??
@@ -86,7 +108,7 @@ class FakeServer implements HttpClientAdapter {
             'message': 'failed',
             'error': {
               'code': code,
-              'details': null,
+              'details': reply.details,
               'hint': {'ar': 'رسالة السيرفر', 'en': 'server message'},
             },
           };
@@ -229,6 +251,8 @@ class TestApp {
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),
+      checkoutRepository: ApiCheckoutRepository(api),
+      offerRepository: ApiOfferRepository(api),
       accountRepository: ApiAccountRepository(
         api,
         UploadService(api: api),

@@ -38,6 +38,9 @@ abstract class AccountRepository {
 
   /// Null when the count could not be loaded.
   Future<int?> ordersCount();
+
+  /// Tells the screens that show the orders count that it changed.
+  void orderPlaced();
   Future<int?> unreadNotifications();
 
   Future<void> logout();
@@ -132,6 +135,9 @@ class ApiAccountRepository implements AccountRepository {
 
   @override
   Future<int?> ordersCount() => _total('/orders', const {'per_page': 1});
+
+  @override
+  void orderPlaced() => _changes.add(null);
 
   @override
   Future<int?> unreadNotifications() =>

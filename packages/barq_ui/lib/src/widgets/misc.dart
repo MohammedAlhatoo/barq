@@ -449,6 +449,32 @@ class BarqIconCard extends StatelessWidget {
       );
 }
 
+/// The picture of the offer expired screen (04_order_status_03): a tilted
+/// clock card with [label] on a pill under it.
+class BarqOfferExpiredArt extends StatelessWidget {
+  const BarqOfferExpiredArt({super.key, required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => BarqIllustrationArea(
+        height: BarqSizes.offerExpiredArt,
+        blobSize: BarqSizes.offerExpiredBlob,
+        overlays: [
+          Positioned(
+            bottom: BarqSizes.offerExpiredPillBottom,
+            child: BarqPill(label, tone: BarqPillTone.danger),
+          ),
+        ],
+        child: const BarqIconCard(
+          icon: 'clock',
+          size: BarqSizes.offerExpiredIcon,
+          radius: 40,
+          angle: -8,
+        ),
+      );
+}
+
 /// Thin bar above a list: what the list is limited to, and a link to change it
 /// ("تتسوّق من: ميني ماركت النور · كل المتاجر").
 class BarqScopeBar extends StatelessWidget {

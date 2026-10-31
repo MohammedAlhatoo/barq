@@ -41,6 +41,12 @@ import '../features/cart/state/cart_summary_cubit.dart';
 import '../features/cart/state/compare_cubit.dart';
 import '../features/cart/ui/cart_screen.dart';
 import '../features/cart/ui/compare_screen.dart';
+import '../features/checkout/state/checkout_cubit.dart';
+import '../features/checkout/ui/checkout_screen.dart';
+import '../features/offer/state/offer_cubit.dart';
+import '../features/offer/ui/offer_screen.dart';
+import '../features/orders/state/order_waiting_cubit.dart';
+import '../features/orders/ui/order_waiting_screen.dart';
 import '../features/system/state/system_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
@@ -70,9 +76,13 @@ abstract final class Routes {
   static const addressNew = '/addresses/new';
   static const addressEdit = '/addresses/edit';
   static const notifications = '/notifications';
+  static const order = '/orders/:id';
+  static const offer = '/orders/:id/offer';
 
   static String productOf(int id) => '/product/$id';
   static String vendorOf(int id) => '/vendor/$id';
+  static String orderOf(int id) => '/orders/$id';
+  static String offerOf(int id) => '/orders/$id/offer';
   static String categoryOf(int id) => '$categories?category=$id';
 
   /// Routes that work without a login.
@@ -173,11 +183,48 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     ),
     GoRoute(
       path: Routes.checkout,
-      builder: (context, _) => PlaceholderScreen(
-        title: AppLocalizations.of(context).checkoutTitle,
-        design: 'design/03_checkout_04.png',
-        back: true,
-      ),
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => CheckoutCubit(
+            repository: deps.checkoutRepository,
+            browse: deps.browseRepository,
+            cart: deps.cart,
+          )..start(),
+          child: const CheckoutScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.order,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => OrderWaitingCubit(
+            repository: deps.offerRepository,
+            orderId: id,
+            pollSeconds:
+                deps.config.config.polling.trackingSeconds ?? Poller.minSeconds,
+          )..start(),
+          child: OrderWaitingScreen(orderId: id),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.offer,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => OfferCubit(
+            repository: deps.offerRepository,
+            cart: deps.cart,
+            orderId: id,
+          )..load(),
+          child: OfferScreen(orderId: id),
+        );
+      },
     ),
     GoRoute(
       path: Routes.search,

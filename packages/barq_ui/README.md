@@ -105,6 +105,7 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | صورة من السيرفر مع بديل · خلفية بلون المنتج | `BarqNetworkImage(url, fallback)` · `BarqTileBackground(tile, height, radius)` |
 | تحميل / رسالة صغيرة داخل قائمة | `BarqLoadingView` · `BarqMessageView(title, message, actionLabel)` |
 | رسومات السلة الفارغة · خارج المنطقة · ناقص أصناف | `BarqEmptyCartArt` · `BarqOutOfZoneArt` · `BarqBasketArt(label)` |
+| رسمة انتهاء عرض السعر | `BarqOfferExpiredArt(label)` |
 | شريط «تتسوّق من» فوق القوائم | `BarqScopeBar(text, action, onAction)` |
 | كرت متجر أفقي · صف متجر بقائمة | `BarqVendorCard(logo, name, meta)` · `BarqVendorRow(logo, name, subtitle, meta, trailing)` |
 | `.tg` / `.rad` / مربع الاختيار | `BarqToggle` / `BarqRadio` / `BarqCheckbox` |

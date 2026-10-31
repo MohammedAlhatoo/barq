@@ -702,4 +702,186 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get checkoutNoAddressBody =>
+      'أضف عنوانك عشان نحسب سعر الطلب والتوصيل.';
+
+  @override
+  String get checkoutCash => 'نقدًا عند الاستلام';
+
+  @override
+  String get checkoutSubstitutions => 'إذا نفد صنف';
+
+  @override
+  String get subCallMe => 'اتصلوا بي';
+
+  @override
+  String get subSimilar => 'بديل مشابه';
+
+  @override
+  String get subSkip => 'احذفوه';
+
+  @override
+  String get checkoutCouponHint => 'كود الخصم';
+
+  @override
+  String get checkoutCouponApply => 'تطبيق';
+
+  @override
+  String get checkoutCouponApplied => 'تم تطبيقه';
+
+  @override
+  String get checkoutNoteHint => 'ملاحظة للمتجر أو السائق';
+
+  @override
+  String get checkoutTotal => 'الإجمالي';
+
+  @override
+  String get checkoutChange => 'تغيير';
+
+  @override
+  String get checkoutPriceHeld => 'السعر محجوز لك لمدة';
+
+  @override
+  String get quoteExpiredTitle => 'انتهت صلاحية السعر';
+
+  @override
+  String get quoteExpiredChanged =>
+      'طلبنا تسعيرة جديدة، وهاي الأسعار اللي تغيّرت:';
+
+  @override
+  String get quoteExpiredSame => 'طلبنا تسعيرة جديدة، والأسعار ما تغيّرت.';
+
+  @override
+  String get quoteExpiredNewTotal => 'الإجمالي الجديد';
+
+  @override
+  String get quoteExpiredContinue => 'متابعة بالسعر الجديد';
+
+  @override
+  String get quoteExpiredReview => 'مراجعة السلة';
+
+  @override
+  String get offerTitle => 'عرض السعر';
+
+  @override
+  String get offerNotReadyTitle => 'المتجر لسا ما سعّر طلبك';
+
+  @override
+  String get offerNotReadyBody => 'رح يوصلك العرض هون فور تجهيزه.';
+
+  @override
+  String get offerPricedTitle => 'تم تسعير طلبك';
+
+  @override
+  String get offerPricedBody => 'المنتجات بالوزن تُسعّر بعد التجهيز';
+
+  @override
+  String get offerUnavailable => 'غير متوفر';
+
+  @override
+  String get offerItemsTotal => 'المنتجات';
+
+  @override
+  String get offerDelivery => 'التوصيل';
+
+  @override
+  String get offerActionRefused =>
+      'ما قدرنا ننفّذ هاد الطلب. جرّب مرة ثانية أو تواصل مع الدعم.';
+
+  @override
+  String get offerApprove => 'الموافقة على العرض';
+
+  @override
+  String get offerExpiredPill => 'انتهت المهلة';
+
+  @override
+  String get offerExpiredTitle => 'انتهت صلاحية العرض';
+
+  @override
+  String get offerExpiredBodyPlain =>
+      'لم تتم الموافقة على عرض السعر، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.';
+
+  @override
+  String get offerExpiredReorder => 'اطلب نفس السلة من جديد';
+
+  @override
+  String get offerExpiredHome => 'العودة للرئيسية';
+
+  @override
+  String get reorderReplaceTitle => 'في سلة حاليًا';
+
+  @override
+  String get reorderReplaceBody => 'إعادة الطلب رح تستبدل سلتك الحالية.';
+
+  @override
+  String get reorderReplaceConfirm => 'استبدال السلة';
+
+  @override
+  String get orderWaitingTitle =>
+      'وصل طلبك، ورح نفتح عرض السعر فور ما يسعّره المتجر.';
+
+  @override
+  String get orderSandboxAdvance => 'تجربة: خطوة المتجر التالية';
+
+  @override
+  String checkoutConfirm(String total) {
+    return 'تأكيد الطلب · $total';
+  }
+
+  @override
+  String checkoutDistance(String km) {
+    return '$km كم';
+  }
+
+  @override
+  String quoteExpiredPassed(int minutes) {
+    return 'مرّت $minutes دقيقة على التسعيرة';
+  }
+
+  @override
+  String lineWithQty(String name, int qty) {
+    return '$name × $qty';
+  }
+
+  @override
+  String offerUnitPrice(String price) {
+    return '$price للوحدة';
+  }
+
+  @override
+  String offerSubstitute(String name, String price) {
+    return 'البديل: $name · $price للوحدة';
+  }
+
+  @override
+  String offerStoreNote(String note) {
+    return 'ملاحظة المتجر: $note';
+  }
+
+  @override
+  String offerDeadline(int minutes) {
+    return 'إذا لم توافق خلال $minutes دقيقة، يُلغى الطلب تلقائيًا.';
+  }
+
+  @override
+  String offerExpiredBody(int minutes) {
+    return 'لم تتم الموافقة على عرض السعر خلال $minutes دقيقة، فأُلغي الطلب تلقائيًا. لم يُخصم أي مبلغ.';
+  }
+
+  @override
+  String offerExpiredSummary(int count, String total) {
+    return '$count منتج · كان الإجمالي $total';
+  }
+
+  @override
+  String orderTitle(String code) {
+    return 'طلب $code';
+  }
+
+  @override
+  String reorderMissing(int count) {
+    return '$count من الأصناف ما عادت متوفرة بالمتجر.';
+  }
 }

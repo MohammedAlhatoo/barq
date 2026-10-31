@@ -17,7 +17,9 @@
 |---|---|---|
 | `unauthenticated` (401) | أي شاشة | `AuthStore` بيمسح التوكن → شاشة "انتهت الجلسة" (P1) |
 | `out_of_zone` (422) | compare / quote | شاشة "خارج منطقة الخدمة" (P2) |
-| `quote_expired` / `quote_used` | إنشاء الطلب | إعادة التسعير وعرض الفرق (P2) |
+| `quote_expired` / `quote_used` (410) | إنشاء الطلب | إعادة التسعير وعرض الفرق (P2) |
+| `conflict` (409) `quote_payload_mismatch` | إنشاء الطلب | `fields` لازم تطابق الـ quote، فأي تغيير بيطلب quote جديد |
+| `idempotency_mismatch` (409) | إعادة طلب | نفس المفتاح لازم يروح مع نفس الجسم بالضبط |
 | `already_taken` (409) | قبول طلب سائق | شاشة "سبقك سائق" (P4) |
 | `cash_limit_reached` | قبول طلب | شاشة "حد النقد" (P4) |
 | `invalid_transition` (422) | خطوة سائق | `details` فيها الحالات المسموحة؛ حدّث المهمة (P4) |
@@ -72,11 +74,21 @@
 - `POST /baskets/compare` ما بيرجع المسافة، فأقرب المتاجر بتنحسب من `distance_km` بـ `GET /vendors`.
 - `GET /vendors` بيرتّب المفتوحة أولًا ثم الأقرب، فمتجر مغلق قريب بييجي بعد مفتوح بعيد.
 - `category` بالمتجر مفتاح زي `grocery` مش نص للعرض، فالترجمة بالتطبيق.
-- `POST /orders/quote` بيسعّر متجر مش بيوصّل لمنطقة العنوان (مجرّب: متاجر غزة مع عنوان بالنصيرات رجعت 7.00 ₪ توصيل)، مع إن `/baskets/compare` ما بيرجعها. لازم صاحب الـ API يأكد إذا `POST /orders` بيرفضها، قبل المرحلة 5.
+- `POST /orders/quote` بيسعّر متجر مش بيوصّل لمنطقة العنوان (مجرّب: متاجر غزة مع عنوان بالنصيرات)، مع إن `/baskets/compare` ما بيرجعها. و `POST /orders` كمان بيقبلها (مجرّب على متجر 7). لازم صاحب الـ API يقرر إذا هاد مقصود.
 - السيرفر بيقبل `page` بـ `GET /products` (مجرّب على الـ sandbox) بس مش مكتوب بـ `openapi.json`.
 - «وفّرت» بشاشة حسابي: السيرفر ما بيرجعها وممنوع نحسبها، فمخفية.
 - اسم المنطقة و«داخل الخدمة» قبل الحفظ: ما في endpoint بيفحص نقطة بدون ما يحفظها، فالتطبيق بيعرف النتيجة بس من رد `POST /addresses` أو `PUT /addresses/{id}`. ولهيك كمان عنوان القائمة بيعرض `details` بدون اسم المنطقة.
 - `GET /app/config`: شكل `zones[].polygon` مش موضّح بـ `openapi.json` (`additionalProperties: true`).
 - مش موضّح بـ `openapi.json`: شو بيصير للافتراضي لما ينحذف العنوان الافتراضي، ولما المستخدم يبعت `is_default: false` على عنوانه الوحيد. `test/live_account_test.dart` بيطبع الأول.
 - `DELETE /me`: `openapi.json` ما بيذكر كود الخطأ لما يكون في طلب جاري، مع إن التصميم بيقول «الطلبات الجارية يجب أن تنتهي أولًا». التطبيق بيعرض `messageAr` لأي رفض.
+- **`POST /orders/{id}/offer/approve` مش شغال (بيوقف المراحل 6 و 7 و 8):** `openapi.json` ما فيه body، و Postman فيها `{}`، والسيرفر بيرجع `422 validation_failed` «offer id مطلوب». مع `offer_id` بيرجع `422 invalid_transition` من `priced` لـ `pending`، والمسموح `awaiting_vendor` و `cancelled`. مجرّب مرة على طلب مفتوح بمتجر 16، وما في بالـ openapi حقل ثاني نبعته. إذا هاد عام، الطلب ما بيكمل بعد `priced` وما بيوصل للسائق.
+- كل الطلبات بتبدأ بـ `awaiting_pricing` (حتى لو كل المنتجات `price_mode: fixed`)، مش بس منتجات الوزن. وما لقينا أي منتج بالوزن بأول 5 صفحات من `GET /products`.
+- `Offer` ما فيه خصم، مع إن `total` شامل الكوبون، فالتطبيق بياخد سطر الخصم من `order.price.breakdown`.
+- `breakdown`: سطر الخصم `amount` موجب و `formatted` سالب. و `discount.formatted` بالرد موجب.
+- `payment_methods` بترجع `cash_on_delivery`، و `POST /orders/quote` بيرجع `payment_method: "cash"`.
+- `GET /orders/{id}` لسا بيرجع `delivery_code`، والتطبيق ما بيعرضه.
+- `POST /orders/{id}/offer/reject` على عرض مسكّر بيرجع `invalid_transition` مع `to: pending`.
+- `config_version` صار 4 على الـ sandbox، و `AGENTS.md` بيقول 3. مش ملاحظين فرق بالحقول اللي بنستخدمها.
+- كوبون `BARQ5` تبع التصميم مش موجود بالـ sandbox. للتجربة: `WELCOME10` (10% لأول طلب، حد أدنى 30.00 ₪).
+- `POST /orders/quote` ما بيرجع سعر لكل منتج، فشاشة انتهاء السعر بتقارن من `GET /products/{id}`.
 - `currency.minor_units` هو عدد الوحدات الصغيرة بالوحدة الكبيرة (100 أغورة بالشيكل)، مش عدد الخانات العشرية. `openapi.json` بيقول `integer` بس بدون شرح.

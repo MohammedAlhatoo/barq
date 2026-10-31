@@ -13,6 +13,8 @@ import '../features/browse/data/vendor_actions.dart';
 import '../features/cart/data/cart_repository.dart';
 import '../features/cart/state/cart_cubit.dart';
 import '../features/cart/state/shop_scope_cubit.dart';
+import '../features/checkout/data/checkout_repository.dart';
+import '../features/offer/data/offer_repository.dart';
 import '../features/system/state/system_cubit.dart';
 import 'locale_cubit.dart';
 
@@ -42,6 +44,8 @@ class AppDependencies {
     required this.cartRepository,
     required this.cart,
     required this.scope,
+    required this.checkoutRepository,
+    required this.offerRepository,
     required this.accountRepository,
     required this.avatarPicker,
     required this.prefs,
@@ -62,6 +66,8 @@ class AppDependencies {
   final CartRepository cartRepository;
   final CartCubit cart;
   final ShopScopeCubit scope;
+  final CheckoutRepository checkoutRepository;
+  final OfferRepository offerRepository;
   final AccountRepository accountRepository;
   final AvatarPicker avatarPicker;
   final SharedPreferences prefs;
@@ -107,6 +113,8 @@ class AppDependencies {
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),
+      checkoutRepository: ApiCheckoutRepository(api),
+      offerRepository: ApiOfferRepository(api),
       accountRepository: ApiAccountRepository(
         api,
         UploadService(api: api),

@@ -189,6 +189,7 @@ abstract final class BarqSizes {
   static const button = 58.0;
   static const buttonSmall = 46.0;
   static const input = 58.0;
+  static const inputCompact = 46.0; // coupon + note on checkout
   static const search = 52.0;
   static const chip = 44.0;
   static const iconButton = 48.0; // .icb
@@ -250,6 +251,14 @@ abstract final class BarqSizes {
   static const deleteAccountArt = 210.0;
   static const deleteAccountBlob = 180.0;
   static const deleteAccountIcon = 110.0;
+  static const checkoutMap = 76.0;
+  static const checkoutSegment = 36.0;
+  static const checkoutPin = 44.0;
+  static const offerStore = 54.0;
+  static const offerExpiredArt = 300.0;
+  static const offerExpiredBlob = 230.0;
+  static const offerExpiredIcon = 130.0;
+  static const offerExpiredPillBottom = 52.0;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)
   static const iconS = 16.0;

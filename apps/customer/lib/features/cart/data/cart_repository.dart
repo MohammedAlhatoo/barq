@@ -56,14 +56,7 @@ class ApiCartRepository implements CartRepository {
     required int vendorId,
     required List<CartLine> lines,
     required int addressId,
-  }) => _quote(vendorId, addressId, [
-    for (final line in lines)
-      {
-        'product_id': line.productId,
-        'qty': line.qty,
-        if (line.options.isNotEmpty) 'options': line.options,
-      },
-  ]);
+  }) => _quote(vendorId, addressId, [for (final line in lines) line.quoteJson]);
 
   @override
   Future<Quote> quoteStore({

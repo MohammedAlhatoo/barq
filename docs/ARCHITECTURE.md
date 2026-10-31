@@ -100,6 +100,7 @@ class ApiClient {
   // Accept-Language, X-App-Version, X-Dev-Member. أي خطأ → ApiException.
   Stream<ApiException> get systemErrors;  // تحديث إجباري وصيانة من أي طلب
 }
+String newIdempotencyKey();  // UUID جديد لهيدر Idempotency-Key
 class Paged<T> { final List<T> items; final int? nextPage; final int? total; }
 
 class ApiException implements Exception {
@@ -107,6 +108,7 @@ class ApiException implements Exception {
   final String code;         // already_taken, out_of_zone, quote_expired, invalid_transition…
   final String messageAr;    // جاهز للعرض (من hint.ar أو message)
   final Map<String, dynamic>? details;
+  String get userMessage;    // للعرض: أول رسالة من details.fields، وإلا messageAr
   bool get isNetwork;        // انقطاع نت / timeout
   bool get isUpdateRequired; // app_update_required
   bool get isMaintenance;    // maintenance · project_frozen

@@ -10,14 +10,20 @@ import '../../../auth/data/auth_models.dart';
 import '../../state/addresses_cubit.dart';
 import 'address_label.dart';
 
-/// Picks a delivery address from anywhere. The cart uses it now, and the
-/// checkout will in phase 5.
+/// Picks a delivery address from anywhere: the compare and checkout screens
+/// use it.
 class AddressPickerSheet extends StatelessWidget {
-  const AddressPickerSheet({super.key});
+  const AddressPickerSheet({super.key, this.selectedId});
+
+  /// The address marked as chosen. Null marks the default one.
+  final int? selectedId;
 
   /// The chosen address, or a new one the user just added. Null means nothing
   /// was chosen.
-  static Future<SavedAddress?> show(BuildContext context) async {
+  static Future<SavedAddress?> show(
+    BuildContext context, {
+    int? selectedId,
+  }) async {
     final repository = context.read<AppDependencies>().accountRepository;
     final choice = await showBarqSheet<_Choice>(
       context,
@@ -25,7 +31,7 @@ class AddressPickerSheet extends StatelessWidget {
         // The sheet opens on the root navigator, above this screen's providers.
         BlocProvider(
           create: (_) => AddressesCubit(repository)..load(),
-          child: const AddressPickerSheet(),
+          child: AddressPickerSheet(selectedId: selectedId),
         ),
       ],
     );
@@ -62,7 +68,12 @@ class AddressPickerSheet extends StatelessWidget {
                   child: BarqGap(
                     children: [
                       for (final address in state.addresses)
-                        _Row(address: address),
+                        _Row(
+                          address: address,
+                          selected: selectedId == null
+                              ? address.isDefault
+                              : address.id == selectedId,
+                        ),
                     ],
                   ),
                 ),
@@ -89,9 +100,10 @@ class _Choice {
 }
 
 class _Row extends StatelessWidget {
-  const _Row({required this.address});
+  const _Row({required this.address, required this.selected});
 
   final SavedAddress address;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -100,8 +112,8 @@ class _Row extends StatelessWidget {
       icon: addressIcon(l10n, address),
       title: addressTitle(l10n, address),
       subtitle: address.details,
-      selected: address.isDefault,
-      trailing: BarqRadio(selected: address.isDefault),
+      selected: selected,
+      trailing: BarqRadio(selected: selected),
       onTap: () => closeBarqSheet(context, _Choice(address: address)),
     );
   }

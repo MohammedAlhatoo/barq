@@ -64,6 +64,20 @@ class ApiException implements Exception {
   /// The server refuses this app version: show "تحديث إجباري".
   bool get isUpdateRequired => code == 'app_update_required';
 
+  /// What to show the user. In a `validation_failed` answer [messageAr] is only
+  /// a hint for developers, and the real reason is in `details.fields`.
+  String get userMessage {
+    final fields = details?['fields'];
+    if (fields is Map) {
+      for (final messages in fields.values) {
+        if (messages is List && messages.isNotEmpty) {
+          return messages.first as String;
+        }
+      }
+    }
+    return messageAr;
+  }
+
   /// The whole service is stopped: show "صيانة".
   bool get isMaintenance => code == 'maintenance' || code == 'project_frozen';
 

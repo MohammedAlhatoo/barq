@@ -57,6 +57,13 @@ class CartLine {
     optionsLabel: optionsLabel,
   );
 
+  /// One entry of `cart` in `POST /orders/quote`.
+  Map<String, Object?> get quoteJson => {
+    'product_id': productId,
+    'qty': qty,
+    if (options.isNotEmpty) 'options': options,
+  };
+
   Map<String, dynamic> toJson() => {
     'product_id': productId,
     'name': name,
