@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,13 +65,16 @@ class JobsCubit extends Cubit<JobsState> {
     required this._jobs,
     required this._earnings,
     required this._pollSeconds,
-  }) : super(const JobsState());
+  }) : super(const JobsState()) {
+    _changes = _jobs.changes.listen((_) => load());
+  }
 
   static const _defaultPollSeconds = 10;
 
   final JobsRepository _jobs;
   final EarningsRepository _earnings;
   final int? Function() _pollSeconds;
+  late final StreamSubscription<void> _changes;
   Poller? _poller;
   bool _online = false;
 
@@ -137,8 +142,9 @@ class JobsCubit extends Cubit<JobsState> {
   void clearNotice() => emit(state.copyWith(taken: false));
 
   @override
-  Future<void> close() {
+  Future<void> close() async {
     _poller?.stop();
+    await _changes.cancel();
     return super.close();
   }
 }

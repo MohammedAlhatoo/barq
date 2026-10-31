@@ -2,12 +2,15 @@
 // pk_test key and a driver login. The login is never written in a file:
 // flutter test test/live_driver_test.dart --dart-define-from-file=../../keys.json
 //   --dart-define=BARQ_LIVE_PHONE=... --dart-define=BARQ_LIVE_PASSWORD=...
+// Then delete build/test_cache: the compiler keeps the defines there.
 import 'package:barq_core/barq_core.dart';
 import 'package:barq_driver/features/auth/data/auth_repository.dart';
 import 'package:barq_driver/features/earnings/data/earnings_repository.dart';
+import 'package:barq_driver/features/history/data/history_repository.dart';
 import 'package:barq_driver/features/jobs/data/jobs_repository.dart';
 import 'package:barq_driver/features/jobs/data/location_source.dart';
 import 'package:barq_driver/features/jobs/data/location_tracker.dart';
+import 'package:barq_driver/features/notifications/data/notifications_repository.dart';
 import 'package:barq_driver/features/profile/data/profile_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -63,6 +66,16 @@ void main() {
       expect(today.series, isNotEmpty);
       final cash = await earnings.cash();
       expect(cash.maxCash.amount, greaterThan(0));
+
+      final kept = await profile.update(
+        vehicleType: me.vehicleType,
+        locale: me.locale,
+      );
+      expect(kept.vehicleType, me.vehicleType);
+      await ApiHistoryRepository(api).history();
+      final notifications = ApiNotificationsRepository(api);
+      await notifications.list();
+      await notifications.readAll();
 
       final offline = await profile.setOnline(false);
       expect(offline.isOnline, isFalse);

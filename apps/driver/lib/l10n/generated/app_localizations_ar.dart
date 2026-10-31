@@ -13,7 +13,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appName => 'برق كابتن';
 
   @override
-  String get splashTagline => 'وصّل بسرعة البرق';
+  String get splashTagline => 'جاهز لطلبات اليوم؟';
 
   @override
   String get commonRetry => 'إعادة المحاولة';
@@ -23,9 +23,6 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get commonCancel => 'إلغاء';
-
-  @override
-  String get comingSoon => 'قريبًا';
 
   @override
   String get offlineTitle => 'لا يوجد اتصال بالإنترنت';
@@ -299,12 +296,196 @@ class AppLocalizationsAr extends AppLocalizations {
   String get taskNoStep => 'بانتظار تحديث الطلب من السيرفر.';
 
   @override
-  String get taskDeliverNext =>
-      'خطوة التسليم بالصورة جاية بالمرحلة الجاية من البناء.';
-
-  @override
   String get taskEmptyTitle => 'ما عندك مهمة حالية';
 
   @override
   String get taskEmptyBody => 'اقبل طلبًا من القائمة لتبدأ.';
+
+  @override
+  String get photoTitle => 'صوّر الطلب';
+
+  @override
+  String get photoBody =>
+      'صورة واضحة للأكياس قبل الاستلام، مطلوبة لتأكيد الخطوة.';
+
+  @override
+  String get photoShutter => 'التقاط';
+
+  @override
+  String get photoRetake => 'اضغط الزر لإعادة التصوير';
+
+  @override
+  String get photoCameraFailed =>
+      'تعذر فتح الكاميرا. اسمح للتطبيق باستخدامها من الإعدادات.';
+
+  @override
+  String get tooFarStore => 'أنت بعيد عن المتجر';
+
+  @override
+  String get tooFarCustomer => 'أنت بعيد عن الزبون';
+
+  @override
+  String tooFarDistance(int meters) {
+    return 'على بعد $meters م من الموقع';
+  }
+
+  @override
+  String tooFarBody(Object label, int meters, Object place) {
+    return 'زر «$label» بيشتغل بس لما تكون ضمن $meters متر من $place.';
+  }
+
+  @override
+  String get tooFarNavigate => 'افتح الملاحة';
+
+  @override
+  String get tooFarRetry => 'حاول مرة أخرى';
+
+  @override
+  String deliverTitle(Object status) {
+    return '$status · سلّم الطلب';
+  }
+
+  @override
+  String get deliverHelp => 'مساعدة';
+
+  @override
+  String get deliverCollect => 'حصّل من الزبون نقدًا';
+
+  @override
+  String get deliverIncludesFee => 'شامل التوصيل';
+
+  @override
+  String get deliverPhotoTitle => 'صوّر الطلب عند الباب';
+
+  @override
+  String get deliverPhotoTaken => 'تم التقاط الصورة';
+
+  @override
+  String get deliverPhotoProof => 'الصورة إثبات التسليم للزبون';
+
+  @override
+  String get deliverTakePhoto => 'التقاط الصورة';
+
+  @override
+  String get deliverRetake => 'إعادة التصوير';
+
+  @override
+  String get periodDay => 'اليوم';
+
+  @override
+  String get periodWeek => 'الأسبوع';
+
+  @override
+  String get periodMonth => 'الشهر';
+
+  @override
+  String get earningsOfDay => 'أرباح اليوم';
+
+  @override
+  String get earningsOfWeek => 'أرباح الأسبوع';
+
+  @override
+  String get earningsOfMonth => 'أرباح الشهر';
+
+  @override
+  String earningsOrders(int count) {
+    return '$count طلب';
+  }
+
+  @override
+  String get cashOnHand => 'النقد اللي معك';
+
+  @override
+  String cashRemaining(Object amount) {
+    return 'باقي لك $amount قبل الحد';
+  }
+
+  @override
+  String cashUnsettled(int count) {
+    return '$count طلبات لسا ما تسوّت';
+  }
+
+  @override
+  String get historyTitle => 'سجل المهام';
+
+  @override
+  String get historyAll => 'الكل';
+
+  @override
+  String get historyDelivered => 'تم التسليم';
+
+  @override
+  String get historyCancelled => 'ملغاة';
+
+  @override
+  String historyToday(int count, Object amount) {
+    return 'اليوم · $count مهام · $amount';
+  }
+
+  @override
+  String historyCash(Object amount) {
+    return 'نقد $amount';
+  }
+
+  @override
+  String get historyEmptyTitle => 'ما في مهام هون';
+
+  @override
+  String get historyEmptyBody => 'مهامك المنتهية بتظهر هون.';
+
+  @override
+  String accountRating(Object rating, int count) {
+    return '$rating ($count)';
+  }
+
+  @override
+  String get accountNotifications => 'الإشعارات';
+
+  @override
+  String get accountSupport => 'الدعم';
+
+  @override
+  String get accountLogout => 'تسجيل الخروج';
+
+  @override
+  String get settingsVehicle => 'نوع المركبة';
+
+  @override
+  String get settingsLanguage => 'اللغة';
+
+  @override
+  String get settingsSave => 'حفظ';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get vehicleMotorcycle => 'دراجة نارية';
+
+  @override
+  String get vehicleCar => 'سيارة';
+
+  @override
+  String get vehicleBicycle => 'دراجة هوائية';
+
+  @override
+  String get vehicleVan => 'فان';
+
+  @override
+  String get vehicleTukTuk => 'توك توك';
+
+  @override
+  String get vehicleOnFoot => 'مشيًا';
+
+  @override
+  String get notificationsReadAll => 'قراءة الكل';
+
+  @override
+  String get notificationsEmptyTitle => 'لا توجد إشعارات';
+
+  @override
+  String get notificationsEmptyBody => 'الطلبات الجديدة والتحديثات بتظهر هون.';
 }

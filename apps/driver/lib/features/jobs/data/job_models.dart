@@ -54,6 +54,22 @@ class NextAction {
   bool get isDeliver => action == deliverAction;
 
   bool get needsPhoto => requires.any((item) => item.contains('photo'));
+
+  /// True when [e] means "too far from the place". openapi.json names no code
+  /// for this, so the first run on the sandbox must confirm it.
+  bool isTooFar(ApiException e) =>
+      geofenceMeters != null &&
+      e.status == 422 &&
+      (e.code == 'out_of_zone' || distanceIn(e) != null);
+
+  /// How far the driver is, when the server says so.
+  static int? distanceIn(ApiException e) {
+    for (final entry in (e.details ?? const {}).entries) {
+      final value = entry.value;
+      if (entry.key.contains('distance') && value is num) return value.round();
+    }
+    return null;
+  }
 }
 
 class JobItem {

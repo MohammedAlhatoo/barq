@@ -651,6 +651,26 @@ class _BarqGalleryState extends State<BarqGallery> {
                       BarqNote('سبقك سائق آخر لهذا الطلب',
                           tone: BarqNoteTone.danger, onClose: () {}),
                       label('BarqNote(onClose)'),
+                      const BarqCaptainWordmark(label: 'كابتن'),
+                      label('BarqCaptainWordmark'),
+                      const SizedBox(
+                          height: 240,
+                          child: BarqCaptainSplash(
+                              label: 'كابتن', tagline: 'جاهز لطلبات اليوم')),
+                      label('BarqCaptainSplash'),
+                      const BarqViewfinder(
+                          height: 160,
+                          child: BarqIllustration(BarqIllustrations.basket)),
+                      label('BarqViewfinder'),
+                      Center(child: BarqShutterButton(onPressed: () {})),
+                      label('BarqShutterButton'),
+                      const BarqBarChart(bars: [
+                        BarqBar(label: 'س', value: 3),
+                        BarqBar(label: 'ح', value: 5),
+                        BarqBar(label: 'ن', value: 8, active: true),
+                        BarqBar(label: 'ث', value: 0),
+                      ]),
+                      label('BarqBarChart'),
                     ],
                   ),
                 ),

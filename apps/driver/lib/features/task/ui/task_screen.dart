@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../app/di.dart';
+import '../../../app/router.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../jobs/data/job_models.dart';
 import '../../jobs/ui/widgets/job_map.dart';
 import '../state/task_cubit.dart';
+import 'too_far_screen.dart';
 import 'widgets/task_sheet.dart';
 
 class TaskScreen extends StatelessWidget {
@@ -23,7 +25,16 @@ class TaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<TaskCubit>();
-    return BlocBuilder<TaskCubit, TaskState>(
+    return BlocConsumer<TaskCubit, TaskState>(
+      listenWhen: (previous, current) =>
+          current.tooFar != null && previous.tooFar != current.tooFar,
+      listener: (context, state) async {
+        final retry = await context.push<bool>(
+          Routes.taskTooFar,
+          extra: TooFarArgs(state.job!, state.tooFar!),
+        );
+        if (retry ?? false) await cubit.advance();
+      },
       builder: (context, state) {
         final job = state.job;
         if (job == null) {

@@ -11,6 +11,7 @@ class TaskState {
     this.job,
     this.submitting = false,
     this.notice,
+    this.tooFar,
   });
 
   final bool loading;
@@ -24,6 +25,9 @@ class TaskState {
 
   /// A step was refused: shown above the button.
   final String? notice;
+
+  /// The server refused because the driver is too far: opens that screen.
+  final ApiException? tooFar;
 }
 
 /// The current job. Keeps asking the server, because the order can be
@@ -78,7 +82,9 @@ class TaskCubit extends Cubit<TaskState> {
       );
       emit(TaskState(loading: false, job: updated));
     } on ApiException catch (e) {
-      if (e.code == 'invalid_transition') {
+      if (next.isTooFar(e)) {
+        emit(TaskState(loading: false, job: job, tooFar: e));
+      } else if (e.code == 'invalid_transition') {
         // The order moved on without us: show where it is now.
         emit(TaskState(loading: false, job: job, notice: e.userMessage));
         await _reload();

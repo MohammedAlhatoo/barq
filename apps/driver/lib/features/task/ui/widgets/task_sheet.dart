@@ -2,11 +2,14 @@ import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../app/di.dart';
+import '../../../../app/router.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../jobs/data/job_models.dart';
 import '../../state/task_cubit.dart';
+import 'confirm_step.dart';
 
 /// The steps, who to reach, the items and the one button from `next_action`.
 class TaskSheet extends StatelessWidget {
@@ -20,38 +23,23 @@ class TaskSheet extends StatelessWidget {
 
   Future<void> _onPressed(BuildContext context, NextAction next) async {
     final cubit = context.read<TaskCubit>();
-    final question = next.confirm;
-    if (question != null && !await _confirmed(context, next, question)) return;
-    await cubit.advance();
-  }
-
-  Future<bool> _confirmed(
-    BuildContext context,
-    NextAction next,
-    String question,
-  ) async {
-    final l10n = AppLocalizations.of(context);
-    final p = BarqPalette.of(context);
-    final answer = await showBarqSheet<bool>(
-      context,
-      children: [
-        Text(question, style: BarqText.h2.copyWith(color: p.text)),
-        Builder(
-          builder: (sheet) => BarqButton(
-            label: next.label,
-            onPressed: () => closeBarqSheet(sheet, true),
-          ),
-        ),
-        Builder(
-          builder: (sheet) => BarqButton(
-            label: l10n.commonCancel,
-            variant: BarqButtonVariant.white,
-            onPressed: () => closeBarqSheet(sheet, false),
-          ),
-        ),
-      ],
-    );
-    return answer ?? false;
+    if (next.isDeliver) {
+      final delivered = await context.push<bool>(
+        Routes.taskDeliver,
+        extra: job,
+      );
+      if (!context.mounted) return;
+      if (delivered ?? false) {
+        context.pop();
+      } else {
+        await cubit.load();
+      }
+    } else if (next.needsPhoto) {
+      await context.push(Routes.taskPhoto, extra: job);
+      await cubit.load();
+    } else if (await confirmStep(context, next)) {
+      await cubit.advance();
+    }
   }
 
   @override
@@ -154,12 +142,13 @@ class TaskSheet extends StatelessWidget {
           ),
         if (next == null)
           BarqNote(l10n.taskNoStep)
-        else if (next.isDeliver)
-          BarqNote(l10n.taskDeliverNext)
         else ...[
           BarqButton(
             label: next.label,
-            icon: BarqIcons.package,
+            icon: next.isDeliver ? BarqIcons.check : BarqIcons.package,
+            variant: next.isDeliver
+                ? BarqButtonVariant.green
+                : BarqButtonVariant.primary,
             loading: state.submitting,
             onPressed: () => _onPressed(context, next),
           ),

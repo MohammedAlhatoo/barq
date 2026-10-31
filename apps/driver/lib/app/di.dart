@@ -5,13 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/auth/data/auth_repository.dart';
 import '../features/earnings/data/earnings_repository.dart';
+import '../features/history/data/history_repository.dart';
 import '../features/jobs/data/device_actions.dart';
 import '../features/jobs/data/jobs_repository.dart';
 import '../features/jobs/data/location_source.dart';
 import '../features/jobs/data/location_tracker.dart';
+import '../features/notifications/data/notifications_repository.dart';
 import '../features/profile/data/profile_repository.dart';
 import '../features/profile/state/driver_cubit.dart';
 import '../features/system/state/system_cubit.dart';
+import '../features/task/data/proof_photo.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'locale_cubit.dart';
 
@@ -37,6 +40,9 @@ class AppDependencies {
     required this.profileRepository,
     required this.jobsRepository,
     required this.earningsRepository,
+    required this.historyRepository,
+    required this.notificationsRepository,
+    required this.proofPhotos,
     required this.deviceActions,
     required this.tracker,
     required this.driver,
@@ -53,6 +59,9 @@ class AppDependencies {
   final ProfileRepository profileRepository;
   final JobsRepository jobsRepository;
   final EarningsRepository earningsRepository;
+  final HistoryRepository historyRepository;
+  final NotificationsRepository notificationsRepository;
+  final ProofPhotos proofPhotos;
   final DeviceActions deviceActions;
   final LocationTracker tracker;
   final DriverCubit driver;
@@ -109,6 +118,9 @@ class AppDependencies {
       profileRepository: profile,
       jobsRepository: ApiJobsRepository(api),
       earningsRepository: ApiEarningsRepository(api),
+      historyRepository: ApiHistoryRepository(api),
+      notificationsRepository: ApiNotificationsRepository(api),
+      proofPhotos: CameraProofPhotos(UploadService(api: api)),
       deviceActions: UrlDeviceActions(),
       tracker: tracker,
       driver: DriverCubit(repository: profile, tracker: tracker, auth: auth),

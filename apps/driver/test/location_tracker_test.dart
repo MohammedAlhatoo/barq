@@ -43,8 +43,9 @@ Future<_Rig> _rig() async {
   return rig;
 }
 
+/// Longer than a fake request, even with every test file running at once.
 Future<void> _settle() =>
-    Future<void>.delayed(const Duration(milliseconds: 20));
+    Future<void>.delayed(const Duration(milliseconds: 150));
 
 void main() {
   final point = FakeLocationSource.point;

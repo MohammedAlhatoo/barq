@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// No description provided for @splashTagline.
   ///
   /// In ar, this message translates to:
-  /// **'وصّل بسرعة البرق'**
+  /// **'جاهز لطلبات اليوم؟'**
   String get splashTagline;
 
   /// No description provided for @commonRetry.
@@ -127,12 +127,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إلغاء'**
   String get commonCancel;
-
-  /// No description provided for @comingSoon.
-  ///
-  /// In ar, this message translates to:
-  /// **'قريبًا'**
-  String get comingSoon;
 
   /// No description provided for @offlineTitle.
   ///
@@ -590,12 +584,6 @@ abstract class AppLocalizations {
   /// **'بانتظار تحديث الطلب من السيرفر.'**
   String get taskNoStep;
 
-  /// No description provided for @taskDeliverNext.
-  ///
-  /// In ar, this message translates to:
-  /// **'خطوة التسليم بالصورة جاية بالمرحلة الجاية من البناء.'**
-  String get taskDeliverNext;
-
   /// No description provided for @taskEmptyTitle.
   ///
   /// In ar, this message translates to:
@@ -607,6 +595,342 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'اقبل طلبًا من القائمة لتبدأ.'**
   String get taskEmptyBody;
+
+  /// No description provided for @photoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الطلب'**
+  String get photoTitle;
+
+  /// No description provided for @photoBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'صورة واضحة للأكياس قبل الاستلام، مطلوبة لتأكيد الخطوة.'**
+  String get photoBody;
+
+  /// No description provided for @photoShutter.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط'**
+  String get photoShutter;
+
+  /// No description provided for @photoRetake.
+  ///
+  /// In ar, this message translates to:
+  /// **'اضغط الزر لإعادة التصوير'**
+  String get photoRetake;
+
+  /// No description provided for @photoCameraFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذر فتح الكاميرا. اسمح للتطبيق باستخدامها من الإعدادات.'**
+  String get photoCameraFailed;
+
+  /// No description provided for @tooFarStore.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت بعيد عن المتجر'**
+  String get tooFarStore;
+
+  /// No description provided for @tooFarCustomer.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت بعيد عن الزبون'**
+  String get tooFarCustomer;
+
+  /// No description provided for @tooFarDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'على بعد {meters} م من الموقع'**
+  String tooFarDistance(int meters);
+
+  /// No description provided for @tooFarBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'زر «{label}» بيشتغل بس لما تكون ضمن {meters} متر من {place}.'**
+  String tooFarBody(Object label, int meters, Object place);
+
+  /// No description provided for @tooFarNavigate.
+  ///
+  /// In ar, this message translates to:
+  /// **'افتح الملاحة'**
+  String get tooFarNavigate;
+
+  /// No description provided for @tooFarRetry.
+  ///
+  /// In ar, this message translates to:
+  /// **'حاول مرة أخرى'**
+  String get tooFarRetry;
+
+  /// No description provided for @deliverTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'{status} · سلّم الطلب'**
+  String deliverTitle(Object status);
+
+  /// No description provided for @deliverHelp.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعدة'**
+  String get deliverHelp;
+
+  /// No description provided for @deliverCollect.
+  ///
+  /// In ar, this message translates to:
+  /// **'حصّل من الزبون نقدًا'**
+  String get deliverCollect;
+
+  /// No description provided for @deliverIncludesFee.
+  ///
+  /// In ar, this message translates to:
+  /// **'شامل التوصيل'**
+  String get deliverIncludesFee;
+
+  /// No description provided for @deliverPhotoTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوّر الطلب عند الباب'**
+  String get deliverPhotoTitle;
+
+  /// No description provided for @deliverPhotoTaken.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التقاط الصورة'**
+  String get deliverPhotoTaken;
+
+  /// No description provided for @deliverPhotoProof.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصورة إثبات التسليم للزبون'**
+  String get deliverPhotoProof;
+
+  /// No description provided for @deliverTakePhoto.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقاط الصورة'**
+  String get deliverTakePhoto;
+
+  /// No description provided for @deliverRetake.
+  ///
+  /// In ar, this message translates to:
+  /// **'إعادة التصوير'**
+  String get deliverRetake;
+
+  /// No description provided for @periodDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get periodDay;
+
+  /// No description provided for @periodWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسبوع'**
+  String get periodWeek;
+
+  /// No description provided for @periodMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشهر'**
+  String get periodMonth;
+
+  /// No description provided for @earningsOfDay.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرباح اليوم'**
+  String get earningsOfDay;
+
+  /// No description provided for @earningsOfWeek.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرباح الأسبوع'**
+  String get earningsOfWeek;
+
+  /// No description provided for @earningsOfMonth.
+  ///
+  /// In ar, this message translates to:
+  /// **'أرباح الشهر'**
+  String get earningsOfMonth;
+
+  /// No description provided for @earningsOrders.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} طلب'**
+  String earningsOrders(int count);
+
+  /// No description provided for @cashOnHand.
+  ///
+  /// In ar, this message translates to:
+  /// **'النقد اللي معك'**
+  String get cashOnHand;
+
+  /// No description provided for @cashRemaining.
+  ///
+  /// In ar, this message translates to:
+  /// **'باقي لك {amount} قبل الحد'**
+  String cashRemaining(Object amount);
+
+  /// No description provided for @cashUnsettled.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} طلبات لسا ما تسوّت'**
+  String cashUnsettled(int count);
+
+  /// No description provided for @historyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سجل المهام'**
+  String get historyTitle;
+
+  /// No description provided for @historyAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get historyAll;
+
+  /// No description provided for @historyDelivered.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم التسليم'**
+  String get historyDelivered;
+
+  /// No description provided for @historyCancelled.
+  ///
+  /// In ar, this message translates to:
+  /// **'ملغاة'**
+  String get historyCancelled;
+
+  /// No description provided for @historyToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم · {count} مهام · {amount}'**
+  String historyToday(int count, Object amount);
+
+  /// No description provided for @historyCash.
+  ///
+  /// In ar, this message translates to:
+  /// **'نقد {amount}'**
+  String historyCash(Object amount);
+
+  /// No description provided for @historyEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في مهام هون'**
+  String get historyEmptyTitle;
+
+  /// No description provided for @historyEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'مهامك المنتهية بتظهر هون.'**
+  String get historyEmptyBody;
+
+  /// No description provided for @accountRating.
+  ///
+  /// In ar, this message translates to:
+  /// **'{rating} ({count})'**
+  String accountRating(Object rating, int count);
+
+  /// No description provided for @accountNotifications.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات'**
+  String get accountNotifications;
+
+  /// No description provided for @accountSupport.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدعم'**
+  String get accountSupport;
+
+  /// No description provided for @accountLogout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيل الخروج'**
+  String get accountLogout;
+
+  /// No description provided for @settingsVehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوع المركبة'**
+  String get settingsVehicle;
+
+  /// No description provided for @settingsLanguage.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get settingsLanguage;
+
+  /// No description provided for @settingsSave.
+  ///
+  /// In ar, this message translates to:
+  /// **'حفظ'**
+  String get settingsSave;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @vehicleMotorcycle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراجة نارية'**
+  String get vehicleMotorcycle;
+
+  /// No description provided for @vehicleCar.
+  ///
+  /// In ar, this message translates to:
+  /// **'سيارة'**
+  String get vehicleCar;
+
+  /// No description provided for @vehicleBicycle.
+  ///
+  /// In ar, this message translates to:
+  /// **'دراجة هوائية'**
+  String get vehicleBicycle;
+
+  /// No description provided for @vehicleVan.
+  ///
+  /// In ar, this message translates to:
+  /// **'فان'**
+  String get vehicleVan;
+
+  /// No description provided for @vehicleTukTuk.
+  ///
+  /// In ar, this message translates to:
+  /// **'توك توك'**
+  String get vehicleTukTuk;
+
+  /// No description provided for @vehicleOnFoot.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشيًا'**
+  String get vehicleOnFoot;
+
+  /// No description provided for @notificationsReadAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة الكل'**
+  String get notificationsReadAll;
+
+  /// No description provided for @notificationsEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد إشعارات'**
+  String get notificationsEmptyTitle;
+
+  /// No description provided for @notificationsEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الطلبات الجديدة والتحديثات بتظهر هون.'**
+  String get notificationsEmptyBody;
 }
 
 class _AppLocalizationsDelegate

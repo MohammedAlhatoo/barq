@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:barq_core/barq_core.dart';
@@ -8,13 +9,16 @@ import 'package:barq_driver/app/di.dart';
 import 'package:barq_driver/app/locale_cubit.dart';
 import 'package:barq_driver/features/auth/data/auth_repository.dart';
 import 'package:barq_driver/features/earnings/data/earnings_repository.dart';
+import 'package:barq_driver/features/history/data/history_repository.dart';
 import 'package:barq_driver/features/jobs/data/device_actions.dart';
 import 'package:barq_driver/features/jobs/data/jobs_repository.dart';
 import 'package:barq_driver/features/jobs/data/location_source.dart';
 import 'package:barq_driver/features/jobs/data/location_tracker.dart';
+import 'package:barq_driver/features/notifications/data/notifications_repository.dart';
 import 'package:barq_driver/features/profile/data/profile_repository.dart';
 import 'package:barq_driver/features/profile/state/driver_cubit.dart';
 import 'package:barq_driver/features/system/state/system_cubit.dart';
+import 'package:barq_driver/features/task/data/proof_photo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -39,6 +43,7 @@ class FakeServer implements HttpClientAdapter {
   final List<String> calls = [];
   final Map<String, Object?> bodies = {};
   final Map<String, Map<String, dynamic>> headers = {};
+  final Map<String, Map<String, dynamic>> queries = {};
 
   /// True makes every request fail like a dead connection.
   bool offline = false;
@@ -60,6 +65,7 @@ class FakeServer implements HttpClientAdapter {
     calls.add(key);
     bodies[key] = options.data;
     headers[key] = options.headers;
+    queries[key] = options.queryParameters;
     final reply = replies[key] ?? const Reply(null, status: 500, error: 'x');
     final code = reply.error;
     final body = code == null
@@ -118,6 +124,35 @@ class FakeLocationSource implements LocationSource {
   Stream<LocationPoint> watch({required int intervalSeconds}) =>
       controller.stream;
 }
+
+/// A camera that always works, and an upload through the fake server.
+class FakeProofPhotos implements ProofPhotos {
+  FakeProofPhotos(this._api);
+
+  final ApiClient _api;
+
+  /// True is a driver who closes the camera without a photo.
+  bool closesCamera = false;
+
+  @override
+  Future<File?> take() async {
+    if (closesCamera) return null;
+    final file = File('${Directory.systemTemp.path}/barq_proof_test.png');
+    await file.writeAsBytes(_onePixelPng);
+    return file;
+  }
+
+  @override
+  Future<int> upload(File photo) async {
+    final data = await _api.post('/uploads') as Map;
+    return data['upload_id'] as int;
+  }
+}
+
+final _onePixelPng = base64Decode(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGA'
+  'WjR9awAAAABJRU5ErkJggg==',
+);
 
 class FakeDeviceActions implements DeviceActions {
   final List<String> called = [];
@@ -307,12 +342,13 @@ const logged = {'barq_token': 'saved'};
 
 /// A full app with real repositories on top of [FakeServer].
 class TestApp {
-  TestApp._(this.deps, this.server, this.location, this.actions);
+  TestApp._(this.deps, this.server, this.location, this.actions, this.photos);
 
   final AppDependencies deps;
   final FakeServer server;
   final FakeLocationSource location;
   final FakeDeviceActions actions;
+  final FakeProofPhotos photos;
 
   static Future<TestApp> create(
     Map<String, Reply> replies, {
@@ -341,6 +377,7 @@ class TestApp {
     );
     final profile = ApiProfileRepository(api);
     final actions = FakeDeviceActions();
+    final photos = FakeProofPhotos(api);
     final deps = AppDependencies(
       auth: auth,
       api: api,
@@ -358,11 +395,14 @@ class TestApp {
       profileRepository: profile,
       jobsRepository: ApiJobsRepository(api),
       earningsRepository: ApiEarningsRepository(api),
+      historyRepository: ApiHistoryRepository(api),
+      notificationsRepository: ApiNotificationsRepository(api),
+      proofPhotos: photos,
       deviceActions: actions,
       tracker: tracker,
       driver: DriverCubit(repository: profile, tracker: tracker, auth: auth),
     );
-    return TestApp._(deps, server, location, actions);
+    return TestApp._(deps, server, location, actions, photos);
   }
 
   /// Dio works with real timers, so waits run outside the fake clock.
@@ -373,6 +413,12 @@ class TestApp {
       );
       await tester.pump(const Duration(milliseconds: 300));
     }
+  }
+
+  /// Stops before the first request ends, to see the splash.
+  Future<void> pumpFirstFrame(WidgetTester tester) async {
+    await tester.pumpWidget(BarqDriverApp(deps: deps));
+    await tester.pump();
   }
 
   Future<void> pump(WidgetTester tester, {Size size = phone}) async {

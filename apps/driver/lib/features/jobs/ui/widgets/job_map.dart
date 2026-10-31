@@ -10,12 +10,22 @@ import '../../data/job_models.dart';
 /// The store, the home and the line between them, dimmed for the dark theme.
 /// Without coordinates it stays the drawn map from the design.
 class JobMap extends StatelessWidget {
-  const JobMap({super.key, required this.job, required this.bottomInset});
+  const JobMap({
+    super.key,
+    required this.job,
+    required this.bottomInset,
+    this.fence,
+    this.fenceMeters,
+  });
 
   final Job job;
 
   /// How much of the map the sheet covers.
   final double bottomInset;
+
+  /// Draws the allowed circle around this place.
+  final JobPlace? fence;
+  final int? fenceMeters;
 
   static const _maxZoom = 16.0;
   static const _edge = 60.0;
@@ -32,6 +42,8 @@ class JobMap extends StatelessWidget {
     final tiles = context.read<AppDependencies>().mapTileUrl;
     final store = LatLng(pickup.lat!, pickup.lng!);
     final home = LatLng(dropoff.lat!, dropoff.lng!);
+    final fence = this.fence;
+    final fenceMeters = this.fenceMeters;
     return BarqMapBackground(
       darken: true,
       children: [
@@ -59,6 +71,19 @@ class JobMap extends StatelessWidget {
               ),
               const IgnorePointer(child: ColoredBox(color: BarqColors.mapDim)),
             ],
+            if (fence != null && fence.hasLocation && fenceMeters != null)
+              CircleLayer(
+                circles: [
+                  CircleMarker(
+                    point: LatLng(fence.lat!, fence.lng!),
+                    radius: fenceMeters.toDouble(),
+                    useRadiusInMeter: true,
+                    color: BarqColors.primary.withValues(alpha: 0.18),
+                    borderColor: BarqColors.primary,
+                    borderStrokeWidth: 2,
+                  ),
+                ],
+              ),
             PolylineLayer(
               polylines: [
                 Polyline(

@@ -13,7 +13,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appName => 'Barq Captain';
 
   @override
-  String get splashTagline => 'Delivered at lightning speed';
+  String get splashTagline => 'Ready for today\'s orders?';
 
   @override
   String get commonRetry => 'Try again';
@@ -23,9 +23,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonCancel => 'Cancel';
-
-  @override
-  String get comingSoon => 'Coming soon';
 
   @override
   String get offlineTitle => 'No internet connection';
@@ -299,11 +296,197 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskNoStep => 'Waiting for the order to update.';
 
   @override
-  String get taskDeliverNext => 'The photo delivery step is coming next.';
-
-  @override
   String get taskEmptyTitle => 'No current job';
 
   @override
   String get taskEmptyBody => 'Accept an order from the list to start.';
+
+  @override
+  String get photoTitle => 'Photo of the order';
+
+  @override
+  String get photoBody =>
+      'A clear photo of the bags before pickup, needed to confirm this step.';
+
+  @override
+  String get photoShutter => 'Take photo';
+
+  @override
+  String get photoRetake => 'Press the button to retake';
+
+  @override
+  String get photoCameraFailed =>
+      'Could not open the camera. Allow it in settings.';
+
+  @override
+  String get tooFarStore => 'You are far from the store';
+
+  @override
+  String get tooFarCustomer => 'You are far from the customer';
+
+  @override
+  String tooFarDistance(int meters) {
+    return '$meters m from the place';
+  }
+
+  @override
+  String tooFarBody(Object label, int meters, Object place) {
+    return 'The “$label” button works only within $meters meters of $place.';
+  }
+
+  @override
+  String get tooFarNavigate => 'Open navigation';
+
+  @override
+  String get tooFarRetry => 'Try again';
+
+  @override
+  String deliverTitle(Object status) {
+    return '$status · hand over the order';
+  }
+
+  @override
+  String get deliverHelp => 'Help';
+
+  @override
+  String get deliverCollect => 'Collect in cash from the customer';
+
+  @override
+  String get deliverIncludesFee => 'Delivery included';
+
+  @override
+  String get deliverPhotoTitle => 'Photo at the door';
+
+  @override
+  String get deliverPhotoTaken => 'Photo taken';
+
+  @override
+  String get deliverPhotoProof => 'The photo proves the delivery';
+
+  @override
+  String get deliverTakePhoto => 'Take photo';
+
+  @override
+  String get deliverRetake => 'Retake';
+
+  @override
+  String get periodDay => 'Day';
+
+  @override
+  String get periodWeek => 'Week';
+
+  @override
+  String get periodMonth => 'Month';
+
+  @override
+  String get earningsOfDay => 'Today\'s earnings';
+
+  @override
+  String get earningsOfWeek => 'This week\'s earnings';
+
+  @override
+  String get earningsOfMonth => 'This month\'s earnings';
+
+  @override
+  String earningsOrders(int count) {
+    return '$count orders';
+  }
+
+  @override
+  String get cashOnHand => 'Cash on hand';
+
+  @override
+  String cashRemaining(Object amount) {
+    return '$amount left before the limit';
+  }
+
+  @override
+  String cashUnsettled(int count) {
+    return '$count orders not settled';
+  }
+
+  @override
+  String get historyTitle => 'Job history';
+
+  @override
+  String get historyAll => 'All';
+
+  @override
+  String get historyDelivered => 'Delivered';
+
+  @override
+  String get historyCancelled => 'Cancelled';
+
+  @override
+  String historyToday(int count, Object amount) {
+    return 'Today · $count jobs · $amount';
+  }
+
+  @override
+  String historyCash(Object amount) {
+    return 'Cash $amount';
+  }
+
+  @override
+  String get historyEmptyTitle => 'No jobs here';
+
+  @override
+  String get historyEmptyBody => 'Your finished jobs will appear here.';
+
+  @override
+  String accountRating(Object rating, int count) {
+    return '$rating ($count)';
+  }
+
+  @override
+  String get accountNotifications => 'Notifications';
+
+  @override
+  String get accountSupport => 'Support';
+
+  @override
+  String get accountLogout => 'Log out';
+
+  @override
+  String get settingsVehicle => 'Vehicle type';
+
+  @override
+  String get settingsLanguage => 'Language';
+
+  @override
+  String get settingsSave => 'Save';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get vehicleMotorcycle => 'Motorcycle';
+
+  @override
+  String get vehicleCar => 'Car';
+
+  @override
+  String get vehicleBicycle => 'Bicycle';
+
+  @override
+  String get vehicleVan => 'Van';
+
+  @override
+  String get vehicleTukTuk => 'Tuk-tuk';
+
+  @override
+  String get vehicleOnFoot => 'On foot';
+
+  @override
+  String get notificationsReadAll => 'Read all';
+
+  @override
+  String get notificationsEmptyTitle => 'No notifications';
+
+  @override
+  String get notificationsEmptyBody =>
+      'New orders and updates will appear here.';
 }

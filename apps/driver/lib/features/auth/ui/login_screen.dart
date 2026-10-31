@@ -19,7 +19,6 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   static const _artHeight = 220.0;
   static const _artWidth = 270.0;
-  static const _wordmark = 52.0;
 
   bool _showPassword = false;
 
@@ -59,19 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             children: [
               BarqHeader(
-                titleWidget: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const BarqWordmark(size: _wordmark),
-                    const SizedBox(width: BarqSpacing.md),
-                    Flexible(
-                      child: BarqPill(
-                        l10n.loginCaptain,
-                        tone: BarqPillTone.white,
-                      ),
-                    ),
-                  ],
-                ),
+                titleWidget: BarqCaptainWordmark(label: l10n.loginCaptain),
               ),
               const BarqIllustrationArea(
                 height: _artHeight,

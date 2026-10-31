@@ -123,7 +123,7 @@ class BarqSectionHeader extends StatelessWidget {
       );
 }
 
-enum BarqTileTone { orange, green, neutral, red, yellow, darkOrange }
+enum BarqTileTone { orange, green, neutral, red, yellow, darkOrange, onCash }
 
 /// .ti — rounded icon tile (46px, radius 16).
 class BarqIconTile extends StatelessWidget {
@@ -161,6 +161,7 @@ class BarqIconTile extends StatelessWidget {
           ? (BarqColors.darkOrangeSoft, BarqColors.cashYellow)
           : (BarqColors.warningSoft, BarqColors.warningText),
       BarqTileTone.darkOrange => (BarqColors.primary, Colors.white),
+      BarqTileTone.onCash => (const Color(0x73FFFFFF), BarqColors.ink),
     };
     return Container(
       width: size,

@@ -125,6 +125,25 @@ abstract final class BarqGradients {
     stops: [0, .55, 1],
   );
 
+  /// The glow behind the logo on the driver's login and splash.
+  static const captainGlow = RadialGradient(
+    colors: [Color(0x59FF7A21), Color(0x00FF7A21)],
+    stops: [0, .7],
+  );
+
+  /// The frame of the order photo.
+  static const viewfinder = RadialGradient(
+    center: Alignment(0, -0.2),
+    colors: [Color(0xFF4A3A31), BarqColors.darkSheet],
+  );
+
+  /// Today's bar in the earnings chart.
+  static const chartBar = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [BarqColors.primaryLight, BarqColors.primaryDeep],
+  );
+
   /// The fill of the driver's cash bar.
   static const cashProgress = LinearGradient(
     colors: [BarqColors.cashYellow, BarqColors.primary],

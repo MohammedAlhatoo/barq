@@ -1,11 +1,10 @@
 {
   "@@locale": "ar",
   "appName": "برق كابتن",
-  "splashTagline": "وصّل بسرعة البرق",
+  "splashTagline": "جاهز لطلبات اليوم؟",
   "commonRetry": "إعادة المحاولة",
   "commonBack": "رجوع",
   "commonCancel": "إلغاء",
-  "comingSoon": "قريبًا",
   "offlineTitle": "لا يوجد اتصال بالإنترنت",
   "offlineBody": "تأكد من الاتصال وأعد المحاولة. مهمتك الحالية محفوظة ولم تتأثر.",
   "updateTitle": "نسخة جديدة من برق كابتن",
@@ -162,7 +161,123 @@
   },
   "taskPhotoHint": "هاي الخطوة بتطلب صورة",
   "taskNoStep": "بانتظار تحديث الطلب من السيرفر.",
-  "taskDeliverNext": "خطوة التسليم بالصورة جاية بالمرحلة الجاية من البناء.",
   "taskEmptyTitle": "ما عندك مهمة حالية",
-  "taskEmptyBody": "اقبل طلبًا من القائمة لتبدأ."
+  "taskEmptyBody": "اقبل طلبًا من القائمة لتبدأ.",
+  "photoTitle": "صوّر الطلب",
+  "photoBody": "صورة واضحة للأكياس قبل الاستلام، مطلوبة لتأكيد الخطوة.",
+  "photoShutter": "التقاط",
+  "photoRetake": "اضغط الزر لإعادة التصوير",
+  "photoCameraFailed": "تعذر فتح الكاميرا. اسمح للتطبيق باستخدامها من الإعدادات.",
+  "tooFarStore": "أنت بعيد عن المتجر",
+  "tooFarCustomer": "أنت بعيد عن الزبون",
+  "tooFarDistance": "على بعد {meters} م من الموقع",
+  "@tooFarDistance": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "tooFarBody": "زر «{label}» بيشتغل بس لما تكون ضمن {meters} متر من {place}.",
+  "@tooFarBody": {
+    "placeholders": {
+      "label": {},
+      "meters": {
+        "type": "int"
+      },
+      "place": {}
+    }
+  },
+  "tooFarNavigate": "افتح الملاحة",
+  "tooFarRetry": "حاول مرة أخرى",
+  "deliverTitle": "{status} · سلّم الطلب",
+  "@deliverTitle": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "deliverHelp": "مساعدة",
+  "deliverCollect": "حصّل من الزبون نقدًا",
+  "deliverIncludesFee": "شامل التوصيل",
+  "deliverPhotoTitle": "صوّر الطلب عند الباب",
+  "deliverPhotoTaken": "تم التقاط الصورة",
+  "deliverPhotoProof": "الصورة إثبات التسليم للزبون",
+  "deliverTakePhoto": "التقاط الصورة",
+  "deliverRetake": "إعادة التصوير",
+  "periodDay": "اليوم",
+  "periodWeek": "الأسبوع",
+  "periodMonth": "الشهر",
+  "earningsOfDay": "أرباح اليوم",
+  "earningsOfWeek": "أرباح الأسبوع",
+  "earningsOfMonth": "أرباح الشهر",
+  "earningsOrders": "{count} طلب",
+  "@earningsOrders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "cashOnHand": "النقد اللي معك",
+  "cashRemaining": "باقي لك {amount} قبل الحد",
+  "@cashRemaining": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "cashUnsettled": "{count} طلبات لسا ما تسوّت",
+  "@cashUnsettled": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "historyTitle": "سجل المهام",
+  "historyAll": "الكل",
+  "historyDelivered": "تم التسليم",
+  "historyCancelled": "ملغاة",
+  "historyToday": "اليوم · {count} مهام · {amount}",
+  "@historyToday": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "amount": {}
+    }
+  },
+  "historyCash": "نقد {amount}",
+  "@historyCash": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "historyEmptyTitle": "ما في مهام هون",
+  "historyEmptyBody": "مهامك المنتهية بتظهر هون.",
+  "accountRating": "{rating} ({count})",
+  "@accountRating": {
+    "placeholders": {
+      "rating": {},
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "accountNotifications": "الإشعارات",
+  "accountSupport": "الدعم",
+  "accountLogout": "تسجيل الخروج",
+  "settingsVehicle": "نوع المركبة",
+  "settingsLanguage": "اللغة",
+  "settingsSave": "حفظ",
+  "languageArabic": "العربية",
+  "languageEnglish": "English",
+  "vehicleMotorcycle": "دراجة نارية",
+  "vehicleCar": "سيارة",
+  "vehicleBicycle": "دراجة هوائية",
+  "vehicleVan": "فان",
+  "vehicleTukTuk": "توك توك",
+  "vehicleOnFoot": "مشيًا",
+  "notificationsReadAll": "قراءة الكل",
+  "notificationsEmptyTitle": "لا توجد إشعارات",
+  "notificationsEmptyBody": "الطلبات الجديدة والتحديثات بتظهر هون."
 }

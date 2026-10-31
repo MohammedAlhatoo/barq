@@ -64,8 +64,10 @@ class SplashScreen extends StatelessWidget {
             );
           }
           return BarqScreen(
-            background: BarqScreenBackground.orange,
-            body: BarqSplashContent(tagline: l10n.splashTagline),
+            body: BarqCaptainSplash(
+              label: l10n.loginCaptain,
+              tagline: l10n.splashTagline,
+            ),
           );
         },
       ),

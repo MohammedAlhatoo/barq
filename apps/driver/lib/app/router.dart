@@ -1,4 +1,5 @@
 import 'package:barq_core/barq_core.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,16 +7,27 @@ import '../features/auth/state/login_cubit.dart';
 import '../features/auth/state/splash_cubit.dart';
 import '../features/auth/ui/login_screen.dart';
 import '../features/auth/ui/splash_screen.dart';
+import '../features/earnings/state/earnings_cubit.dart';
+import '../features/earnings/ui/earnings_screen.dart';
+import '../features/history/state/history_cubit.dart';
+import '../features/history/ui/history_screen.dart';
+import '../features/jobs/data/job_models.dart';
 import '../features/jobs/state/cash_limit_cubit.dart';
 import '../features/jobs/state/jobs_cubit.dart';
 import '../features/jobs/state/offer_cubit.dart';
 import '../features/jobs/ui/cash_limit_screen.dart';
 import '../features/jobs/ui/jobs_screen.dart';
 import '../features/jobs/ui/offer_screen.dart';
+import '../features/notifications/state/notifications_cubit.dart';
+import '../features/notifications/ui/notifications_screen.dart';
+import '../features/profile/ui/account_screen.dart';
 import '../features/system/state/system_cubit.dart';
+import '../features/task/state/proof_cubit.dart';
 import '../features/task/state/task_cubit.dart';
+import '../features/task/ui/deliver_screen.dart';
+import '../features/task/ui/photo_screen.dart';
 import '../features/task/ui/task_screen.dart';
-import 'coming_soon_screen.dart';
+import '../features/task/ui/too_far_screen.dart';
 import 'di.dart';
 import 'main_shell.dart';
 
@@ -29,6 +41,10 @@ abstract final class Routes {
   static const offer = '/offer/:id';
   static const cashLimit = '/cash-limit';
   static const task = '/task';
+  static const taskPhoto = '/task/photo';
+  static const taskDeliver = '/task/deliver';
+  static const taskTooFar = '/task/too-far';
+  static const notifications = '/notifications';
 
   static String offerOf(int id) => '/offer/$id';
 
@@ -42,6 +58,14 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
   redirect: (context, state) {
     final path = state.matchedLocation;
     if (!auth.isLoggedIn && !Routes.public.contains(path)) return Routes.login;
+    const needJob = {Routes.taskPhoto, Routes.taskDeliver};
+    if (needJob.contains(path)) {
+      final job = state.extra;
+      if (job is! Job || job.nextAction == null) return Routes.task;
+    }
+    if (path == Routes.taskTooFar && state.extra is! TooFarArgs) {
+      return Routes.task;
+    }
     return null;
   },
   routes: [
@@ -92,7 +116,16 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           routes: [
             GoRoute(
               path: Routes.earnings,
-              builder: (context, _) => const ComingSoonScreen(),
+              builder: (context, _) => BlocProvider(
+                create: (context) {
+                  final deps = context.read<AppDependencies>();
+                  return EarningsCubit(
+                    earnings: deps.earningsRepository,
+                    jobs: deps.jobsRepository,
+                  )..load();
+                },
+                child: const EarningsScreen(),
+              ),
             ),
           ],
         ),
@@ -100,7 +133,17 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           routes: [
             GoRoute(
               path: Routes.history,
-              builder: (context, _) => const ComingSoonScreen(),
+              builder: (context, _) => BlocProvider(
+                create: (context) {
+                  final deps = context.read<AppDependencies>();
+                  return HistoryCubit(
+                    history: deps.historyRepository,
+                    earnings: deps.earningsRepository,
+                    jobs: deps.jobsRepository,
+                  )..load();
+                },
+                child: const HistoryScreen(),
+              ),
             ),
           ],
         ),
@@ -108,7 +151,7 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           routes: [
             GoRoute(
               path: Routes.account,
-              builder: (context, _) => const ComingSoonScreen(),
+              builder: (context, _) => const AccountScreen(),
             ),
           ],
         ),
@@ -148,5 +191,44 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
         child: const TaskScreen(),
       ),
     ),
+    GoRoute(
+      path: Routes.taskPhoto,
+      builder: (context, state) => _proof(state, const PhotoScreen()),
+    ),
+    GoRoute(
+      path: Routes.taskDeliver,
+      builder: (context, state) => _proof(state, const DeliverScreen()),
+    ),
+    GoRoute(
+      path: Routes.taskTooFar,
+      builder: (context, state) =>
+          TooFarScreen(args: state.extra! as TooFarArgs),
+    ),
+    GoRoute(
+      path: Routes.notifications,
+      builder: (context, _) => BlocProvider(
+        create: (context) => NotificationsCubit(
+          context.read<AppDependencies>().notificationsRepository,
+        )..load(),
+        child: const NotificationsScreen(),
+      ),
+    ),
   ],
 );
+
+/// The redirect above guarantees a job with a next step on these routes.
+Widget _proof(GoRouterState state, Widget screen) {
+  final job = state.extra! as Job;
+  return BlocProvider(
+    create: (context) {
+      final deps = context.read<AppDependencies>();
+      return ProofCubit(
+        jobs: deps.jobsRepository,
+        photos: deps.proofPhotos,
+        job: job,
+        next: job.nextAction!,
+      );
+    },
+    child: screen,
+  );
+}
