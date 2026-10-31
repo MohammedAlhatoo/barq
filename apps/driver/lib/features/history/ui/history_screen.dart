@@ -121,8 +121,10 @@ class _OrderRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final p = BarqPalette.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    final time = DateFormat.jm(locale)
-        .format((order.completedAt ?? order.createdAt).toLocal());
+    final format = DateFormat.jm(locale)..useNativeDigits = false;
+    final time = format.format(
+      (order.completedAt ?? order.createdAt).toLocal(),
+    );
     return BarqCard(
       padding: const EdgeInsets.symmetric(
         horizontal: 14,

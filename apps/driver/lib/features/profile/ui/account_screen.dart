@@ -129,7 +129,7 @@ class AccountScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         BarqListTile(
-                          title: l10n.settingsVehicle,
+                          title: l10n.accountVehicle,
                           leading: const BarqIconTile(BarqIcons.bike),
                           value: vehicleLabel(l10n, driver.vehicleType),
                           onTap: () => _openSettings(context, driver),

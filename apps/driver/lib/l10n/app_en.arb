@@ -109,15 +109,15 @@
   "earningsOfDay": "Today's earnings",
   "earningsOfWeek": "This week's earnings",
   "earningsOfMonth": "This month's earnings",
-  "earningsOrders": "{count} orders",
+  "earningsOrders": "{count, plural, =1{1 order} other{{count} orders}}",
   "cashOnHand": "Cash on hand",
   "cashRemaining": "{amount} left before the limit",
-  "cashUnsettled": "{count} orders not settled",
+  "cashUnsettled": "{count, plural, =0{All orders settled} =1{1 order not settled} other{{count} orders not settled}}",
   "historyTitle": "Job history",
   "historyAll": "All",
   "historyDelivered": "Delivered",
   "historyCancelled": "Cancelled",
-  "historyToday": "Today · {count} jobs · {amount}",
+  "historyToday": "Today · {count, plural, =1{1 job} other{{count} jobs}} · {amount}",
   "historyCash": "Cash {amount}",
   "historyEmptyTitle": "No jobs here",
   "historyEmptyBody": "Your finished jobs will appear here.",
@@ -138,5 +138,6 @@
   "vehicleOnFoot": "On foot",
   "notificationsReadAll": "Read all",
   "notificationsEmptyTitle": "No notifications",
-  "notificationsEmptyBody": "New orders and updates will appear here."
+  "notificationsEmptyBody": "New orders and updates will appear here.",
+  "accountVehicle": "Vehicle"
 }

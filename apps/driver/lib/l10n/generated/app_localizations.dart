@@ -755,7 +755,7 @@ abstract class AppLocalizations {
   /// No description provided for @earningsOrders.
   ///
   /// In ar, this message translates to:
-  /// **'{count} طلب'**
+  /// **'{count, plural, =1{طلب واحد} =2{طلبان} few{{count} طلبات} many{{count} طلبًا} other{{count} طلب}}'**
   String earningsOrders(int count);
 
   /// No description provided for @cashOnHand.
@@ -773,7 +773,7 @@ abstract class AppLocalizations {
   /// No description provided for @cashUnsettled.
   ///
   /// In ar, this message translates to:
-  /// **'{count} طلبات لسا ما تسوّت'**
+  /// **'{count, plural, =0{كل الطلبات متسوّية} =1{طلب واحد لسا ما تسوّى} few{{count} طلبات لسا ما تسوّت} other{{count} طلب لسا ما تسوّى}}'**
   String cashUnsettled(int count);
 
   /// No description provided for @historyTitle.
@@ -803,7 +803,7 @@ abstract class AppLocalizations {
   /// No description provided for @historyToday.
   ///
   /// In ar, this message translates to:
-  /// **'اليوم · {count} مهام · {amount}'**
+  /// **'اليوم · {count, plural, =1{مهمة واحدة} =2{مهمتان} few{{count} مهام} many{{count} مهمة} other{{count} مهمة}} · {amount}'**
   String historyToday(int count, Object amount);
 
   /// No description provided for @historyCash.
@@ -931,6 +931,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الطلبات الجديدة والتحديثات بتظهر هون.'**
   String get notificationsEmptyBody;
+
+  /// No description provided for @accountVehicle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المركبة'**
+  String get accountVehicle;
 }
 
 class _AppLocalizationsDelegate

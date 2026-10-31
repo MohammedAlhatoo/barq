@@ -298,7 +298,7 @@ void main() {
       expect(find.byType(AccountScreen), findsOneWidget);
       expect(find.text('دراجة نارية'), findsOneWidget);
 
-      await tester.tap(find.text('نوع المركبة'));
+      await tester.tap(find.text('المركبة'));
       await app.settle(tester);
       await tester.tap(find.text('سيارة'));
       await tester.pump();

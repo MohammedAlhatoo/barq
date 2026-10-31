@@ -389,7 +389,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String earningsOrders(int count) {
-    return '$count orders';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count orders',
+      one: '1 order',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -402,7 +408,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String cashUnsettled(int count) {
-    return '$count orders not settled';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count orders not settled',
+      one: '1 order not settled',
+      zero: 'All orders settled',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -419,7 +432,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String historyToday(int count, Object amount) {
-    return 'Today · $count jobs · $amount';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count jobs',
+      one: '1 job',
+    );
+    return 'Today · $_temp0 · $amount';
   }
 
   @override
@@ -489,4 +508,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get notificationsEmptyBody =>
       'New orders and updates will appear here.';
+
+  @override
+  String get accountVehicle => 'Vehicle';
 }

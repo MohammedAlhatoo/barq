@@ -210,7 +210,7 @@
   "earningsOfDay": "أرباح اليوم",
   "earningsOfWeek": "أرباح الأسبوع",
   "earningsOfMonth": "أرباح الشهر",
-  "earningsOrders": "{count} طلب",
+  "earningsOrders": "{count, plural, =1{طلب واحد} =2{طلبان} few{{count} طلبات} many{{count} طلبًا} other{{count} طلب}}",
   "@earningsOrders": {
     "placeholders": {
       "count": {
@@ -225,7 +225,7 @@
       "amount": {}
     }
   },
-  "cashUnsettled": "{count} طلبات لسا ما تسوّت",
+  "cashUnsettled": "{count, plural, =0{كل الطلبات متسوّية} =1{طلب واحد لسا ما تسوّى} few{{count} طلبات لسا ما تسوّت} other{{count} طلب لسا ما تسوّى}}",
   "@cashUnsettled": {
     "placeholders": {
       "count": {
@@ -237,7 +237,7 @@
   "historyAll": "الكل",
   "historyDelivered": "تم التسليم",
   "historyCancelled": "ملغاة",
-  "historyToday": "اليوم · {count} مهام · {amount}",
+  "historyToday": "اليوم · {count, plural, =1{مهمة واحدة} =2{مهمتان} few{{count} مهام} many{{count} مهمة} other{{count} مهمة}} · {amount}",
   "@historyToday": {
     "placeholders": {
       "count": {
@@ -279,5 +279,6 @@
   "vehicleOnFoot": "مشيًا",
   "notificationsReadAll": "قراءة الكل",
   "notificationsEmptyTitle": "لا توجد إشعارات",
-  "notificationsEmptyBody": "الطلبات الجديدة والتحديثات بتظهر هون."
+  "notificationsEmptyBody": "الطلبات الجديدة والتحديثات بتظهر هون.",
+  "accountVehicle": "المركبة"
 }

@@ -126,7 +126,8 @@ class _NotificationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final p = BarqPalette.of(context);
     final locale = Localizations.localeOf(context).languageCode;
-    final time = DateFormat.jm(locale).format(item.createdAt.toLocal());
+    final format = DateFormat.jm(locale)..useNativeDigits = false;
+    final time = format.format(item.createdAt.toLocal());
     return BarqCard(
       onTap: onTap,
       padding: const EdgeInsets.symmetric(

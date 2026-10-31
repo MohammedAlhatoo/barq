@@ -389,7 +389,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String earningsOrders(int count) {
-    return '$count طلب';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count طلب',
+      many: '$count طلبًا',
+      few: '$count طلبات',
+      two: 'طلبان',
+      one: 'طلب واحد',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -402,7 +411,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String cashUnsettled(int count) {
-    return '$count طلبات لسا ما تسوّت';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count طلب لسا ما تسوّى',
+      few: '$count طلبات لسا ما تسوّت',
+      one: 'طلب واحد لسا ما تسوّى',
+      zero: 'كل الطلبات متسوّية',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -419,7 +436,16 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String historyToday(int count, Object amount) {
-    return 'اليوم · $count مهام · $amount';
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count مهمة',
+      many: '$count مهمة',
+      few: '$count مهام',
+      two: 'مهمتان',
+      one: 'مهمة واحدة',
+    );
+    return 'اليوم · $_temp0 · $amount';
   }
 
   @override
@@ -488,4 +514,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationsEmptyBody => 'الطلبات الجديدة والتحديثات بتظهر هون.';
+
+  @override
+  String get accountVehicle => 'المركبة';
 }
