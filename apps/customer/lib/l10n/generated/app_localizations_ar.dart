@@ -259,6 +259,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeSeeAll => 'عرض الكل';
 
   @override
+  String get homeNearStores => 'متاجر قريبة منك';
+
+  @override
+  String get homeStores => 'المتاجر';
+
+  @override
   String get homeDeal => 'عرض اليوم';
 
   @override

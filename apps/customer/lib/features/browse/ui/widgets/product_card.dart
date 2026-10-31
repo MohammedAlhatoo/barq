@@ -32,6 +32,7 @@ class ProductCard extends StatelessWidget {
       name: product.name,
       price: product.price.formatted,
       compareAtPrice: product.compareAtPrice?.formatted,
+      vendorName: product.vendorName,
       image: ProductArt(
         imageUrl: product.imageUrl,
         categoryIcon: product.categoryIcon,

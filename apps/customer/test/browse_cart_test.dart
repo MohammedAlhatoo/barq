@@ -1,5 +1,6 @@
 import 'package:barq_customer/app/router.dart';
 import 'package:barq_customer/features/browse/data/browse_models.dart';
+import 'package:barq_customer/features/browse/ui/widgets/product_art.dart';
 import 'package:barq_customer/features/cart/data/cart_models.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_ui/barq_ui.dart';
@@ -487,6 +488,115 @@ void main() {
       await tester.tap(find.text('تفريغ وإضافة'));
       await app.settle(tester);
       expect(app.deps.cart.state.vendorId, 7);
+    });
+  });
+
+  group('review fixes', () {
+    testWidgets('a product image comes from image_url', (tester) async {
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.rtl,
+          child: ProductArt(
+            imageUrl: 'https://example.com/tomato.png',
+            categoryIcon: 'apple',
+          ),
+        ),
+      );
+      expect(find.byType(Image), findsOneWidget);
+      expect(find.byType(BarqIllustration), findsNothing);
+    });
+
+    testWidgets('the illustration is only for a null image_url', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        const Directionality(
+          textDirection: TextDirection.rtl,
+          child: ProductArt(categoryIcon: 'apple'),
+        ),
+      );
+      expect(find.byType(BarqIllustration), findsOneWidget);
+      expect(find.byType(Image), findsNothing);
+    });
+
+    testWidgets('home sends the default address and keeps the server order', (
+      tester,
+    ) async {
+      final replies = _server();
+      replies['GET /vendors'] = Reply([
+        {..._vendorJson, 'id': 8, 'name': 'الأقرب', 'distance_km': 0.8},
+        {..._vendorJson, 'name': 'الأبعد', 'distance_km': 2.0},
+      ]);
+      final app = await _open(tester, replies: replies);
+
+      final query = app.server.queries['GET /vendors']!;
+      expect(query['lat'], 31.45);
+      expect(query['lng'], 34.39);
+      expect(find.text('متاجر قريبة منك'), findsOneWidget);
+      expect(find.text('0.8 كم'), findsOneWidget);
+      expect(
+        tester.getTopRight(find.text('الأقرب')).dx,
+        greaterThan(tester.getTopRight(find.text('الأبعد').first).dx),
+      );
+    });
+
+    testWidgets('home works without an address or stores', (tester) async {
+      final replies = _server();
+      replies['GET /addresses'] = const Reply(<Object>[]);
+      replies['GET /vendors'] = const Reply(
+        null,
+        status: 500,
+        error: 'server_error',
+      );
+      final app = await _open(tester, replies: replies);
+      expect(app.server.queries['GET /vendors']!.containsKey('lat'), isFalse);
+      expect(find.text('بندورة'), findsOneWidget);
+      expect(find.text('متاجر قريبة منك'), findsNothing);
+    });
+
+    testWidgets('a tile shows its store, and adding asks on another store', (
+      tester,
+    ) async {
+      final app = await _open(tester);
+      expect(
+        tester
+            .widget<BarqProductTile>(find.byType(BarqProductTile).first)
+            .vendorName,
+        'ميني ماركت النور',
+      );
+      expect(tester.takeException(), isNull);
+
+      _addToCart(app, vendor: 8);
+      await tester.tap(find.byType(BarqPlusButton).first);
+      await tester.pumpAndSettle();
+      expect(find.text('تفريغ السلة؟'), findsOneWidget);
+
+      await tester.tap(find.text('تفريغ وإضافة'));
+      await tester.pumpAndSettle();
+      expect(app.deps.cart.state.vendorId, 7);
+      expect(app.deps.cart.state.count, 1);
+    });
+
+    testWidgets('compare shows only the stores the server returned', (
+      tester,
+    ) async {
+      final app = await _open(
+        tester,
+        replies: _server(
+          compare: Reply({
+            'zone': {'id': 9, 'name': 'النصيرات'},
+            'items': <Object>[],
+            'cheapest_vendor_id': 8,
+            'stores': [_store(8, 'بقالة البركة', 4400, cheapest: true)],
+          }),
+        ),
+      );
+      _addToCart(app);
+      await _go(tester, app, Routes.compare);
+
+      expect(find.text('بقالة البركة'), findsOneWidget);
+      expect(find.text('ميني ماركت النور'), findsNothing);
+      expect(find.text('متاجر منطقتك: النصيرات'), findsOneWidget);
     });
   });
 

@@ -13,7 +13,8 @@ abstract class BrowseRepository {
   });
   Future<Product> product(int id);
 
-  /// [lat] and [lng] make the server fill `distance_km`.
+  /// [lat] and [lng] make the server fill `distance_km` and put the nearest
+  /// first, after the open stores.
   Future<List<Vendor>> vendors({double? lat, double? lng});
   Future<Vendor> vendor(int id);
 
@@ -35,6 +36,9 @@ class ApiBrowseRepository implements BrowseRepository {
   /// Category id → icon, so products can show a matching picture.
   Map<int, String?>? _icons;
 
+  /// Vendor id → name, so tiles can show who sells each product.
+  Map<int, String>? _vendorNames;
+
   @override
   Future<List<Category>> categories({int? vendorId}) async {
     final data = await _api.get('/categories', query: {'vendor': ?vendorId});
@@ -55,6 +59,7 @@ class ApiBrowseRepository implements BrowseRepository {
     int page = 1,
   }) async {
     final icons = await _categoryIcons();
+    final names = await _namesOfVendors();
     final result = await _api.getPaged(
       '/products',
       query: {
@@ -66,7 +71,7 @@ class ApiBrowseRepository implements BrowseRepository {
       },
     );
     return Paged(
-      items: result.items.map((e) => _product(e, icons)).toList(),
+      items: result.items.map((e) => _product(e, icons, names)).toList(),
       nextPage: result.nextPage,
       total: result.total,
     );
@@ -75,7 +80,8 @@ class ApiBrowseRepository implements BrowseRepository {
   @override
   Future<Product> product(int id) async {
     final icons = await _categoryIcons();
-    return _product(await _api.get('/products/$id'), icons);
+    final names = await _namesOfVendors();
+    return _product(await _api.get('/products/$id'), icons, names);
   }
 
   @override
@@ -84,9 +90,11 @@ class ApiBrowseRepository implements BrowseRepository {
       '/vendors',
       query: {'lat': ?lat, 'lng': ?lng, 'per_page': _vendorsPageSize},
     );
-    return (data as List)
+    final vendors = (data as List)
         .map((e) => Vendor.fromJson((e as Map).cast<String, dynamic>()))
         .toList();
+    _vendorNames = {for (final vendor in vendors) vendor.id: vendor.name};
+    return vendors;
   }
 
   @override
@@ -120,8 +128,28 @@ class ApiBrowseRepository implements BrowseRepository {
     return _icons ?? const {};
   }
 
-  Product _product(dynamic json, Map<int, String?> icons) {
+  /// Like the pictures: products still load without the store names.
+  Future<Map<int, String>> _namesOfVendors() async {
+    final known = _vendorNames;
+    if (known != null) return known;
+    try {
+      await vendors();
+    } on ApiException {
+      return const {};
+    }
+    return _vendorNames ?? const {};
+  }
+
+  Product _product(
+    dynamic json,
+    Map<int, String?> icons,
+    Map<int, String> names,
+  ) {
     final map = (json as Map).cast<String, dynamic>();
-    return Product.fromJson(map, categoryIcon: icons[map['category_id']]);
+    return Product.fromJson(
+      map,
+      categoryIcon: icons[map['category_id']],
+      vendorName: names[map['vendor_id']],
+    );
   }
 }

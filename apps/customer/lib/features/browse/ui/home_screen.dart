@@ -61,6 +61,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   SliverToBoxAdapter(child: _Featured(products: featured)),
+                  if (state.vendors.isNotEmpty)
+                    SliverToBoxAdapter(child: _Vendors(vendors: state.vendors)),
                   if (rest.isNotEmpty) ...[
                     SliverPadding(
                       padding: const EdgeInsets.only(
@@ -145,6 +147,73 @@ class _HomeHeader extends StatelessWidget {
             onPressed: () => context.push(Routes.search),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Not in the design: the way from home to a store. Kept in the order the
+/// server sent, which is open first, then nearest.
+class _Vendors extends StatelessWidget {
+  const _Vendors({required this.vendors});
+
+  final List<Vendor> vendors;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final located = vendors.any((vendor) => vendor.distanceKm != null);
+    return Padding(
+      padding: const EdgeInsets.only(top: BarqSpacing.section),
+      child: BarqGap(
+        gap: BarqSpacing.xs,
+        children: [
+          BarqSectionHeader(located ? l10n.homeNearStores : l10n.homeStores),
+          BarqChipsRow(
+            children: [
+              for (final vendor in vendors) _VendorCard(vendor: vendor),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VendorCard extends StatelessWidget {
+  const _VendorCard({required this.vendor});
+
+  final Vendor vendor;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final km = vendor.distanceKm;
+    return SizedBox(
+      width: BarqSizes.homeVendorCard,
+      child: BarqCard(
+        padding: const EdgeInsets.all(BarqSpacing.gap),
+        onTap: () => context.push(Routes.vendorOf(vendor.id)),
+        child: BarqGap(
+          gap: BarqSpacing.xxs,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              vendor.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: BarqText.h3,
+            ),
+            Text(
+              km != null
+                  ? l10n.distanceKm(km.toStringAsFixed(1))
+                  : vendor.isOpen
+                  ? l10n.vendorOpen
+                  : l10n.vendorClosed,
+              style: BarqText.xs,
+            ),
+          ],
+        ),
       ),
     );
   }

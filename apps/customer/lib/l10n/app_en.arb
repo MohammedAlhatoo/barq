@@ -92,6 +92,8 @@
   "homeAll": "All",
   "homeBestSellers": "Most ordered",
   "homeSeeAll": "See all",
+  "homeNearStores": "Stores near you",
+  "homeStores": "Stores",
   "homeDeal": "Today's deal",
   "searchHint": "Search for a product or store",
   "soldOut": "Sold out",

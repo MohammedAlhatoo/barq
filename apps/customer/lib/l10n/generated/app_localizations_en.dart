@@ -261,6 +261,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSeeAll => 'See all';
 
   @override
+  String get homeNearStores => 'Stores near you';
+
+  @override
+  String get homeStores => 'Stores';
+
+  @override
   String get homeDeal => 'Today\'s deal';
 
   @override

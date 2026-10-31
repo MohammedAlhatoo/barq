@@ -78,9 +78,14 @@ class Product {
     required this.vendorId,
     required this.options,
     this.categoryIcon,
+    this.vendorName,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json, {String? categoryIcon}) {
+  factory Product.fromJson(
+    Map<String, dynamic> json, {
+    String? categoryIcon,
+    String? vendorName,
+  }) {
     final compareAt = json['compare_at_price'];
     return Product(
       id: json['id'] as int,
@@ -100,6 +105,7 @@ class Product {
           )
           .toList(),
       categoryIcon: categoryIcon,
+      vendorName: vendorName,
     );
   }
 
@@ -119,6 +125,9 @@ class Product {
   /// The icon of the product's category. Not in the API's product: the
   /// repository adds it.
   final String? categoryIcon;
+
+  /// Not in the API's product either: the repository adds it.
+  final String? vendorName;
 
   /// Such a product can only be added from its details screen.
   bool get needsChoice => options.any((option) => option.isRequired);

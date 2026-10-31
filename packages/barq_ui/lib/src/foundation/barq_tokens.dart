@@ -229,6 +229,7 @@ abstract final class BarqSizes {
   static const compareBasket = 62.0;
   static const cartBarIcon = 40.0;
   static const compareArrow = 38.0;
+  static const homeVendorCard = 170.0;
   static const incompleteStoreOpacity = .75;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)

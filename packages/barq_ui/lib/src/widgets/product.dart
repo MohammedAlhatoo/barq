@@ -9,8 +9,8 @@ import 'buttons.dart';
 import 'indicators.dart';
 import 'surfaces.dart';
 
-/// A picture from the server. Shows [fallback] while there is no [url], while
-/// it loads, and when it fails.
+/// A picture from the server. [fallback] is only for an item with no [url]:
+/// loading shows a small spinner, and a broken link a neutral icon.
 class BarqNetworkImage extends StatelessWidget {
   const BarqNetworkImage(
       {super.key, required this.url, required this.fallback});
@@ -21,13 +21,23 @@ class BarqNetworkImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final link = url;
-    if (link == null) return fallback;
+    if (link == null || link.isEmpty) return fallback;
     return Image.network(
       link,
       fit: BoxFit.contain,
-      loadingBuilder: (_, child, progress) =>
-          progress == null ? child : fallback,
-      errorBuilder: (context, error, stack) => fallback,
+      loadingBuilder: (_, child, progress) => progress == null
+          ? child
+          : const Center(
+              child: SizedBox.square(
+                dimension: BarqSizes.iconM,
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: BarqColors.primary),
+              ),
+            ),
+      errorBuilder: (context, error, stack) => const Center(
+        child: BarqIcon('package',
+            size: BarqSizes.iconL, color: BarqColors.placeholder),
+      ),
     );
   }
 }
@@ -105,6 +115,7 @@ class BarqProductTile extends StatelessWidget {
     this.tile = BarqTileColor.pink,
     this.compareAtPrice,
     this.unit,
+    this.vendorName,
     this.badge,
     this.topBadge,
     this.isFavorite,
@@ -131,6 +142,9 @@ class BarqProductTile extends StatelessWidget {
 
   /// e.g. "/ كغ"
   final String? unit;
+
+  /// The store selling it, under the name.
+  final String? vendorName;
 
   /// Discount badge text, e.g. "−25%" (green pill, top-left).
   final String? badge;
@@ -171,7 +185,8 @@ class BarqProductTile extends StatelessWidget {
               left: large ? 30 : 16,
               right: large ? 30 : 16,
               top: large ? 30 : 8,
-              bottom: large ? 70 : 70,
+              // The footer is taller with the store line.
+              bottom: vendorName == null ? 70 : 88,
               child: Opacity(opacity: soldOut ? .45 : 1, child: image),
             ),
             if (isFavorite != null)
@@ -231,6 +246,11 @@ class BarqProductTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: BarqText.h3
                                     .copyWith(fontSize: large ? 16 : 15)),
+                            if (vendorName != null)
+                              Text(vendorName!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: BarqText.xs),
                             BarqPrice(price,
                                 compareAt: compareAtPrice,
                                 unit: unit,

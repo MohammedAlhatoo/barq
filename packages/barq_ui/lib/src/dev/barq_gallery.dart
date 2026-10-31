@@ -439,6 +439,18 @@ class _BarqGalleryState extends State<BarqGallery> {
                                 BarqIllustrations.cucumber)),
                       ),
                       label('BarqTileBackground + BarqNetworkImage'),
+                      SizedBox(
+                        width: 170,
+                        child: BarqProductTile(
+                          name: 'بندورة',
+                          price: '6.00 ₪',
+                          vendorName: 'ميني ماركت النور',
+                          image: const BarqIllustration(
+                              BarqIllustrations.tomato),
+                          onAdd: () {},
+                        ),
+                      ),
+                      label('BarqProductTile(vendorName)'),
                       const BarqEmptyCartArt(),
                       label('BarqEmptyCartArt'),
                       const BarqOutOfZoneArt(),

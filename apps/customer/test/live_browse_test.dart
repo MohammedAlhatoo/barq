@@ -72,6 +72,15 @@ void main() {
     expect(address, isNotNull);
     final nearby = await browse.vendors(lat: address!.lat, lng: address.lng);
     expect(nearby.first.distanceKm, isNotNull);
+    // Open stores first, then nearest.
+    final open = nearby.where((v) => v.isOpen).toList();
+    for (var i = 1; i < open.length; i++) {
+      expect(
+        open[i].distanceKm!,
+        greaterThanOrEqualTo(open[i - 1].distanceKm!),
+      );
+    }
+    expect(first.items.first.vendorName, isNotNull);
 
     final comparison = await carts.compare(
       lines: [
@@ -89,6 +98,33 @@ void main() {
     );
     expect(comparison.zoneName, isNotEmpty);
     expect(comparison.stores, isNotEmpty);
+    // The cart's own store is left out when it doesn't deliver to the zone.
+    final zoneStores = comparison.stores.map((s) => s.vendorId).toSet();
+    debugPrint('zone stores=$zoneStores of ${nearby.length}');
+    expect(zoneStores.length, lessThan(nearby.length));
+
+    // Out of every zone, without saving an address on the account.
+    await expectLater(
+      api.post(
+        '/baskets/compare',
+        body: {
+          'cart': [
+            {'product_id': first.items.first.id, 'qty': 1},
+          ],
+          'dropoff': {'lat': 0, 'lng': 0},
+        },
+      ),
+      throwsA(
+        isA<ApiException>()
+            .having((e) => e.status, 'status', 422)
+            .having((e) => e.code, 'code', 'out_of_zone'),
+      ),
+    );
+
+    final imaged = (await browse.products(query: 'ا')).items
+        .where((p) => p.imageUrl != null);
+    debugPrint('products with image_url on a page: ${imaged.length}');
+
     debugPrint(
       'zone=${comparison.zoneName} stores=${comparison.stores.length} '
       'best=${comparison.cheapestVendorId}',

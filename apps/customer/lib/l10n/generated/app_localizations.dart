@@ -566,6 +566,18 @@ abstract class AppLocalizations {
   /// **'عرض الكل'**
   String get homeSeeAll;
 
+  /// No description provided for @homeNearStores.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاجر قريبة منك'**
+  String get homeNearStores;
+
+  /// No description provided for @homeStores.
+  ///
+  /// In ar, this message translates to:
+  /// **'المتاجر'**
+  String get homeStores;
+
   /// No description provided for @homeDeal.
   ///
   /// In ar, this message translates to:
