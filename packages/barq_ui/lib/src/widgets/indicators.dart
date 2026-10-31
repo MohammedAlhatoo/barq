@@ -36,12 +36,17 @@ class BarqPill extends StatelessWidget {
   const BarqPill(this.label,
       {super.key,
       this.tone = BarqPillTone.orange,
+      this.color,
       this.icon,
       this.padding,
       this.fontSize});
 
   final String label;
   final BarqPillTone tone;
+
+  /// Replaces [tone] with a soft tint of this color, for colors the server
+  /// decides (order statuses).
+  final Color? color;
 
   /// A [BarqIcons] name shown before the label.
   final String? icon;
@@ -51,7 +56,9 @@ class BarqPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final p = BarqPalette.of(context);
+    final custom = color;
     final (Color bg, Color fg) = switch (tone) {
+      _ when custom != null => (custom.withValues(alpha: 0.14), custom),
       BarqPillTone.success => p.isDark
           ? (BarqColors.darkSuccessSoft, BarqColors.darkSuccessText)
           : (BarqColors.successSoft, BarqColors.successText),

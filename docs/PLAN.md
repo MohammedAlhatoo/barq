@@ -21,14 +21,14 @@ Claude Code بيبني المشروع **مرحلة مرحلة** بالترتيب
 
 ## المرحلة 1 · الأساس `barq_core` — فرع `phase-1-core`
 (مرجع: `01_…` P1-05…P1-09 · `03_…` P3-01, P3-02)
-- [ ] P1-05 · `ApiClient` + `ApiException` + `BarqEnv`
-- [ ] P1-06 · `AuthStore` (التوكن + 401 → sessionExpired)
-- [ ] P1-07 · `ConfigStore` + `AppConfig` + `Money` + `StatusInfo`
-- [ ] P1-08 · `UploadService`
-- [ ] P3-01 · `Poller`
-- [ ] P3-02 · `OrderStatusPill` + `OrderStatusTimeline`
-- [ ] P1-09 · `PushService` (FCM) — بيحتاج Firebase project؛ إذا مش جاهز، اعمل الكود وأجّل الربط.
-- [ ] تجربة حقيقية: `GET /app/config` بيرجع بيانات، ومفتاح غلط بيرجع `ApiException`.
+- [x] P1-05 · `ApiClient` + `ApiException` + `BarqEnv`
+- [x] P1-06 · `AuthStore` (التوكن + 401 → sessionExpired)
+- [x] P1-07 · `ConfigStore` + `AppConfig` + `Money` + `StatusInfo`
+- [x] P1-08 · `UploadService`
+- [x] P3-01 · `Poller`
+- [x] P3-02 · `OrderStatusPill` + `OrderStatusTimeline`
+- [x] P1-09 · `PushService` (FCM) — بيحتاج Firebase project؛ إذا مش جاهز، اعمل الكود وأجّل الربط. (الكود جاهز، وربط Firebase مؤجّل)
+- [ ] تجربة حقيقية: `GET /app/config` بيرجع بيانات، ومفتاح غلط بيرجع `ApiException`. (المفتاح الغلط نجح؛ `GET /app/config` بيستنى مفتاح حقيقي)
 
 ## المرحلة 2 · هيكل تطبيق الزبون + الدخول + شاشات النظام — فرع `phase-2-customer-auth`
 (مرجع: `01_…`)

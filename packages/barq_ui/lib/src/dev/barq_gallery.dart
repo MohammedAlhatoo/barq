@@ -198,6 +198,7 @@ class _BarqGalleryState extends State<BarqGallery> {
                         BarqPill('داخل منطقة الخدمة',
                             tone: BarqPillTone.success, icon: BarqIcons.check),
                         BarqPill('422 out_of_zone', tone: BarqPillTone.neutral),
+                        BarqPill('بانتظار المتجر', color: Color(0xFFF59E0B)),
                       ]),
                       label('BarqPill(tone: …)'),
                       const BarqStepProgress(count: 5, current: 2, labels: [
