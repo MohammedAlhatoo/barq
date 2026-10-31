@@ -8,6 +8,9 @@ import 'package:barq_customer/app/di.dart';
 import 'package:barq_customer/app/locale_cubit.dart';
 import 'package:barq_customer/features/auth/data/auth_repository.dart';
 import 'package:barq_customer/features/auth/data/location_repository.dart';
+import 'package:barq_customer/features/browse/data/browse_repository.dart';
+import 'package:barq_customer/features/cart/data/cart_repository.dart';
+import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_customer/features/system/state/system_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +20,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// One server answer. [error] makes it the standard failure shape.
 class Reply {
-  const Reply(this.data, {this.status = 200, this.error});
+  const Reply(this.data, {this.status = 200, this.error, this.meta});
 
   final Object? data;
   final int status;
   final String? error;
+  final Map<String, Object>? meta;
 }
 
 /// Plays the server: maps "POST /auth/send-otp" to a [Reply].
@@ -31,6 +35,7 @@ class FakeServer implements HttpClientAdapter {
   final Map<String, Reply> replies;
   final List<String> calls = [];
   final Map<String, Object?> bodies = {};
+  final Map<String, Map<String, dynamic>> queries = {};
 
   /// True makes every request fail like a dead connection.
   bool offline = false;
@@ -51,10 +56,16 @@ class FakeServer implements HttpClientAdapter {
         .replaceFirst('/api/v1', '');
     calls.add(key);
     bodies[key] = options.data;
+    queries[key] = options.queryParameters;
     final reply = replies[key] ?? const Reply(null, status: 500, error: 'x');
     final code = reply.error;
     final body = code == null
-        ? {'success': true, 'message': 'ok', 'data': reply.data}
+        ? {
+            'success': true,
+            'message': 'ok',
+            'data': reply.data,
+            'meta': ?reply.meta,
+          }
         : {
             'success': false,
             'message': 'failed',
@@ -153,6 +164,7 @@ class TestApp {
     final config = ConfigStore(api: api, app: BarqAppKind.customer);
     final network = FakeNetwork();
     final location = FakeLocation();
+    final browse = ApiBrowseRepository(api);
     final deps = AppDependencies(
       auth: auth,
       api: api,
@@ -169,6 +181,10 @@ class TestApp {
       ),
       authRepository: ApiAuthRepository(api, sharedPrefs),
       locationRepository: location,
+      browseRepository: browse,
+      cartRepository: ApiCartRepository(api),
+      cart: CartCubit(prefs: sharedPrefs, config: config, browse: browse),
+      prefs: sharedPrefs,
     );
     return TestApp._(deps, server, network, location);
   }

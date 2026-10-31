@@ -102,6 +102,9 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | `.search` | `BarqSearchBar(onTap / controller, active)` |
 | `.ob` خانات الرمز | `BarqCodeInput(length: 4, onCompleted)` |
 | `.qty` `.qb` | `BarqQtyStepper(value, onChanged, trashAtOne)` |
+| صورة من السيرفر مع بديل · خلفية بلون المنتج | `BarqNetworkImage(url, fallback)` · `BarqTileBackground(tile, height, radius)` |
+| تحميل / رسالة صغيرة داخل قائمة | `BarqLoadingView` · `BarqMessageView(title, message, actionLabel)` |
+| رسومات السلة الفارغة · خارج المنطقة · ناقص أصناف | `BarqEmptyCartArt` · `BarqOutOfZoneArt` · `BarqBasketArt(label)` |
 | `.tg` / `.rad` / مربع الاختيار | `BarqToggle` / `BarqRadio` / `BarqCheckbox` |
 | `.pc` + `.gls` كرت المنتج | `BarqProductTile(name, price, compareAtPrice, badge, soldOut, tile)` |
 | صف منتج داخل كرت | `BarqProductRow(thumb: BarqThumb(...))` |

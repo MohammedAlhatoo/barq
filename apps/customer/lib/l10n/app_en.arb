@@ -85,5 +85,120 @@
   "maintenanceContact": "Questions: ",
   "sessionTitle": "Log in again",
   "sessionBody": "Your session ended to protect your account. Enter your number and we will send a new code.",
-  "sessionLogin": "Log in"
+  "sessionLogin": "Log in",
+
+  "homeMorning": "Good morning",
+  "homeEvening": "Good evening",
+  "homeAll": "All",
+  "homeBestSellers": "Most ordered",
+  "homeSeeAll": "See all",
+  "homeDeal": "Today's deal",
+  "searchHint": "Search for a product or store",
+  "soldOut": "Sold out",
+  "browseEmpty": "No products here yet",
+  "searchRecent": "Recent searches:",
+  "searchCount": "{count} results",
+  "@searchCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "searchNoResults": "No results",
+  "searchNoResultsBody": "Try another word or check the spelling.",
+  "distanceKm": "{km} km",
+  "@distanceKm": {
+    "placeholders": { "km": { "type": "String" } }
+  },
+  "vendorOpen": "Open",
+  "vendorClosed": "Closed",
+  "vendorPrep": "{minutes} min prep",
+  "@vendorPrep": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "viewCart": "View cart",
+  "cartCount": "{count} items",
+  "@cartCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "productTitle": "Product details",
+  "productAvailable": "In stock",
+  "productUnavailable": "Unavailable",
+  "productRequired": "(required)",
+  "productDescription": "Description",
+  "addToCart": "Add to cart",
+  "addToCartPrice": "Add to cart · {price}",
+  "@addToCartPrice": {
+    "placeholders": { "price": { "type": "String" } }
+  },
+  "otherStoreTitle": "Empty your cart?",
+  "otherStoreBody": "Your cart has products from another store, and an order comes from one store. Empty it and add this product?",
+  "otherStoreConfirm": "Empty and add",
+  "commonKeepCart": "Keep my cart",
+  "cartLimitTitle": "Limit reached",
+  "cartLimitBody": "You can't add more to the cart.",
+  "commonOk": "OK",
+  "cartTitle": "My cart",
+  "cartClearTitle": "Empty your cart?",
+  "cartClearBody": "All products will be removed from your cart.",
+  "cartClearConfirm": "Empty cart",
+  "cartCompareTitle": "Compare your cart with nearby stores",
+  "cartCompareBody": "We'll check if a store that delivers to you is cheaper",
+  "cartTotal": "Total",
+  "cartDelivery": "Delivery",
+  "cartAtCheckout": "Calculated at checkout",
+  "cartContinue": "Continue",
+  "cartContinueTotal": "Continue · {total}",
+  "@cartContinueTotal": {
+    "placeholders": { "total": { "type": "String" } }
+  },
+  "cartEmptyTitle": "Your cart is empty",
+  "cartEmptyBody": "Add products from stores in your area, and Barq compares prices before you order.",
+  "cartBrowse": "Browse stores",
+  "compareTitle": "Best basket",
+  "compareZone": "Stores in your area: {zone}",
+  "@compareZone": {
+    "placeholders": { "zone": { "type": "String" } }
+  },
+  "compareBody": "We compared your cart items ({count}) with the stores that deliver to your address only.",
+  "@compareBody": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "compareBest": "Best price",
+  "compareForItems": "for products",
+  "compareAvailable": "{available} of {total} available",
+  "@compareAvailable": {
+    "placeholders": { "available": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "compareOthers": "Other stores in your area",
+  "compareNote": "Prices exclude delivery, shown in the next step",
+  "comparePickBest": "Choose best · {price}",
+  "@comparePickBest": {
+    "placeholders": { "price": { "type": "String" } }
+  },
+  "comparePick": "Choose {store} · {price}",
+  "@comparePick": {
+    "placeholders": { "store": { "type": "String" }, "price": { "type": "String" } }
+  },
+  "compareMissing": "{count} missing · {detail}",
+  "@compareMissing": {
+    "placeholders": { "count": { "type": "int" }, "detail": { "type": "String" } }
+  },
+  "compareNotEnough": "Not enough stock",
+  "noStoreBadge": "Items missing",
+  "noStoreTitle": "No store has your whole cart",
+  "noStoreBody": "All stores in {zone} are missing an item or more. Pick a store to continue with what's available, or edit your cart.",
+  "@noStoreBody": {
+    "placeholders": { "zone": { "type": "String" } }
+  },
+  "noStoreContinue": "Continue with {store}",
+  "@noStoreContinue": {
+    "placeholders": { "store": { "type": "String" } }
+  },
+  "noStoreEdit": "Edit cart",
+  "noStoresTitle": "No stores deliver to your address yet",
+  "outOfZoneTitle": "We don't deliver here yet",
+  "outOfZoneBody": "Your address is outside Barq's service areas. Choose another address inside the delivery area.",
+  "outOfZoneChange": "Change address",
+  "noAddressTitle": "You have no delivery address",
+  "noAddressBody": "Add your address so we can compare your cart with stores that deliver to you.",
+  "noAddressAdd": "Add address",
+  "checkoutTitle": "Confirm order"
 }

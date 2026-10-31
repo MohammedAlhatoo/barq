@@ -9,6 +9,57 @@ import 'buttons.dart';
 import 'indicators.dart';
 import 'surfaces.dart';
 
+/// A picture from the server. Shows [fallback] while there is no [url], while
+/// it loads, and when it fails.
+class BarqNetworkImage extends StatelessWidget {
+  const BarqNetworkImage(
+      {super.key, required this.url, required this.fallback});
+
+  final String? url;
+  final Widget fallback;
+
+  @override
+  Widget build(BuildContext context) {
+    final link = url;
+    if (link == null) return fallback;
+    return Image.network(
+      link,
+      fit: BoxFit.contain,
+      loadingBuilder: (_, child, progress) =>
+          progress == null ? child : fallback,
+      errorBuilder: (context, error, stack) => fallback,
+    );
+  }
+}
+
+/// A block with a product tile color: product picture, store hero, the top of
+/// the best-basket card.
+class BarqTileBackground extends StatelessWidget {
+  const BarqTileBackground(
+      {super.key,
+      required this.child,
+      this.tile = BarqTileColor.pink,
+      this.height,
+      this.radius = BarqRadius.productTile,
+      this.padding = EdgeInsets.zero});
+
+  final Widget child;
+  final BarqTileColor tile;
+  final double? height;
+  final double radius;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        height: height,
+        padding: padding,
+        decoration: BoxDecoration(
+            gradient: tile.gradient,
+            borderRadius: BorderRadius.circular(radius)),
+        child: child,
+      );
+}
+
 /// Colored rounded square holding a product picture (list rows, cart, receipt).
 /// [image] is usually `Image.network(product.imageUrl)` or a [BarqIllustration].
 class BarqThumb extends StatelessWidget {

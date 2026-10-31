@@ -42,6 +42,7 @@ class BarqButton extends StatelessWidget {
     this.small = false,
     this.loading = false,
     this.expand = true,
+    this.leading,
     this.trailing,
     this.labelColor,
   });
@@ -55,6 +56,10 @@ class BarqButton extends StatelessWidget {
   final bool small;
   final bool loading;
   final bool expand;
+
+  /// A widget before the label (the orange circle in "عرض السلة"). Use
+  /// [icon] for a plain icon.
+  final Widget? leading;
 
   /// Optional widget at the end (e.g. price "₪46" in "عرض السلة").
   final Widget? trailing;
@@ -126,6 +131,10 @@ class BarqButton extends StatelessWidget {
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.spaceBetween,
             children: [
+              if (leading != null) ...[
+                leading!,
+                const SizedBox(width: 10)
+              ],
               if (icon != null) ...[
                 BarqIcon(icon!,
                     size: small ? BarqSizes.iconM : BarqSizes.icon, color: fg),

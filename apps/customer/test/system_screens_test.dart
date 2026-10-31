@@ -143,7 +143,12 @@ void main() {
     app.network.controller.add(false);
     await app.settle(tester);
 
-    await tester.tap(find.text('إعادة المحاولة'));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(NoInternetView),
+        matching: find.text('إعادة المحاولة'),
+      ),
+    );
     await app.settle(tester);
     expect(find.byType(NoInternetView), findsOneWidget);
   });
@@ -158,7 +163,7 @@ void main() {
 
     tester.widget<BarqNavBar>(find.byType(BarqNavBar)).onFab!();
     await app.settle(tester);
-    expect(find.text('السلة'), findsOneWidget);
+    expect(find.text('سلتك فارغة'), findsOneWidget);
   });
 
   for (final size in [phone, smallPhone]) {

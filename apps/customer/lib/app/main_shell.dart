@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/cart/state/cart_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
 import 'router.dart';
@@ -35,6 +36,9 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final cartCount = context.select<CartCubit, int>(
+      (cart) => cart.state.count,
+    );
     return BarqScreen(
       body: widget.shell,
       bottomNavigationBar: BarqNavBar(
@@ -50,6 +54,7 @@ class _MainShellState extends State<MainShell> {
           initialLocation: index == widget.shell.currentIndex,
         ),
         fabIcon: BarqIcons.bag,
+        fabBadge: cartCount,
         onFab: () => context.push(Routes.cart),
       ),
     );

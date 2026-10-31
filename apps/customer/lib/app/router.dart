@@ -1,4 +1,5 @@
 import 'package:barq_core/barq_core.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,6 +14,21 @@ import '../features/auth/ui/otp_screen.dart';
 import '../features/auth/ui/phone_screen.dart';
 import '../features/auth/ui/splash_screen.dart';
 import '../features/auth/ui/welcome_screen.dart';
+import '../features/browse/state/home_cubit.dart';
+import '../features/browse/state/product_cubit.dart';
+import '../features/browse/state/products_cubit.dart';
+import '../features/browse/state/search_cubit.dart';
+import '../features/browse/state/vendor_cubit.dart';
+import '../features/browse/ui/category_screen.dart';
+import '../features/browse/ui/home_screen.dart';
+import '../features/browse/ui/product_screen.dart';
+import '../features/browse/ui/search_screen.dart';
+import '../features/browse/ui/vendor_screen.dart';
+import '../features/cart/state/cart_cubit.dart';
+import '../features/cart/state/cart_summary_cubit.dart';
+import '../features/cart/state/compare_cubit.dart';
+import '../features/cart/ui/cart_screen.dart';
+import '../features/cart/ui/compare_screen.dart';
 import '../features/system/state/system_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
@@ -30,6 +46,15 @@ abstract final class Routes {
   static const orders = '/orders';
   static const account = '/account';
   static const cart = '/cart';
+  static const compare = '/cart/compare';
+  static const checkout = '/checkout';
+  static const search = '/search';
+  static const product = '/product/:id';
+  static const vendor = '/vendor/:id';
+
+  static String productOf(int id) => '/product/$id';
+  static String vendorOf(int id) => '/vendor/$id';
+  static String categoryOf(int id) => '$categories?category=$id';
 
   /// Routes that work without a login.
   static const public = {splash, onboarding, login, otp, welcome};
@@ -99,20 +124,116 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     ),
     GoRoute(
       path: Routes.cart,
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => CartSummaryCubit(
+            browse: deps.browseRepository,
+            cart: deps.cartRepository,
+            compareEnabled: deps.config.config.hasModule('basket_compare'),
+          )..refresh(deps.cart.state),
+          child: const CartScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.compare,
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => CompareCubit(
+            browse: deps.browseRepository,
+            cart: deps.cartRepository,
+            lines: context.read<CartCubit>().state.lines,
+          )..load(),
+          child: const CompareScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.checkout,
       builder: (context, _) => PlaceholderScreen(
-        title: AppLocalizations.of(context).navCart,
-        design: 'design/03_checkout_01.png',
+        title: AppLocalizations.of(context).checkoutTitle,
+        design: 'design/03_checkout_04.png',
         back: true,
       ),
+    ),
+    GoRoute(
+      path: Routes.search,
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) =>
+              SearchCubit(deps.browseRepository, deps.prefs)..loadVendors(),
+          child: const SearchScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.product,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return BlocProvider(
+          create: (context) =>
+              ProductCubit(context.read<AppDependencies>().browseRepository, id)
+                ..load(),
+          child: const ProductScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.vendor,
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        final browse = context.read<AppDependencies>().browseRepository;
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => VendorCubit(browse, id)..load()),
+            BlocProvider(
+              create: (_) => ProductsCubit(browse, vendorId: id)..load(),
+            ),
+          ],
+          child: const VendorScreen(),
+        );
+      },
     ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, shell) => MainShell(shell: shell),
       branches: [
-        _tab(Routes.home, 'design/02_browse_01.png', (l10n) => l10n.navHome),
-        _tab(
-          Routes.categories,
-          'design/02_browse_02.png',
-          (l10n) => l10n.navCategories,
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.home,
+              builder: (context, _) => BlocProvider(
+                create: (context) =>
+                    HomeCubit(context.read<AppDependencies>().browseRepository)
+                      ..load(),
+                child: const HomeScreen(),
+              ),
+            ),
+          ],
+        ),
+        StatefulShellBranch(
+          routes: [
+            GoRoute(
+              path: Routes.categories,
+              builder: (context, state) {
+                final category = int.tryParse(
+                  state.uri.queryParameters['category'] ?? '',
+                );
+                // The key starts a fresh list when a home chip picks another
+                // category.
+                return BlocProvider(
+                  key: ValueKey(category),
+                  create: (context) => ProductsCubit(
+                    context.read<AppDependencies>().browseRepository,
+                    categoryId: category,
+                  )..load(),
+                  child: CategoryScreen(fromHome: category != null),
+                );
+              },
+            ),
+          ],
         ),
         _tab(
           Routes.orders,

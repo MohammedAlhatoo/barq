@@ -19,6 +19,7 @@ abstract final class BarqColors {
   static const muted = Color(0xFF6F6F6F);
   static const placeholder = Color(0xFF8A7F79);
   static const white = Color(0xFFFFFFFF);
+  static const onDarkMuted = Color(0xFFCFC5C0); // small text on black cards
   static const chipMuted = Color(0xFFF3ECE8); // .ti.k / .qb
   static const segmentBg = Color(0xFFF7F0EC);
   static const border = Color(0xFFF1DFD5); // .inp / .ob
@@ -171,6 +172,11 @@ abstract final class BarqSpacing {
   /// Space under the last button: forms (34) and state screens (30).
   static const formBottom = 34.0;
   static const stateBottom = 30.0;
+
+  /// Bottom padding of lists, so nothing hides behind what floats over them.
+  static const navClearance = 130.0;
+  static const cartBarClearance = 110.0;
+  static const cartSheetClearance = 230.0;
 }
 
 abstract final class BarqSizes {
@@ -207,6 +213,23 @@ abstract final class BarqSizes {
   static const wordmarkHeader = 40.0;
   static const welcomeMap = 120.0;
   static const welcomePin = 64.0;
+
+  // Browse and cart.
+  static const productTile = 186.0;
+  static const featuredTile = 252.0;
+  static const featuredViewport = .78; // share of the screen width
+  static const productHero = 220.0;
+  static const storeHero = 250.0;
+  static const storeHeroCardTop = 210.0; // the card overlaps the hero by 40
+  static const storeHeroBlob = 200.0;
+  static const optionChip = 38.0;
+  static const rowThumb = 74.0;
+  static const cartThumb = 52.0;
+  static const storeLogo = 46.0;
+  static const compareBasket = 62.0;
+  static const cartBarIcon = 40.0;
+  static const compareArrow = 38.0;
+  static const incompleteStoreOpacity = .75;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)
   static const iconS = 16.0;
@@ -278,6 +301,14 @@ abstract final class BarqShadows {
         offset: Offset(0, 14),
         blurRadius: 26,
         spreadRadius: -12)
+  ];
+  // السلة الأوفر card 0 20px 34px -18px rgba(30,158,85,.6)
+  static const greenCard = [
+    BoxShadow(
+        color: Color(0x991E9E55),
+        offset: Offset(0, 20),
+        blurRadius: 34,
+        spreadRadius: -18)
   ];
   static const redButton = [
     BoxShadow(

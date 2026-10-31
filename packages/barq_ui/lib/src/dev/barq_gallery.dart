@@ -430,6 +430,37 @@ class _BarqGalleryState extends State<BarqGallery> {
                         ]),
                       ),
                       label('BarqBanner(gradient)'),
+                      const BarqTileBackground(
+                        tile: BarqTileColor.mint,
+                        height: 90,
+                        child: BarqNetworkImage(
+                            url: null,
+                            fallback: BarqIllustration(
+                                BarqIllustrations.cucumber)),
+                      ),
+                      label('BarqTileBackground + BarqNetworkImage'),
+                      const BarqEmptyCartArt(),
+                      label('BarqEmptyCartArt'),
+                      const BarqOutOfZoneArt(),
+                      label('BarqOutOfZoneArt'),
+                      const BarqBasketArt(label: 'ناقص أصناف'),
+                      label('BarqBasketArt'),
+                      const BarqMessageView(
+                          title: 'لا نتائج', actionLabel: 'إعادة المحاولة'),
+                      label('BarqMessageView'),
+                      const SizedBox(height: 80, child: BarqLoadingView()),
+                      label('BarqLoadingView'),
+                      BarqButton(
+                        label: 'عرض السلة',
+                        variant: BarqButtonVariant.dark,
+                        leading: const BarqIconTile(BarqIcons.bag,
+                            tone: BarqTileTone.darkOrange,
+                            size: BarqSizes.cartBarIcon,
+                            radius: BarqRadius.pill),
+                        trailing: const Text('3 منتجات'),
+                        onPressed: () {},
+                      ),
+                      label('BarqButton(leading, trailing)'),
                       SizedBox(
                         height: 160,
                         child: ClipRRect(

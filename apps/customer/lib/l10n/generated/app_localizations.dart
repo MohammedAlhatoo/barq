@@ -535,6 +535,438 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تسجيل الدخول'**
   String get sessionLogin;
+
+  /// No description provided for @homeMorning.
+  ///
+  /// In ar, this message translates to:
+  /// **'صباح الخير'**
+  String get homeMorning;
+
+  /// No description provided for @homeEvening.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساء الخير'**
+  String get homeEvening;
+
+  /// No description provided for @homeAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكل'**
+  String get homeAll;
+
+  /// No description provided for @homeBestSellers.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأكثر طلبًا'**
+  String get homeBestSellers;
+
+  /// No description provided for @homeSeeAll.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض الكل'**
+  String get homeSeeAll;
+
+  /// No description provided for @homeDeal.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض اليوم'**
+  String get homeDeal;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن منتج أو متجر'**
+  String get searchHint;
+
+  /// No description provided for @soldOut.
+  ///
+  /// In ar, this message translates to:
+  /// **'نفدت الكمية'**
+  String get soldOut;
+
+  /// No description provided for @browseEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد منتجات هنا بعد'**
+  String get browseEmpty;
+
+  /// No description provided for @searchRecent.
+  ///
+  /// In ar, this message translates to:
+  /// **'عمليات بحث سابقة:'**
+  String get searchRecent;
+
+  /// No description provided for @searchCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} نتيجة'**
+  String searchCount(int count);
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا نتائج'**
+  String get searchNoResults;
+
+  /// No description provided for @searchNoResultsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'جرّب كلمة ثانية أو تأكد من الإملاء.'**
+  String get searchNoResultsBody;
+
+  /// No description provided for @distanceKm.
+  ///
+  /// In ar, this message translates to:
+  /// **'{km} كم'**
+  String distanceKm(String km);
+
+  /// No description provided for @vendorOpen.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح'**
+  String get vendorOpen;
+
+  /// No description provided for @vendorClosed.
+  ///
+  /// In ar, this message translates to:
+  /// **'مغلق'**
+  String get vendorClosed;
+
+  /// No description provided for @vendorPrep.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحضير {minutes} د'**
+  String vendorPrep(int minutes);
+
+  /// No description provided for @viewCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'عرض السلة'**
+  String get viewCart;
+
+  /// No description provided for @cartCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} منتجات'**
+  String cartCount(int count);
+
+  /// No description provided for @productTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفاصيل المنتج'**
+  String get productTitle;
+
+  /// No description provided for @productAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوفر'**
+  String get productAvailable;
+
+  /// No description provided for @productUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'غير متوفر'**
+  String get productUnavailable;
+
+  /// No description provided for @productRequired.
+  ///
+  /// In ar, this message translates to:
+  /// **'(إجباري)'**
+  String get productRequired;
+
+  /// No description provided for @productDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوصف'**
+  String get productDescription;
+
+  /// No description provided for @addToCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف للسلة'**
+  String get addToCart;
+
+  /// No description provided for @addToCartPrice.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف للسلة · {price}'**
+  String addToCartPrice(String price);
+
+  /// No description provided for @otherStoreTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفريغ السلة؟'**
+  String get otherStoreTitle;
+
+  /// No description provided for @otherStoreBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتك فيها منتجات من متجر ثاني، والطلب بيكون من متجر واحد. نفرّغها ونضيف هذا المنتج؟'**
+  String get otherStoreBody;
+
+  /// No description provided for @otherStoreConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفريغ وإضافة'**
+  String get otherStoreConfirm;
+
+  /// No description provided for @commonKeepCart.
+  ///
+  /// In ar, this message translates to:
+  /// **'إبقاء السلة'**
+  String get commonKeepCart;
+
+  /// No description provided for @cartLimitTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلت للحد المسموح'**
+  String get cartLimitTitle;
+
+  /// No description provided for @cartLimitBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يمكن إضافة المزيد إلى السلة.'**
+  String get cartLimitBody;
+
+  /// No description provided for @commonOk.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسنًا'**
+  String get commonOk;
+
+  /// No description provided for @cartTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتي'**
+  String get cartTitle;
+
+  /// No description provided for @cartClearTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إفراغ السلة؟'**
+  String get cartClearTitle;
+
+  /// No description provided for @cartClearBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'بنحذف كل المنتجات من سلتك.'**
+  String get cartClearBody;
+
+  /// No description provided for @cartClearConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إفراغ السلة'**
+  String get cartClearConfirm;
+
+  /// No description provided for @cartCompareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'قارن سلتك بمتاجر منطقتك'**
+  String get cartCompareTitle;
+
+  /// No description provided for @cartCompareBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نشوف إذا في متجر أرخص بيوصّلك'**
+  String get cartCompareBody;
+
+  /// No description provided for @cartTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجموع'**
+  String get cartTotal;
+
+  /// No description provided for @cartDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوصيل'**
+  String get cartDelivery;
+
+  /// No description provided for @cartAtCheckout.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُحسب عند تأكيد الطلب'**
+  String get cartAtCheckout;
+
+  /// No description provided for @cartContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الطلب'**
+  String get cartContinue;
+
+  /// No description provided for @cartContinueTotal.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة الطلب · {total}'**
+  String cartContinueTotal(String total);
+
+  /// No description provided for @cartEmptyTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتك فارغة'**
+  String get cartEmptyTitle;
+
+  /// No description provided for @cartEmptyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف منتجات من متاجر منطقتك، وبرق يقارن لك الأسعار قبل ما تطلب.'**
+  String get cartEmptyBody;
+
+  /// No description provided for @cartBrowse.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفّح المتاجر'**
+  String get cartBrowse;
+
+  /// No description provided for @compareTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السلة الأوفر'**
+  String get compareTitle;
+
+  /// No description provided for @compareZone.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاجر منطقتك: {zone}'**
+  String compareZone(String zone);
+
+  /// No description provided for @compareBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'قارنّا منتجات سلتك ({count}) بالمتاجر اللي بتوصّل لعنوانك بس.'**
+  String compareBody(int count);
+
+  /// No description provided for @compareBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأوفر'**
+  String get compareBest;
+
+  /// No description provided for @compareForItems.
+  ///
+  /// In ar, this message translates to:
+  /// **'للمنتجات'**
+  String get compareForItems;
+
+  /// No description provided for @compareAvailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'{available} من {total} متوفرة'**
+  String compareAvailable(int available, int total);
+
+  /// No description provided for @compareOthers.
+  ///
+  /// In ar, this message translates to:
+  /// **'متاجر أخرى بمنطقتك'**
+  String get compareOthers;
+
+  /// No description provided for @compareNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية'**
+  String get compareNote;
+
+  /// No description provided for @comparePickBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار الأوفر · {price}'**
+  String comparePickBest(String price);
+
+  /// No description provided for @comparePick.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيار {store} · {price}'**
+  String comparePick(String store, String price);
+
+  /// No description provided for @compareMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'ناقص {count} · {detail}'**
+  String compareMissing(int count, String detail);
+
+  /// No description provided for @compareNotEnough.
+  ///
+  /// In ar, this message translates to:
+  /// **'الكمية غير كافية'**
+  String get compareNotEnough;
+
+  /// No description provided for @noStoreBadge.
+  ///
+  /// In ar, this message translates to:
+  /// **'ناقص أصناف'**
+  String get noStoreBadge;
+
+  /// No description provided for @noStoreTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في متجر عنده كل سلتك'**
+  String get noStoreTitle;
+
+  /// No description provided for @noStoreBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل متاجر {zone} ناقصها صنف أو أكثر. اختار متجر وبنكمّل بالمتوفر، أو عدّل السلة.'**
+  String noStoreBody(String zone);
+
+  /// No description provided for @noStoreContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل من {store}'**
+  String noStoreContinue(String store);
+
+  /// No description provided for @noStoreEdit.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعديل السلة'**
+  String get noStoreEdit;
+
+  /// No description provided for @noStoresTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في متاجر بتوصّل لعنوانك حاليًا'**
+  String get noStoresTitle;
+
+  /// No description provided for @outOfZoneTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا نوصل لهذا العنوان بعد'**
+  String get outOfZoneTitle;
+
+  /// No description provided for @outOfZoneBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوانك خارج مناطق خدمة برق حاليًا. اختر عنوانًا آخر داخل منطقة التوصيل.'**
+  String get outOfZoneBody;
+
+  /// No description provided for @outOfZoneChange.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير العنوان'**
+  String get outOfZoneChange;
+
+  /// No description provided for @noAddressTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما عندك عنوان توصيل'**
+  String get noAddressTitle;
+
+  /// No description provided for @noAddressBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أضف عنوانك عشان نقارن سلتك بالمتاجر اللي بتوصّلك.'**
+  String get noAddressBody;
+
+  /// No description provided for @noAddressAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة عنوان'**
+  String get noAddressAdd;
+
+  /// No description provided for @checkoutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تأكيد الطلب'**
+  String get checkoutTitle;
 }
 
 class _AppLocalizationsDelegate

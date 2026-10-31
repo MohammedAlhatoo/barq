@@ -255,17 +255,23 @@ class BarqSheet extends StatelessWidget {
   }
 }
 
-/// Shows a modal [BarqSheet] with the design scrim (.scrim).
+/// Shows a modal [BarqSheet] with the design scrim (.scrim). It opens on the
+/// root navigator so it covers the nav bar; close it with [closeBarqSheet].
 Future<T?> showBarqSheet<T>(BuildContext context,
     {required List<Widget> children, bool showGrab = true}) {
   return showModalBottomSheet<T>(
     context: context,
+    useRootNavigator: true,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     barrierColor: const Color(0x6B281208),
     builder: (_) => BarqSheet(showGrab: showGrab, children: children),
   );
 }
+
+/// Closes the sheet opened by [showBarqSheet], with an optional result.
+void closeBarqSheet<T>(BuildContext context, [T? result]) =>
+    Navigator.of(context, rootNavigator: true).pop(result);
 
 /// .grab — the small handle at the top of sheets.
 class BarqGrab extends StatelessWidget {

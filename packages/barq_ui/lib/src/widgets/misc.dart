@@ -439,6 +439,161 @@ class BarqIconCard extends StatelessWidget {
       );
 }
 
+/// Spinner for a screen or list that is loading.
+class BarqLoadingView extends StatelessWidget {
+  const BarqLoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Center(
+        child: Padding(
+          padding: EdgeInsets.all(BarqSpacing.lg),
+          child: CircularProgressIndicator(color: BarqColors.primary),
+        ),
+      );
+}
+
+/// Small centered message for an empty or failed list inside a screen.
+/// [BarqStateView] is the full-screen version.
+class BarqMessageView extends StatelessWidget {
+  const BarqMessageView({
+    super.key,
+    required this.title,
+    this.message,
+    this.icon = 'info',
+    this.actionLabel,
+    this.onAction,
+  });
+
+  final String title;
+  final String? message;
+
+  /// A [BarqIcons] name.
+  final String icon;
+  final String? actionLabel;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = BarqPalette.of(context);
+    final action = actionLabel;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(BarqSpacing.page),
+        child: BarqGap(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            BarqIconTile(icon),
+            Text(title,
+                textAlign: TextAlign.center,
+                style: BarqText.h3.copyWith(color: p.text)),
+            if (message != null)
+              Text(message!,
+                  textAlign: TextAlign.center,
+                  style: BarqText.t.copyWith(color: p.textMuted)),
+            if (action != null)
+              BarqButton(
+                  label: action,
+                  small: true,
+                  expand: false,
+                  onPressed: onAction),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The picture of the empty cart screen (07_states_02).
+class BarqEmptyCartArt extends StatelessWidget {
+  const BarqEmptyCartArt({super.key});
+
+  @override
+  Widget build(BuildContext context) => const SizedBox(
+        width: 270,
+        height: 270,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            BarqIconCard(icon: 'bag', angle: -6),
+            Positioned(
+                left: 169,
+                top: 37,
+                child: BarqIllustration('lemon', width: 56)),
+            Positioned(
+                left: 43,
+                top: 181,
+                child: BarqIllustration('tomato', width: 56)),
+          ],
+        ),
+      );
+}
+
+/// The pin with a red x of the out-of-zone screen (07_states_01).
+class BarqOutOfZoneArt extends StatelessWidget {
+  const BarqOutOfZoneArt({super.key});
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: 220,
+        height: 220,
+        child: Stack(
+          children: [
+            const BarqIllustration('pin3d', width: 220),
+            Positioned(
+              left: 34,
+              top: 17,
+              child: Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: BarqColors.danger,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                ),
+                child: const BarqIcon('x',
+                    size: BarqSizes.iconM, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      );
+}
+
+/// The tilted basket with a pill under it (03_checkout_03).
+class BarqBasketArt extends StatelessWidget {
+  const BarqBasketArt({super.key, required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) => BarqIllustrationArea(
+        height: 220,
+        blobSize: 200,
+        overlays: [
+          Positioned(
+              bottom: 22,
+              child: BarqPill(label,
+                  tone: BarqPillTone.danger,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 8))),
+        ],
+        child: Transform.rotate(
+          angle: -6 * 3.1415926535 / 180,
+          child: Container(
+            width: 124,
+            height: 124,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(38),
+            ),
+            child: const BarqIllustration('basket', width: 100, height: 96),
+          ),
+        ),
+      );
+}
+
 /// Store/stores row ("ميني ماركت النور · تحضير 15 د · 1.2 كم").
 class BarqMetaRow extends StatelessWidget {
   const BarqMetaRow({super.key, required this.items, this.color});

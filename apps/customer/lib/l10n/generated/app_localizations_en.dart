@@ -244,4 +244,253 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sessionLogin => 'Log in';
+
+  @override
+  String get homeMorning => 'Good morning';
+
+  @override
+  String get homeEvening => 'Good evening';
+
+  @override
+  String get homeAll => 'All';
+
+  @override
+  String get homeBestSellers => 'Most ordered';
+
+  @override
+  String get homeSeeAll => 'See all';
+
+  @override
+  String get homeDeal => 'Today\'s deal';
+
+  @override
+  String get searchHint => 'Search for a product or store';
+
+  @override
+  String get soldOut => 'Sold out';
+
+  @override
+  String get browseEmpty => 'No products here yet';
+
+  @override
+  String get searchRecent => 'Recent searches:';
+
+  @override
+  String searchCount(int count) {
+    return '$count results';
+  }
+
+  @override
+  String get searchNoResults => 'No results';
+
+  @override
+  String get searchNoResultsBody => 'Try another word or check the spelling.';
+
+  @override
+  String distanceKm(String km) {
+    return '$km km';
+  }
+
+  @override
+  String get vendorOpen => 'Open';
+
+  @override
+  String get vendorClosed => 'Closed';
+
+  @override
+  String vendorPrep(int minutes) {
+    return '$minutes min prep';
+  }
+
+  @override
+  String get viewCart => 'View cart';
+
+  @override
+  String cartCount(int count) {
+    return '$count items';
+  }
+
+  @override
+  String get productTitle => 'Product details';
+
+  @override
+  String get productAvailable => 'In stock';
+
+  @override
+  String get productUnavailable => 'Unavailable';
+
+  @override
+  String get productRequired => '(required)';
+
+  @override
+  String get productDescription => 'Description';
+
+  @override
+  String get addToCart => 'Add to cart';
+
+  @override
+  String addToCartPrice(String price) {
+    return 'Add to cart · $price';
+  }
+
+  @override
+  String get otherStoreTitle => 'Empty your cart?';
+
+  @override
+  String get otherStoreBody =>
+      'Your cart has products from another store, and an order comes from one store. Empty it and add this product?';
+
+  @override
+  String get otherStoreConfirm => 'Empty and add';
+
+  @override
+  String get commonKeepCart => 'Keep my cart';
+
+  @override
+  String get cartLimitTitle => 'Limit reached';
+
+  @override
+  String get cartLimitBody => 'You can\'t add more to the cart.';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get cartTitle => 'My cart';
+
+  @override
+  String get cartClearTitle => 'Empty your cart?';
+
+  @override
+  String get cartClearBody => 'All products will be removed from your cart.';
+
+  @override
+  String get cartClearConfirm => 'Empty cart';
+
+  @override
+  String get cartCompareTitle => 'Compare your cart with nearby stores';
+
+  @override
+  String get cartCompareBody =>
+      'We\'ll check if a store that delivers to you is cheaper';
+
+  @override
+  String get cartTotal => 'Total';
+
+  @override
+  String get cartDelivery => 'Delivery';
+
+  @override
+  String get cartAtCheckout => 'Calculated at checkout';
+
+  @override
+  String get cartContinue => 'Continue';
+
+  @override
+  String cartContinueTotal(String total) {
+    return 'Continue · $total';
+  }
+
+  @override
+  String get cartEmptyTitle => 'Your cart is empty';
+
+  @override
+  String get cartEmptyBody =>
+      'Add products from stores in your area, and Barq compares prices before you order.';
+
+  @override
+  String get cartBrowse => 'Browse stores';
+
+  @override
+  String get compareTitle => 'Best basket';
+
+  @override
+  String compareZone(String zone) {
+    return 'Stores in your area: $zone';
+  }
+
+  @override
+  String compareBody(int count) {
+    return 'We compared your cart items ($count) with the stores that deliver to your address only.';
+  }
+
+  @override
+  String get compareBest => 'Best price';
+
+  @override
+  String get compareForItems => 'for products';
+
+  @override
+  String compareAvailable(int available, int total) {
+    return '$available of $total available';
+  }
+
+  @override
+  String get compareOthers => 'Other stores in your area';
+
+  @override
+  String get compareNote => 'Prices exclude delivery, shown in the next step';
+
+  @override
+  String comparePickBest(String price) {
+    return 'Choose best · $price';
+  }
+
+  @override
+  String comparePick(String store, String price) {
+    return 'Choose $store · $price';
+  }
+
+  @override
+  String compareMissing(int count, String detail) {
+    return '$count missing · $detail';
+  }
+
+  @override
+  String get compareNotEnough => 'Not enough stock';
+
+  @override
+  String get noStoreBadge => 'Items missing';
+
+  @override
+  String get noStoreTitle => 'No store has your whole cart';
+
+  @override
+  String noStoreBody(String zone) {
+    return 'All stores in $zone are missing an item or more. Pick a store to continue with what\'s available, or edit your cart.';
+  }
+
+  @override
+  String noStoreContinue(String store) {
+    return 'Continue with $store';
+  }
+
+  @override
+  String get noStoreEdit => 'Edit cart';
+
+  @override
+  String get noStoresTitle => 'No stores deliver to your address yet';
+
+  @override
+  String get outOfZoneTitle => 'We don\'t deliver here yet';
+
+  @override
+  String get outOfZoneBody =>
+      'Your address is outside Barq\'s service areas. Choose another address inside the delivery area.';
+
+  @override
+  String get outOfZoneChange => 'Change address';
+
+  @override
+  String get noAddressTitle => 'You have no delivery address';
+
+  @override
+  String get noAddressBody =>
+      'Add your address so we can compare your cart with stores that deliver to you.';
+
+  @override
+  String get noAddressAdd => 'Add address';
+
+  @override
+  String get checkoutTitle => 'Confirm order';
 }

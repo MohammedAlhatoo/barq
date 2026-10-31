@@ -203,6 +203,7 @@ class BarqSearchBar extends StatelessWidget {
       this.controller,
       this.onTap,
       this.onChanged,
+      this.onSubmitted,
       this.onClear,
       this.active = false,
       this.autofocus = false});
@@ -211,6 +212,7 @@ class BarqSearchBar extends StatelessWidget {
   final TextEditingController? controller;
   final VoidCallback? onTap;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
   final VoidCallback? onClear;
   final bool active;
   final bool autofocus;
@@ -241,6 +243,8 @@ class BarqSearchBar extends StatelessWidget {
                   ? TextField(
                       controller: controller,
                       onChanged: onChanged,
+                      onSubmitted: onSubmitted,
+                      textInputAction: TextInputAction.search,
                       autofocus: autofocus,
                       style: BarqText.t.copyWith(fontSize: 15),
                       cursorColor: BarqColors.primary,

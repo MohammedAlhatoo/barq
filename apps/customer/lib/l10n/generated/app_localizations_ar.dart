@@ -242,4 +242,252 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get sessionLogin => 'تسجيل الدخول';
+
+  @override
+  String get homeMorning => 'صباح الخير';
+
+  @override
+  String get homeEvening => 'مساء الخير';
+
+  @override
+  String get homeAll => 'الكل';
+
+  @override
+  String get homeBestSellers => 'الأكثر طلبًا';
+
+  @override
+  String get homeSeeAll => 'عرض الكل';
+
+  @override
+  String get homeDeal => 'عرض اليوم';
+
+  @override
+  String get searchHint => 'ابحث عن منتج أو متجر';
+
+  @override
+  String get soldOut => 'نفدت الكمية';
+
+  @override
+  String get browseEmpty => 'لا توجد منتجات هنا بعد';
+
+  @override
+  String get searchRecent => 'عمليات بحث سابقة:';
+
+  @override
+  String searchCount(int count) {
+    return '$count نتيجة';
+  }
+
+  @override
+  String get searchNoResults => 'لا نتائج';
+
+  @override
+  String get searchNoResultsBody => 'جرّب كلمة ثانية أو تأكد من الإملاء.';
+
+  @override
+  String distanceKm(String km) {
+    return '$km كم';
+  }
+
+  @override
+  String get vendorOpen => 'مفتوح';
+
+  @override
+  String get vendorClosed => 'مغلق';
+
+  @override
+  String vendorPrep(int minutes) {
+    return 'تحضير $minutes د';
+  }
+
+  @override
+  String get viewCart => 'عرض السلة';
+
+  @override
+  String cartCount(int count) {
+    return '$count منتجات';
+  }
+
+  @override
+  String get productTitle => 'تفاصيل المنتج';
+
+  @override
+  String get productAvailable => 'متوفر';
+
+  @override
+  String get productUnavailable => 'غير متوفر';
+
+  @override
+  String get productRequired => '(إجباري)';
+
+  @override
+  String get productDescription => 'الوصف';
+
+  @override
+  String get addToCart => 'أضف للسلة';
+
+  @override
+  String addToCartPrice(String price) {
+    return 'أضف للسلة · $price';
+  }
+
+  @override
+  String get otherStoreTitle => 'تفريغ السلة؟';
+
+  @override
+  String get otherStoreBody =>
+      'سلتك فيها منتجات من متجر ثاني، والطلب بيكون من متجر واحد. نفرّغها ونضيف هذا المنتج؟';
+
+  @override
+  String get otherStoreConfirm => 'تفريغ وإضافة';
+
+  @override
+  String get commonKeepCart => 'إبقاء السلة';
+
+  @override
+  String get cartLimitTitle => 'وصلت للحد المسموح';
+
+  @override
+  String get cartLimitBody => 'لا يمكن إضافة المزيد إلى السلة.';
+
+  @override
+  String get commonOk => 'حسنًا';
+
+  @override
+  String get cartTitle => 'سلتي';
+
+  @override
+  String get cartClearTitle => 'إفراغ السلة؟';
+
+  @override
+  String get cartClearBody => 'بنحذف كل المنتجات من سلتك.';
+
+  @override
+  String get cartClearConfirm => 'إفراغ السلة';
+
+  @override
+  String get cartCompareTitle => 'قارن سلتك بمتاجر منطقتك';
+
+  @override
+  String get cartCompareBody => 'نشوف إذا في متجر أرخص بيوصّلك';
+
+  @override
+  String get cartTotal => 'المجموع';
+
+  @override
+  String get cartDelivery => 'التوصيل';
+
+  @override
+  String get cartAtCheckout => 'يُحسب عند تأكيد الطلب';
+
+  @override
+  String get cartContinue => 'متابعة الطلب';
+
+  @override
+  String cartContinueTotal(String total) {
+    return 'متابعة الطلب · $total';
+  }
+
+  @override
+  String get cartEmptyTitle => 'سلتك فارغة';
+
+  @override
+  String get cartEmptyBody =>
+      'أضف منتجات من متاجر منطقتك، وبرق يقارن لك الأسعار قبل ما تطلب.';
+
+  @override
+  String get cartBrowse => 'تصفّح المتاجر';
+
+  @override
+  String get compareTitle => 'السلة الأوفر';
+
+  @override
+  String compareZone(String zone) {
+    return 'متاجر منطقتك: $zone';
+  }
+
+  @override
+  String compareBody(int count) {
+    return 'قارنّا منتجات سلتك ($count) بالمتاجر اللي بتوصّل لعنوانك بس.';
+  }
+
+  @override
+  String get compareBest => 'الأوفر';
+
+  @override
+  String get compareForItems => 'للمنتجات';
+
+  @override
+  String compareAvailable(int available, int total) {
+    return '$available من $total متوفرة';
+  }
+
+  @override
+  String get compareOthers => 'متاجر أخرى بمنطقتك';
+
+  @override
+  String get compareNote => 'الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية';
+
+  @override
+  String comparePickBest(String price) {
+    return 'اختيار الأوفر · $price';
+  }
+
+  @override
+  String comparePick(String store, String price) {
+    return 'اختيار $store · $price';
+  }
+
+  @override
+  String compareMissing(int count, String detail) {
+    return 'ناقص $count · $detail';
+  }
+
+  @override
+  String get compareNotEnough => 'الكمية غير كافية';
+
+  @override
+  String get noStoreBadge => 'ناقص أصناف';
+
+  @override
+  String get noStoreTitle => 'ما في متجر عنده كل سلتك';
+
+  @override
+  String noStoreBody(String zone) {
+    return 'كل متاجر $zone ناقصها صنف أو أكثر. اختار متجر وبنكمّل بالمتوفر، أو عدّل السلة.';
+  }
+
+  @override
+  String noStoreContinue(String store) {
+    return 'أكمل من $store';
+  }
+
+  @override
+  String get noStoreEdit => 'تعديل السلة';
+
+  @override
+  String get noStoresTitle => 'ما في متاجر بتوصّل لعنوانك حاليًا';
+
+  @override
+  String get outOfZoneTitle => 'لا نوصل لهذا العنوان بعد';
+
+  @override
+  String get outOfZoneBody =>
+      'عنوانك خارج مناطق خدمة برق حاليًا. اختر عنوانًا آخر داخل منطقة التوصيل.';
+
+  @override
+  String get outOfZoneChange => 'تغيير العنوان';
+
+  @override
+  String get noAddressTitle => 'ما عندك عنوان توصيل';
+
+  @override
+  String get noAddressBody =>
+      'أضف عنوانك عشان نقارن سلتك بالمتاجر اللي بتوصّلك.';
+
+  @override
+  String get noAddressAdd => 'إضافة عنوان';
+
+  @override
+  String get checkoutTitle => 'تأكيد الطلب';
 }

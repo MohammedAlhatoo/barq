@@ -4,6 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/location_repository.dart';
+import '../features/browse/data/browse_repository.dart';
+import '../features/cart/data/cart_repository.dart';
+import '../features/cart/state/cart_cubit.dart';
 import '../features/system/state/system_cubit.dart';
 import 'locale_cubit.dart';
 
@@ -27,6 +30,10 @@ class AppDependencies {
     required this.system,
     required this.authRepository,
     required this.locationRepository,
+    required this.browseRepository,
+    required this.cartRepository,
+    required this.cart,
+    required this.prefs,
   });
 
   final AuthStore auth;
@@ -37,6 +44,10 @@ class AppDependencies {
   final SystemCubit system;
   final AuthRepository authRepository;
   final LocationRepository locationRepository;
+  final BrowseRepository browseRepository;
+  final CartRepository cartRepository;
+  final CartCubit cart;
+  final SharedPreferences prefs;
 
   static Future<AppDependencies> create() async {
     final prefs = await SharedPreferences.getInstance();
@@ -58,6 +69,7 @@ class AppDependencies {
       appVersion: appVersion,
       initial: kDebugMode ? SystemIssue.values.asNameMap()[_preview] : null,
     );
+    final browse = ApiBrowseRepository(api);
     return AppDependencies(
       auth: auth,
       api: api,
@@ -67,6 +79,10 @@ class AppDependencies {
       system: system,
       authRepository: ApiAuthRepository(api, prefs),
       locationRepository: GeolocatorLocationRepository(),
+      browseRepository: browse,
+      cartRepository: ApiCartRepository(api),
+      cart: CartCubit(prefs: prefs, config: config, browse: browse),
+      prefs: prefs,
     );
   }
 }

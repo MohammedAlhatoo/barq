@@ -85,5 +85,120 @@
   "maintenanceContact": "للاستفسار: ",
   "sessionTitle": "سجّل الدخول من جديد",
   "sessionBody": "انتهت جلستك لحماية حسابك. أدخل رقمك وسنرسل لك رمزًا جديدًا.",
-  "sessionLogin": "تسجيل الدخول"
+  "sessionLogin": "تسجيل الدخول",
+
+  "homeMorning": "صباح الخير",
+  "homeEvening": "مساء الخير",
+  "homeAll": "الكل",
+  "homeBestSellers": "الأكثر طلبًا",
+  "homeSeeAll": "عرض الكل",
+  "homeDeal": "عرض اليوم",
+  "searchHint": "ابحث عن منتج أو متجر",
+  "soldOut": "نفدت الكمية",
+  "browseEmpty": "لا توجد منتجات هنا بعد",
+  "searchRecent": "عمليات بحث سابقة:",
+  "searchCount": "{count} نتيجة",
+  "@searchCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "searchNoResults": "لا نتائج",
+  "searchNoResultsBody": "جرّب كلمة ثانية أو تأكد من الإملاء.",
+  "distanceKm": "{km} كم",
+  "@distanceKm": {
+    "placeholders": { "km": { "type": "String" } }
+  },
+  "vendorOpen": "مفتوح",
+  "vendorClosed": "مغلق",
+  "vendorPrep": "تحضير {minutes} د",
+  "@vendorPrep": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "viewCart": "عرض السلة",
+  "cartCount": "{count} منتجات",
+  "@cartCount": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "productTitle": "تفاصيل المنتج",
+  "productAvailable": "متوفر",
+  "productUnavailable": "غير متوفر",
+  "productRequired": "(إجباري)",
+  "productDescription": "الوصف",
+  "addToCart": "أضف للسلة",
+  "addToCartPrice": "أضف للسلة · {price}",
+  "@addToCartPrice": {
+    "placeholders": { "price": { "type": "String" } }
+  },
+  "otherStoreTitle": "تفريغ السلة؟",
+  "otherStoreBody": "سلتك فيها منتجات من متجر ثاني، والطلب بيكون من متجر واحد. نفرّغها ونضيف هذا المنتج؟",
+  "otherStoreConfirm": "تفريغ وإضافة",
+  "commonKeepCart": "إبقاء السلة",
+  "cartLimitTitle": "وصلت للحد المسموح",
+  "cartLimitBody": "لا يمكن إضافة المزيد إلى السلة.",
+  "commonOk": "حسنًا",
+  "cartTitle": "سلتي",
+  "cartClearTitle": "إفراغ السلة؟",
+  "cartClearBody": "بنحذف كل المنتجات من سلتك.",
+  "cartClearConfirm": "إفراغ السلة",
+  "cartCompareTitle": "قارن سلتك بمتاجر منطقتك",
+  "cartCompareBody": "نشوف إذا في متجر أرخص بيوصّلك",
+  "cartTotal": "المجموع",
+  "cartDelivery": "التوصيل",
+  "cartAtCheckout": "يُحسب عند تأكيد الطلب",
+  "cartContinue": "متابعة الطلب",
+  "cartContinueTotal": "متابعة الطلب · {total}",
+  "@cartContinueTotal": {
+    "placeholders": { "total": { "type": "String" } }
+  },
+  "cartEmptyTitle": "سلتك فارغة",
+  "cartEmptyBody": "أضف منتجات من متاجر منطقتك، وبرق يقارن لك الأسعار قبل ما تطلب.",
+  "cartBrowse": "تصفّح المتاجر",
+  "compareTitle": "السلة الأوفر",
+  "compareZone": "متاجر منطقتك: {zone}",
+  "@compareZone": {
+    "placeholders": { "zone": { "type": "String" } }
+  },
+  "compareBody": "قارنّا منتجات سلتك ({count}) بالمتاجر اللي بتوصّل لعنوانك بس.",
+  "@compareBody": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "compareBest": "الأوفر",
+  "compareForItems": "للمنتجات",
+  "compareAvailable": "{available} من {total} متوفرة",
+  "@compareAvailable": {
+    "placeholders": { "available": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "compareOthers": "متاجر أخرى بمنطقتك",
+  "compareNote": "الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية",
+  "comparePickBest": "اختيار الأوفر · {price}",
+  "@comparePickBest": {
+    "placeholders": { "price": { "type": "String" } }
+  },
+  "comparePick": "اختيار {store} · {price}",
+  "@comparePick": {
+    "placeholders": { "store": { "type": "String" }, "price": { "type": "String" } }
+  },
+  "compareMissing": "ناقص {count} · {detail}",
+  "@compareMissing": {
+    "placeholders": { "count": { "type": "int" }, "detail": { "type": "String" } }
+  },
+  "compareNotEnough": "الكمية غير كافية",
+  "noStoreBadge": "ناقص أصناف",
+  "noStoreTitle": "ما في متجر عنده كل سلتك",
+  "noStoreBody": "كل متاجر {zone} ناقصها صنف أو أكثر. اختار متجر وبنكمّل بالمتوفر، أو عدّل السلة.",
+  "@noStoreBody": {
+    "placeholders": { "zone": { "type": "String" } }
+  },
+  "noStoreContinue": "أكمل من {store}",
+  "@noStoreContinue": {
+    "placeholders": { "store": { "type": "String" } }
+  },
+  "noStoreEdit": "تعديل السلة",
+  "noStoresTitle": "ما في متاجر بتوصّل لعنوانك حاليًا",
+  "outOfZoneTitle": "لا نوصل لهذا العنوان بعد",
+  "outOfZoneBody": "عنوانك خارج مناطق خدمة برق حاليًا. اختر عنوانًا آخر داخل منطقة التوصيل.",
+  "outOfZoneChange": "تغيير العنوان",
+  "noAddressTitle": "ما عندك عنوان توصيل",
+  "noAddressBody": "أضف عنوانك عشان نقارن سلتك بالمتاجر اللي بتوصّلك.",
+  "noAddressAdd": "إضافة عنوان",
+  "checkoutTitle": "تأكيد الطلب"
 }

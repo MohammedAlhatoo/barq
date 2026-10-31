@@ -16,11 +16,16 @@ class AppConfig {
     required this.modules,
     required this.supportPhone,
     required this.termsUrl,
+    this.cartMaxLines = 50,
+    this.cartMaxQty = 99,
   });
 
   factory AppConfig.fromJson(Map<String, dynamic> json) {
     final driver = json['driver'];
     final project = json['project'];
+    final modules = json['modules_config'];
+    final catalog = modules is Map ? modules['catalog'] : null;
+    final cart = catalog is Map ? catalog['cart'] : null;
     return AppConfig(
       deliveryConfirmation: json['delivery_confirmation'] as String,
       paymentMethods: (json['payment_methods'] as List).cast<String>(),
@@ -38,6 +43,8 @@ class AppConfig {
       modules: (json['modules'] as List).cast<String>(),
       supportPhone: project is Map ? project['support_phone'] as String? : null,
       termsUrl: json['terms_url'] as String?,
+      cartMaxLines: cart is Map ? cart['max_lines'] as int? ?? 50 : 50,
+      cartMaxQty: cart is Map ? cart['max_qty'] as int? ?? 99 : 99,
     );
   }
 
@@ -51,6 +58,10 @@ class AppConfig {
   final List<String> modules;
   final String? supportPhone;
   final String? termsUrl;
+
+  /// From `modules_config.catalog.cart`.
+  final int cartMaxLines;
+  final int cartMaxQty;
 
   StatusInfo status(String key) {
     for (final status in statuses) {
