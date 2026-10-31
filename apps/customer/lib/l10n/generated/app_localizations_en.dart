@@ -536,7 +536,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compareCurrentCart => 'Your current cart';
 
   @override
-  String get compareCurrentIsBest => 'Your current store is the cheapest';
+  String get compareCurrentIsBest =>
+      'Your current store is the cheapest of the nearest stores';
 
   @override
   String get compareKeepCart => 'Continue with my cart';

@@ -533,7 +533,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get compareCurrentCart => 'سلتك الحالية';
 
   @override
-  String get compareCurrentIsBest => 'متجرك الحالي هو الأوفر';
+  String get compareCurrentIsBest => 'متجرك الحالي هو الأوفر بين أقرب المتاجر';
 
   @override
   String get compareKeepCart => 'متابعة بسلتي الحالية';

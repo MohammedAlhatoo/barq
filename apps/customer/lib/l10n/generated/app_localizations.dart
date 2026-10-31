@@ -1049,7 +1049,7 @@ abstract class AppLocalizations {
   /// No description provided for @compareCurrentIsBest.
   ///
   /// In ar, this message translates to:
-  /// **'متجرك الحالي هو الأوفر'**
+  /// **'متجرك الحالي هو الأوفر بين أقرب المتاجر'**
   String get compareCurrentIsBest;
 
   /// No description provided for @compareKeepCart.

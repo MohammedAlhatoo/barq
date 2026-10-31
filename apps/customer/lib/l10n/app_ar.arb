@@ -220,7 +220,7 @@
 
   "cartWithDelivery": "الإجمالي مع التوصيل",
   "compareCurrentCart": "سلتك الحالية",
-  "compareCurrentIsBest": "متجرك الحالي هو الأوفر",
+  "compareCurrentIsBest": "متجرك الحالي هو الأوفر بين أقرب المتاجر",
   "compareKeepCart": "متابعة بسلتي الحالية",
   "compareSave": "وفّر {price}",
   "@compareSave": {

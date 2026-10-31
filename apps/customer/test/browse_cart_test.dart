@@ -922,7 +922,10 @@ void main() {
       expect(find.text('الأوفر'), findsOneWidget);
       expect(find.text('وفّر 5.00 ₪'), findsOneWidget);
       expect(find.text('اختيار الأوفر · 50.0 ₪'), findsOneWidget);
-      expect(find.text('متجرك الحالي هو الأوفر'), findsNothing);
+      expect(
+        find.text('متجرك الحالي هو الأوفر بين أقرب المتاجر'),
+        findsNothing,
+      );
       expect(find.text('شامل التوصيل'), findsNWidgets(2));
       expect(tester.takeException(), isNull);
     });
@@ -941,7 +944,10 @@ void main() {
       final app = await compareWith(tester, {7: quote(5500), 8: quote(6000)});
 
       expect(find.text('الأوفر'), findsNothing);
-      expect(find.text('متجرك الحالي هو الأوفر'), findsOneWidget);
+      expect(
+        find.text('متجرك الحالي هو الأوفر بين أقرب المتاجر'),
+        findsOneWidget,
+      );
       expect(find.textContaining('وفّر'), findsNothing);
 
       await tester.tap(find.text('متابعة بسلتي الحالية'));
@@ -952,7 +958,10 @@ void main() {
     testWidgets('an equal total is not cheaper', (tester) async {
       await compareWith(tester, {7: quote(5500), 8: quote(5500)});
       expect(find.text('الأوفر'), findsNothing);
-      expect(find.text('متجرك الحالي هو الأوفر'), findsOneWidget);
+      expect(
+        find.text('متجرك الحالي هو الأوفر بين أقرب المتاجر'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('a cart quote failure: best without a saving', (tester) async {
@@ -967,13 +976,19 @@ void main() {
       expect(find.text('44.0 ₪'), findsOneWidget);
       expect(find.text('التوصيل يُحسب لاحقًا'), findsOneWidget);
       expect(find.text('الأوفر'), findsNothing);
-      expect(find.text('متجرك الحالي هو الأوفر'), findsNothing);
+      expect(
+        find.text('متجرك الحالي هو الأوفر بين أقرب المتاجر'),
+        findsNothing,
+      );
     });
 
     testWidgets('with no quotes nothing is called the best', (tester) async {
       await compareWith(tester, const {});
       expect(find.text('الأوفر'), findsNothing);
-      expect(find.text('متجرك الحالي هو الأوفر'), findsNothing);
+      expect(
+        find.text('متجرك الحالي هو الأوفر بين أقرب المتاجر'),
+        findsNothing,
+      );
       expect(find.text('متابعة بسلتي الحالية'), findsOneWidget);
     });
 

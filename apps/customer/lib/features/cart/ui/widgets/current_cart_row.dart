@@ -45,10 +45,11 @@ class CurrentCartRow extends StatelessWidget {
               children: [
                 Text(l10n.compareCurrentCart, style: BarqText.h3),
                 if (store != null) Text(store, style: BarqText.xs),
+                // A pill would cut this long sentence off.
                 if (isCheapest)
-                  BarqPill(
+                  Text(
                     l10n.compareCurrentIsBest,
-                    tone: BarqPillTone.success,
+                    style: BarqText.xs.copyWith(color: BarqColors.successText),
                   ),
               ],
             ),
