@@ -9,7 +9,6 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../data/cart_models.dart';
 import '../state/cart_cubit.dart';
 import '../state/compare_cubit.dart';
-import 'widgets/missing_pill.dart';
 import 'widgets/no_full_store_view.dart';
 import 'widgets/out_of_zone_view.dart';
 
@@ -298,52 +297,46 @@ class _StoreRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    return Opacity(
-      opacity: store.complete ? 1 : BarqSizes.incompleteStoreOpacity,
-      child: BarqCard(
-        padding: const EdgeInsets.all(BarqSpacing.gap),
-        borderColor: selected ? BarqColors.primary : null,
-        borderWidth: 2,
-        onTap: onTap,
-        child: Row(
-          children: [
-            const BarqIconTile(BarqIcons.store, tone: BarqTileTone.neutral),
-            const SizedBox(width: BarqSpacing.gap),
-            Expanded(
-              child: BarqGap(
-                gap: BarqSpacing.xxs,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(store.vendorName, style: BarqText.h3),
-                  if (store.complete)
-                    Text(
-                      l10n.compareAvailable(
-                        store.availableCount,
-                        store.lines.length,
-                      ),
-                      style: BarqText.xs,
-                    )
-                  else
-                    MissingPill(store: store),
-                ],
-              ),
-            ),
-            const SizedBox(width: BarqSpacing.sm),
-            BarqGap(
-              gap: 0,
-              crossAxisAlignment: CrossAxisAlignment.end,
+    return BarqCard(
+      padding: const EdgeInsets.all(BarqSpacing.gap),
+      borderColor: selected ? BarqColors.primary : null,
+      borderWidth: 2,
+      onTap: onTap,
+      child: Row(
+        children: [
+          const BarqIconTile(BarqIcons.store, tone: BarqTileTone.neutral),
+          const SizedBox(width: BarqSpacing.gap),
+          Expanded(
+            child: BarqGap(
+              gap: BarqSpacing.xxs,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text((total ?? store.itemsTotal).formatted, style: BarqText.h3),
+                Text(store.vendorName, style: BarqText.h3),
                 Text(
-                  total == null
-                      ? l10n.compareDeliveryLater
-                      : l10n.compareWithDelivery,
+                  l10n.compareAvailable(
+                    store.availableCount,
+                    store.lines.length,
+                  ),
                   style: BarqText.xs,
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(width: BarqSpacing.sm),
+          BarqGap(
+            gap: 0,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text((total ?? store.itemsTotal).formatted, style: BarqText.h3),
+              Text(
+                total == null
+                    ? l10n.compareDeliveryLater
+                    : l10n.compareWithDelivery,
+                style: BarqText.xs,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

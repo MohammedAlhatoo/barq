@@ -569,7 +569,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeNearStores.
   ///
   /// In ar, this message translates to:
-  /// **'متاجر قريبة منك'**
+  /// **'متاجر قريبة'**
   String get homeNearStores;
 
   /// No description provided for @homeStores.
@@ -577,12 +577,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'المتاجر'**
   String get homeStores;
-
-  /// No description provided for @homeDeal.
-  ///
-  /// In ar, this message translates to:
-  /// **'عرض اليوم'**
-  String get homeDeal;
 
   /// No description provided for @searchHint.
   ///
@@ -1003,6 +997,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'متجر سلتي فقط'**
   String get scopeOnlyMine;
+
+  /// No description provided for @vendorsTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المتاجر'**
+  String get vendorsTitle;
+
+  /// No description provided for @vendorsOpenNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفتوح الآن'**
+  String get vendorsOpenNow;
+
+  /// No description provided for @vendorsEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد متاجر حاليًا'**
+  String get vendorsEmpty;
+
+  /// No description provided for @vendorNew.
+  ///
+  /// In ar, this message translates to:
+  /// **'جديد'**
+  String get vendorNew;
+
+  /// No description provided for @vendorCategoryGrocery.
+  ///
+  /// In ar, this message translates to:
+  /// **'بقالة'**
+  String get vendorCategoryGrocery;
+
+  /// No description provided for @vendorCallFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر فتح الاتصال'**
+  String get vendorCallFailed;
 }
 
 class _AppLocalizationsDelegate

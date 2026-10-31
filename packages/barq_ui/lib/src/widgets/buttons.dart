@@ -131,10 +131,7 @@ class BarqButton extends StatelessWidget {
                 ? MainAxisAlignment.center
                 : MainAxisAlignment.spaceBetween,
             children: [
-              if (leading != null) ...[
-                leading!,
-                const SizedBox(width: 10)
-              ],
+              if (leading != null) ...[leading!, const SizedBox(width: 10)],
               if (icon != null) ...[
                 BarqIcon(icon!,
                     size: small ? BarqSizes.iconM : BarqSizes.icon, color: fg),

@@ -12,6 +12,7 @@ import '../widgets/misc.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/product.dart';
 import '../widgets/surfaces.dart';
+import '../widgets/vendor.dart';
 
 /// Every barq_ui widget on one scrolling page (light or dark).
 /// Open it during development: `Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()))`
@@ -435,8 +436,8 @@ class _BarqGalleryState extends State<BarqGallery> {
                         height: 90,
                         child: BarqNetworkImage(
                             url: null,
-                            fallback: BarqIllustration(
-                                BarqIllustrations.cucumber)),
+                            fallback:
+                                BarqIllustration(BarqIllustrations.cucumber)),
                       ),
                       label('BarqTileBackground + BarqNetworkImage'),
                       SizedBox(
@@ -445,8 +446,8 @@ class _BarqGalleryState extends State<BarqGallery> {
                           name: 'بندورة',
                           price: '6.00 ₪',
                           vendorName: 'ميني ماركت النور',
-                          image: const BarqIllustration(
-                              BarqIllustrations.tomato),
+                          image:
+                              const BarqIllustration(BarqIllustrations.tomato),
                           onAdd: () {},
                         ),
                       ),
@@ -457,6 +458,51 @@ class _BarqGalleryState extends State<BarqGallery> {
                         onAction: () {},
                       ),
                       label('BarqScopeBar'),
+                      SizedBox(
+                        width: BarqSizes.homeVendorCard,
+                        height: BarqSizes.homeVendorCardHeight,
+                        child: BarqVendorCard(
+                          logo: const BarqIllustration(
+                              BarqIllustrations.storefront),
+                          name: 'ميني ماركت النور',
+                          meta: const [
+                            (
+                              icon: BarqIcons.star,
+                              text: '4.8 (320)',
+                              iconColor: BarqColors.star
+                            ),
+                            (
+                              icon: BarqIcons.clock,
+                              text: 'تحضير 15 د',
+                              iconColor: null
+                            ),
+                            (
+                              icon: BarqIcons.pin,
+                              text: '1.2 كم',
+                              iconColor: null
+                            ),
+                          ],
+                          onTap: () {},
+                        ),
+                      ),
+                      label('BarqVendorCard'),
+                      BarqVendorRow(
+                        logo: const BarqIllustration(
+                            BarqIllustrations.storefront),
+                        name: 'ميني ماركت النور',
+                        subtitle: 'بقالة',
+                        meta: const [
+                          (
+                            icon: BarqIcons.pin,
+                            text: '1.2 كم',
+                            iconColor: null
+                          ),
+                        ],
+                        trailing:
+                            const BarqPill('مفتوح', tone: BarqPillTone.success),
+                        onTap: () {},
+                      ),
+                      label('BarqVendorRow'),
                       const BarqEmptyCartArt(),
                       label('BarqEmptyCartArt'),
                       const BarqOutOfZoneArt(),

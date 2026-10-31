@@ -216,8 +216,6 @@ abstract final class BarqSizes {
 
   // Browse and cart.
   static const productTile = 186.0;
-  static const featuredTile = 252.0;
-  static const featuredViewport = .78; // share of the screen width
   static const productHero = 220.0;
   static const storeHero = 250.0;
   static const storeHeroCardTop = 210.0; // the card overlaps the hero by 40
@@ -229,8 +227,10 @@ abstract final class BarqSizes {
   static const compareBasket = 62.0;
   static const cartBarIcon = 40.0;
   static const compareArrow = 38.0;
-  static const homeVendorCard = 170.0;
-  static const incompleteStoreOpacity = .75;
+  static const homeProductTile = 160.0;
+  static const homeVendorCard = 200.0;
+  static const homeVendorCardHeight = 156.0;
+  static const vendorRowLogo = 62.0;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)
   static const iconS = 16.0;

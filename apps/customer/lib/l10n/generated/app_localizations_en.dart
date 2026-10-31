@@ -261,13 +261,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeSeeAll => 'See all';
 
   @override
-  String get homeNearStores => 'Stores near you';
+  String get homeNearStores => 'Nearby stores';
 
   @override
   String get homeStores => 'Stores';
-
-  @override
-  String get homeDeal => 'Today\'s deal';
 
   @override
   String get searchHint => 'Search for a product or store';
@@ -513,4 +510,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scopeOnlyMine => 'My cart\'s store only';
+
+  @override
+  String get vendorsTitle => 'All stores';
+
+  @override
+  String get vendorsOpenNow => 'Open now';
+
+  @override
+  String get vendorsEmpty => 'No stores right now';
+
+  @override
+  String get vendorNew => 'New';
+
+  @override
+  String get vendorCategoryGrocery => 'Grocery';
+
+  @override
+  String get vendorCallFailed => 'Couldn\'t start the call';
 }

@@ -19,11 +19,13 @@ import '../features/browse/state/product_cubit.dart';
 import '../features/browse/state/products_cubit.dart';
 import '../features/browse/state/search_cubit.dart';
 import '../features/browse/state/vendor_cubit.dart';
+import '../features/browse/state/vendors_cubit.dart';
 import '../features/browse/ui/category_screen.dart';
 import '../features/browse/ui/home_screen.dart';
 import '../features/browse/ui/product_screen.dart';
 import '../features/browse/ui/search_screen.dart';
 import '../features/browse/ui/vendor_screen.dart';
+import '../features/browse/ui/vendors_screen.dart';
 import '../features/cart/state/cart_cubit.dart';
 import '../features/cart/state/cart_summary_cubit.dart';
 import '../features/cart/state/compare_cubit.dart';
@@ -51,6 +53,7 @@ abstract final class Routes {
   static const search = '/search';
   static const product = '/product/:id';
   static const vendor = '/vendor/:id';
+  static const vendors = '/vendors';
 
   static String productOf(int id) => '/product/$id';
   static String vendorOf(int id) => '/vendor/$id';
@@ -181,6 +184,15 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           child: const ProductScreen(),
         );
       },
+    ),
+    GoRoute(
+      path: Routes.vendors,
+      builder: (context, _) => BlocProvider(
+        create: (context) =>
+            VendorsCubit(context.read<AppDependencies>().browseRepository)
+              ..load(),
+        child: const VendorsScreen(),
+      ),
     ),
     GoRoute(
       path: Routes.vendor,

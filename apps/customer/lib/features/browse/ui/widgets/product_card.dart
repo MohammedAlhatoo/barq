@@ -11,18 +11,11 @@ import '../../../cart/ui/add_to_cart.dart';
 import '../../data/browse_models.dart';
 import 'product_art.dart';
 
-/// A product tile for grids and the home carousel.
+/// A product tile for grids and the home row.
 class ProductCard extends StatelessWidget {
-  const ProductCard({
-    super.key,
-    required this.product,
-    this.large = false,
-    this.topBadge,
-  });
+  const ProductCard({super.key, required this.product});
 
   final Product product;
-  final bool large;
-  final String? topBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +36,7 @@ class ProductCard extends StatelessWidget {
         categoryIcon: product.categoryIcon,
       ),
       tile: ProductArt.tileOf(product.categoryIcon),
-      topBadge: topBadge,
-      large: large,
-      height: large ? BarqSizes.featuredTile : BarqSizes.productTile,
+      height: BarqSizes.productTile,
       soldOut: !product.inStock,
       soldOutLabel: AppLocalizations.of(context).soldOut,
       quantityInCart: qty,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/di.dart';
 import '../../../app/router.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../cart/data/cart_models.dart';
@@ -13,6 +14,7 @@ import '../state/vendor_cubit.dart';
 import 'widgets/category_chips.dart';
 import 'widgets/load_more_listener.dart';
 import 'widgets/product_row_card.dart';
+import 'widgets/vendor_meta.dart';
 
 class VendorScreen extends StatelessWidget {
   const VendorScreen({super.key});
@@ -146,9 +148,6 @@ class _VendorHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final average = vendor.ratingAverage;
-    final km = vendor.distanceKm;
-    final prep = vendor.prepMinutes;
     return Stack(
       children: [
         const Positioned(
@@ -169,7 +168,7 @@ class _VendorHero extends StatelessWidget {
             ),
           ),
         ),
-        const BarqHeader(back: true),
+        _VendorHeader(vendor: vendor),
         Padding(
           padding: const EdgeInsets.fromLTRB(
             BarqSpacing.page,
@@ -192,33 +191,63 @@ class _VendorHero extends StatelessWidget {
                     ),
                   ],
                 ),
-                BarqMetaRow(
-                  items: [
-                    if (average != null && vendor.ratingCount > 0)
-                      (
-                        icon: BarqIcons.star,
-                        text: '$average (${vendor.ratingCount})',
-                        iconColor: BarqColors.star,
-                      ),
-                    if (prep != null)
-                      (
-                        icon: BarqIcons.clock,
-                        text: l10n.vendorPrep(prep),
-                        iconColor: null,
-                      ),
-                    if (km != null)
-                      (
-                        icon: BarqIcons.pin,
-                        text: l10n.distanceKm(km.toStringAsFixed(1)),
-                        iconColor: null,
-                      ),
-                  ],
-                ),
+                BarqMetaRow(items: vendorMeta(l10n, vendor)),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Back on the right, share and call on the left (RTL).
+class _VendorHeader extends StatelessWidget {
+  const _VendorHeader({required this.vendor});
+
+  final Vendor vendor;
+
+  Future<void> _call(BuildContext context, String phone) async {
+    final l10n = AppLocalizations.of(context);
+    final actions = context.read<AppDependencies>().vendorActions;
+    final called = await actions.call(phone);
+    if (called || !context.mounted) return;
+    await showBarqSheet<void>(
+      context,
+      children: [
+        Text(l10n.vendorCallFailed, style: BarqText.h2),
+        Text(phone, style: BarqText.body),
+        BarqButton(
+          label: l10n.commonOk,
+          onPressed: () => closeBarqSheet<void>(context),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final phone = vendor.phone;
+    final address = vendor.address;
+    final actions = context.read<AppDependencies>().vendorActions;
+    return BarqHeader(
+      back: true,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BarqIconButton(
+            icon: BarqIcons.share,
+            onPressed: () => actions.share([vendor.name, ?address].join('\n')),
+          ),
+          if (phone != null && phone.isNotEmpty) ...[
+            const SizedBox(width: BarqSpacing.md),
+            BarqIconButton(
+              icon: BarqIcons.phone,
+              onPressed: () => _call(context, phone),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

@@ -92,9 +92,8 @@
   "homeAll": "All",
   "homeBestSellers": "Most ordered",
   "homeSeeAll": "See all",
-  "homeNearStores": "Stores near you",
+  "homeNearStores": "Nearby stores",
   "homeStores": "Stores",
-  "homeDeal": "Today's deal",
   "searchHint": "Search for a product or store",
   "soldOut": "Sold out",
   "browseEmpty": "No products here yet",
@@ -210,5 +209,12 @@
   },
   "scopeCartStore": "your cart's store",
   "scopeAllStores": "All stores",
-  "scopeOnlyMine": "My cart's store only"
+  "scopeOnlyMine": "My cart's store only",
+
+  "vendorsTitle": "All stores",
+  "vendorsOpenNow": "Open now",
+  "vendorsEmpty": "No stores right now",
+  "vendorNew": "New",
+  "vendorCategoryGrocery": "Grocery",
+  "vendorCallFailed": "Couldn't start the call"
 }

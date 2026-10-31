@@ -9,14 +9,14 @@ import '../data/browse_models.dart';
 import '../state/home_cubit.dart';
 import 'widgets/category_chips.dart';
 import 'widgets/product_card.dart';
-import 'widgets/product_grid.dart';
 import 'widgets/shop_scope_bar.dart';
+import 'widgets/vendor_meta.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  /// How many products the carousel shows before the grid starts.
-  static const _featuredCount = 3;
+  /// The rest are one tap away, on "كل المتاجر".
+  static const _vendorCount = 10;
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +39,6 @@ class HomeScreen extends StatelessWidget {
                 : state.products.isEmpty
                 ? BarqMessageView(title: l10n.browseEmpty)
                 : null;
-            final featured = state.products.take(_featuredCount).toList();
-            final rest = state.products.skip(_featuredCount).toList();
             return CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _HomeHeader(name: state.name)),
@@ -62,24 +60,29 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(child: _Featured(products: featured)),
-                  if (state.vendors.isNotEmpty)
-                    SliverToBoxAdapter(child: _Vendors(vendors: state.vendors)),
-                  if (rest.isNotEmpty) ...[
-                    SliverPadding(
-                      padding: const EdgeInsets.only(
-                        top: BarqSpacing.section,
-                        bottom: BarqSpacing.gap,
-                      ),
-                      sliver: SliverToBoxAdapter(
-                        child: BarqSectionHeader(
-                          l10n.homeBestSellers,
-                          action: l10n.homeSeeAll,
-                          onAction: () => context.go(Routes.categories),
-                        ),
+                  SliverToBoxAdapter(
+                    child: _SectionTitle(
+                      title: l10n.homeBestSellers,
+                      onSeeAll: () => context.go(Routes.categories),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _Products(products: state.products),
+                  ),
+                  if (state.vendors.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: _SectionTitle(
+                        title: state.vendors.any((v) => v.distanceKm != null)
+                            ? l10n.homeNearStores
+                            : l10n.homeStores,
+                        onSeeAll: () => context.push(Routes.vendors),
                       ),
                     ),
-                    ProductGrid(products: rest),
+                    SliverToBoxAdapter(
+                      child: _Vendors(
+                        vendors: state.vendors.take(_vendorCount).toList(),
+                      ),
+                    ),
                   ],
                   const SliverPadding(
                     padding: EdgeInsets.only(bottom: BarqSpacing.navClearance),
@@ -154,8 +157,48 @@ class _HomeHeader extends StatelessWidget {
   }
 }
 
-/// Not in the design: the way from home to a store. Kept in the order the
-/// server sent, which is open first, then nearest.
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle({required this.title, required this.onSeeAll});
+
+  final String title;
+  final VoidCallback onSeeAll;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.only(
+      top: BarqSpacing.section,
+      bottom: BarqSpacing.gap,
+    ),
+    child: BarqSectionHeader(
+      title,
+      action: AppLocalizations.of(context).homeSeeAll,
+      onAction: onSeeAll,
+    ),
+  );
+}
+
+class _Products extends StatelessWidget {
+  const _Products({required this.products});
+
+  final List<Product> products;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+    height: BarqSizes.productTile,
+    child: ListView.separated(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.page),
+      itemCount: products.length,
+      separatorBuilder: (_, _) => const SizedBox(width: BarqSpacing.gap),
+      itemBuilder: (_, index) => SizedBox(
+        width: BarqSizes.homeProductTile,
+        child: ProductCard(product: products[index]),
+      ),
+    ),
+  );
+}
+
+/// Kept in the order the server sent: open first, then nearest.
 class _Vendors extends StatelessWidget {
   const _Vendors({required this.vendors});
 
@@ -164,105 +207,26 @@ class _Vendors extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
-    final located = vendors.any((vendor) => vendor.distanceKm != null);
-    return Padding(
-      padding: const EdgeInsets.only(top: BarqSpacing.section),
-      child: BarqGap(
-        gap: BarqSpacing.xs,
-        children: [
-          BarqSectionHeader(located ? l10n.homeNearStores : l10n.homeStores),
-          BarqChipsRow(
-            children: [
-              for (final vendor in vendors) _VendorCard(vendor: vendor),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _VendorCard extends StatelessWidget {
-  const _VendorCard({required this.vendor});
-
-  final Vendor vendor;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final km = vendor.distanceKm;
     return SizedBox(
-      width: BarqSizes.homeVendorCard,
-      child: BarqCard(
-        padding: const EdgeInsets.all(BarqSpacing.gap),
-        onTap: () => context.push(Routes.vendorOf(vendor.id)),
-        child: BarqGap(
-          gap: BarqSpacing.xxs,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              vendor.name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: BarqText.h3,
+      height: BarqSizes.homeVendorCardHeight,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.page),
+        clipBehavior: Clip.none,
+        itemCount: vendors.length,
+        separatorBuilder: (_, _) => const SizedBox(width: BarqSpacing.gap),
+        itemBuilder: (context, index) {
+          final vendor = vendors[index];
+          return SizedBox(
+            width: BarqSizes.homeVendorCard,
+            child: BarqVendorCard(
+              logo: VendorLogo(url: vendor.logoUrl),
+              name: vendor.name,
+              meta: vendorMeta(l10n, vendor),
+              onTap: () => context.push(Routes.vendorOf(vendor.id)),
             ),
-            Text(
-              km != null
-                  ? l10n.distanceKm(km.toStringAsFixed(1))
-                  : vendor.isOpen
-                  ? l10n.vendorOpen
-                  : l10n.vendorClosed,
-              style: BarqText.xs,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Featured extends StatefulWidget {
-  const _Featured({required this.products});
-
-  final List<Product> products;
-
-  @override
-  State<_Featured> createState() => _FeaturedState();
-}
-
-class _FeaturedState extends State<_Featured> {
-  final _controller = PageController(
-    viewportFraction: BarqSizes.featuredViewport,
-  );
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final deal = AppLocalizations.of(context).homeDeal;
-    return Padding(
-      padding: const EdgeInsets.only(top: BarqSpacing.sm),
-      child: SizedBox(
-        height: BarqSizes.featuredTile,
-        child: PageView.builder(
-          controller: _controller,
-          itemCount: widget.products.length,
-          itemBuilder: (_, index) {
-            final product = widget.products[index];
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.xs),
-              child: ProductCard(
-                product: product,
-                large: true,
-                topBadge: product.compareAtPrice == null ? null : deal,
-              ),
-            );
-          },
-        ),
+          );
+        },
       ),
     );
   }

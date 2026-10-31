@@ -92,9 +92,8 @@
   "homeAll": "الكل",
   "homeBestSellers": "الأكثر طلبًا",
   "homeSeeAll": "عرض الكل",
-  "homeNearStores": "متاجر قريبة منك",
+  "homeNearStores": "متاجر قريبة",
   "homeStores": "المتاجر",
-  "homeDeal": "عرض اليوم",
   "searchHint": "ابحث عن منتج أو متجر",
   "soldOut": "نفدت الكمية",
   "browseEmpty": "لا توجد منتجات هنا بعد",
@@ -210,5 +209,12 @@
   },
   "scopeCartStore": "متجر سلتك",
   "scopeAllStores": "كل المتاجر",
-  "scopeOnlyMine": "متجر سلتي فقط"
+  "scopeOnlyMine": "متجر سلتي فقط",
+
+  "vendorsTitle": "كل المتاجر",
+  "vendorsOpenNow": "مفتوح الآن",
+  "vendorsEmpty": "لا توجد متاجر حاليًا",
+  "vendorNew": "جديد",
+  "vendorCategoryGrocery": "بقالة",
+  "vendorCallFailed": "تعذّر فتح الاتصال"
 }

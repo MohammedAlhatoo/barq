@@ -34,6 +34,15 @@ VendorSummary, BasketComparison, BasketStore, Quote, Offer — الحقول من
 ### P2-03 · الرئيسية — `02_browse_01`
 `GET /categories` · `GET /vendors` · `GET /products` (بدون تسجيل دخول). البانر البرتقالي `BarqBanner`، كروت المنتجات `BarqProductTile`.
 
+**تعديل بعد المراجعة (بيلغي التصميم بهالجزء):** المنتجات بصف أفقي بدل الشبكة والكاروسيل. تحته قسم «متاجر قريبة» مع «عرض الكل»: صف أفقي من كروت المتاجر (الشعار، الاسم، `distance_km`، `prep_minutes`، التقييم) من `GET /vendors` مع `lat` و `lng` للعنوان الافتراضي.
+
+### P2-03ب · كل المتاجر (بدون تصميم)
+بتفتح من «عرض الكل». مبنية من barq_ui بنفس شكل القوائم الثانية.
+- `GET /vendors` مع `lat` و `lng` وترقيم صفحات.
+- Chips: «الكل» و «مفتوح الآن» (`open_now=1`. لازم 1، السيرفر بيرجع 422 لـ `true`).
+- كل صف: الشعار، الاسم، القسم، التقييم، `prep_minutes`، `distance_km`، pill مفتوح/مغلق.
+- حالات تحميل وفراغ وخطأ. الضغط على متجر بيفتح صفحة المتجر.
+
 ### P2-04 · منتجات القسم — `02_browse_02`
 `GET /products?category=…` + ترقيم صفحات (تحميل عند آخر القائمة). Chips الأقسام الفرعية `BarqChipsRow`. نفس الشاشة بتفتح من تبويب **«الأقسام»**.
 
@@ -42,6 +51,7 @@ VendorSummary, BasketComparison, BasketStore, Quote, Offer — الحقول من
 
 ### P2-06 · صفحة المتجر — `02_browse_04`
 `GET /vendors/{id}` + منتجاته بـ `GET /products?vendor={id}`.
+الهيدر: الرجوع يمين (RTL)، وعلى اليسار مشاركة (`share_plus`: اسم المتجر + العنوان) واتصال (`tel:`، بيختفي إذا ما في رقم).
 
 ### P2-07 · تفاصيل المنتج — `02_browse_05`
 `GET /products/{id}` — الخيارات (options/choices) + `BarqQtyStepper` + "أضف للسلة". إذا السلة من متجر ثاني → `showBarqSheet` يسأل "تفريغ السلة؟".
@@ -56,6 +66,7 @@ VendorSummary, BasketComparison, BasketStore, Quote, Offer — الحقول من
 - **إذا ولا متجر `complete`** → شاشة `03_checkout_03` (جديدة): "أكمل من …" أو "تعديل السلة".
 - خطأ `out_of_zone` → شاشة `07_states_01`.
 - اختيار متجر = تبديل vendor بالسلة للمتوفر عنده.
+- **المقارنة بين أقرب 3 متاجر كاملة** (المسافة من `GET /vendors`، لأن compare ما بيرجعها). لكل واحد `POST /orders/quote` بـ `vendor_id` و `store_product_id` تبعه، والترتيب و«الأوفر» حسب `total` من السيرفر (منتجات + توصيل). الـ quote الفاشل بيعرض سعر المنتجات مع «التوصيل يُحسب لاحقًا». المتاجر الناقصة بتظهر بس بشاشة `03_checkout_03` لما ما يكون في ولا متجر كامل.
 
 ### P2-10 · تأكيد الطلب — `03_checkout_04`
 - العنوان: **`AddressPickerSheet` من P1** (إذا لسا مش جاهز، Fake).

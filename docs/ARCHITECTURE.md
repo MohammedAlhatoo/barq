@@ -59,7 +59,7 @@ apps/customer/lib/
    ├─ auth/              splash · onboarding · phone · otp · welcome
    ├─ account/           account · edit profile · delete · addresses · add address
    ├─ system/            no internet · force update · maintenance · session expired
-   ├─ browse/            home · category · search · vendor · product
+   ├─ browse/            home · category · search · vendor · all vendors · product
    ├─ cart/              cart · compare · no single store · empty cart
    ├─ checkout/          confirm order · quote expired · out of zone
    ├─ offer/             store price offer · offer expired

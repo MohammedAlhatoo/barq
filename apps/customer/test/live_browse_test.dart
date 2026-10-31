@@ -82,6 +82,22 @@ void main() {
     }
     expect(first.items.first.vendorName, isNotNull);
 
+    final stores = await browse.vendorsPage(lat: address.lat, lng: address.lng);
+    final moreStores = await browse.vendorsPage(
+      lat: address.lat,
+      lng: address.lng,
+      page: 2,
+    );
+    expect(
+      moreStores.items
+          .map((v) => v.id)
+          .toSet()
+          .intersection(stores.items.map((v) => v.id).toSet()),
+      isEmpty,
+    );
+    final openOnly = await browse.vendorsPage(openNow: true);
+    expect(openOnly.items.every((v) => v.isOpen), isTrue);
+
     final comparison = await carts.compare(
       lines: [
         for (final item in first.items.take(2))

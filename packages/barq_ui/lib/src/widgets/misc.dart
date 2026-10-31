@@ -379,8 +379,7 @@ class BarqStateView extends StatelessWidget {
               textDirection: TextDirection.ltr,
               child: BarqPill(code!,
                   mono: true,
-                  tone:
-                      onOrange ? BarqPillTone.onOrange : BarqPillTone.white)),
+                  tone: onOrange ? BarqPillTone.onOrange : BarqPillTone.white)),
         ],
       ],
     );

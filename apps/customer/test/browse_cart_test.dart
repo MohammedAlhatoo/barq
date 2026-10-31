@@ -540,11 +540,13 @@ void main() {
       final query = app.server.queries['GET /vendors']!;
       expect(query['lat'], 31.45);
       expect(query['lng'], 34.39);
-      expect(find.text('متاجر قريبة منك'), findsOneWidget);
+      expect(find.text('متاجر قريبة'), findsOneWidget);
       expect(find.text('0.8 كم'), findsOneWidget);
       expect(
-        tester.getTopRight(find.text('الأقرب')).dx,
-        greaterThan(tester.getTopRight(find.text('الأبعد').first).dx),
+        tester
+            .widgetList<BarqVendorCard>(find.byType(BarqVendorCard))
+            .map((card) => card.name),
+        ['الأقرب', 'الأبعد'],
       );
     });
 
@@ -559,7 +561,7 @@ void main() {
       final app = await _open(tester, replies: replies);
       expect(app.server.queries['GET /vendors']!.containsKey('lat'), isFalse);
       expect(find.text('بندورة'), findsOneWidget);
-      expect(find.text('متاجر قريبة منك'), findsNothing);
+      expect(find.text('متاجر قريبة'), findsNothing);
     });
 
     testWidgets('a tile shows its store, and adding asks on another store', (
@@ -788,6 +790,48 @@ void main() {
       ]);
     });
 
+    testWidgets('only the 3 nearest complete stores are compared', (
+      tester,
+    ) async {
+      final replies = _server(
+        compare: Reply({
+          'zone': {'id': 9, 'name': 'النصيرات'},
+          'items': <Object>[],
+          'cheapest_vendor_id': 1,
+          'stores': [
+            _store(1, 'الأرخص البعيد', 1000, cheapest: true),
+            _store(2, 'الثاني', 1100),
+            _store(3, 'الثالث', 1200),
+            _store(4, 'الرابع', 1300),
+          ],
+        }),
+      );
+      replies['GET /vendors'] = Reply([
+        for (final (id, km) in [(4, 0.3), (3, 0.9), (2, 1.4), (1, 8.0)])
+          <String, Object?>{
+            ..._vendorJson,
+            'id': id,
+            'name': 'متجر $id',
+            'distance_km': km,
+          },
+      ]);
+      final app = await TestApp.create(
+        replies,
+        secure: {'barq_token': 'saved'},
+      );
+      final quoted = <Object?>[];
+      app.server.handlers['POST /orders/quote'] = (body) {
+        quoted.add((body! as Map)['vendor_id']);
+        return quote(2000);
+      };
+      await app.pump(tester);
+      _addToCart(app);
+      await _go(tester, app, Routes.compare);
+
+      expect(quoted, [4, 3, 2]);
+      expect(find.text('الأرخص البعيد'), findsNothing);
+    });
+
     testWidgets('the best is the lowest total, not the lowest items price', (
       tester,
     ) async {
@@ -803,6 +847,7 @@ void main() {
 
       expect(find.text('55.0 ₪'), findsOneWidget);
       expect(find.text('شامل التوصيل'), findsNWidgets(2));
+      expect(find.text('التوصيل يُحسب لاحقًا'), findsNothing);
       expect(find.text('اختيار الأوفر · 55.0 ₪'), findsOneWidget);
       expect(
         find.descendant(
@@ -814,7 +859,6 @@ void main() {
         ),
         findsOneWidget,
       );
-      expect(find.text('التوصيل يُحسب لاحقًا'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
 
@@ -835,7 +879,7 @@ void main() {
 
       expect(find.text('اختيار الأوفر · 99.0 ₪'), findsOneWidget);
       expect(find.text('44.0 ₪'), findsOneWidget);
-      expect(find.text('التوصيل يُحسب لاحقًا'), findsNWidgets(2));
+      expect(find.text('التوصيل يُحسب لاحقًا'), findsOneWidget);
     });
 
     testWidgets('with no quotes the server cheapest stays the best', (
@@ -847,7 +891,205 @@ void main() {
 
       expect(find.text('اختيار الأوفر · 44.0 ₪'), findsOneWidget);
       expect(find.text('شامل التوصيل'), findsNothing);
-      expect(find.text('التوصيل يُحسب لاحقًا'), findsNWidgets(3));
+      expect(find.text('التوصيل يُحسب لاحقًا'), findsNWidgets(2));
+    });
+  });
+
+  group('all stores', () {
+    Map<String, Object?> store(int id, String name, {bool open = true}) => {
+      ..._vendorJson,
+      'id': id,
+      'name': name,
+      'is_open_now': open,
+      'category': 'grocery',
+      'distance_km': 1.5,
+    };
+
+    testWidgets('home links to the list, each row has its details', (
+      tester,
+    ) async {
+      final replies = _server();
+      replies['GET /vendors'] = Reply([
+        store(7, 'ميني ماركت النور'),
+        store(8, 'بقالة البركة', open: false),
+      ]);
+      final app = await _open(tester, replies: replies);
+
+      await tester.ensureVisible(find.text('عرض الكل').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('عرض الكل').last);
+      await app.settle(tester);
+
+      expect(find.text('كل المتاجر'), findsOneWidget);
+      expect(find.text('مفتوح الآن'), findsOneWidget);
+      expect(find.byType(BarqVendorRow), findsNWidgets(2));
+      expect(find.text('بقالة'), findsNWidgets(2));
+      expect(find.text('مفتوح'), findsOneWidget);
+      expect(find.text('مغلق'), findsOneWidget);
+      expect(find.text('1.5 كم'), findsNWidgets(2));
+      expect(find.text('تحضير 15 د'), findsNWidgets(2));
+      expect(find.text('4.8 (320)'), findsNWidgets(2));
+      expect(app.server.queries['GET /vendors']!['lat'], 31.45);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.text('بقالة البركة'));
+      await app.settle(tester);
+      expect(find.byType(BarqScopeBar), findsNothing);
+      expect(find.byType(BarqVendorRow), findsNothing);
+    });
+
+    testWidgets('the open chip sends open_now=1', (tester) async {
+      final app = await _open(tester);
+      await _go(tester, app, Routes.vendors);
+      expect(
+        app.server.queries['GET /vendors']!.containsKey('open_now'),
+        isFalse,
+      );
+
+      await tester.tap(find.text('مفتوح الآن'));
+      await app.settle(tester);
+      expect(app.server.queries['GET /vendors']!['open_now'], 1);
+
+      await tester.tap(find.text('الكل'));
+      await app.settle(tester);
+      expect(
+        app.server.queries['GET /vendors']!.containsKey('open_now'),
+        isFalse,
+      );
+    });
+
+    testWidgets('the list loads the next page', (tester) async {
+      final replies = _server();
+      replies['GET /vendors'] = Reply(
+        [for (var i = 1; i <= 8; i++) store(i, 'متجر $i')],
+        meta: const {'page': 1, 'per_page': 20, 'total': 16, 'last_page': 2},
+      );
+      final app = await _open(tester, replies: replies);
+      await _go(tester, app, Routes.vendors);
+      expect(app.server.queries['GET /vendors']!['page'], 1);
+
+      await tester.drag(find.byType(ListView).last, const Offset(0, -500));
+      await app.settle(tester);
+      expect(app.server.queries['GET /vendors']!['page'], 2);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('empty and error states', (tester) async {
+      final replies = _server();
+      final app = await _open(tester, replies: replies);
+      replies['GET /vendors'] = const Reply(<Object>[]);
+      await _go(tester, app, Routes.vendors);
+      expect(find.text('لا توجد متاجر حاليًا'), findsOneWidget);
+
+      replies['GET /vendors'] = const Reply(
+        null,
+        status: 500,
+        error: 'server_error',
+      );
+      await tester.tap(find.text('مفتوح الآن'));
+      await app.settle(tester);
+      expect(find.text('رسالة السيرفر'), findsOneWidget);
+
+      replies['GET /vendors'] = Reply([store(7, 'ميني ماركت النور')]);
+      await tester.tap(find.text('إعادة المحاولة'));
+      await app.settle(tester);
+      expect(find.byType(BarqVendorRow), findsOneWidget);
+    });
+
+    testWidgets('a home card opens the store page', (tester) async {
+      final app = await _open(tester);
+      await tester.ensureVisible(find.byType(BarqVendorCard).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.byType(BarqVendorCard).first);
+      await app.settle(tester);
+      expect(app.server.queries['GET /products']!['vendor'], 7);
+      expect(find.text('مفتوح'), findsOneWidget);
+    });
+
+    testWidgets('home scrolls products sideways, no grid', (tester) async {
+      await _open(tester);
+      expect(find.byType(SliverGrid), findsNothing);
+      final lists = tester.widgetList<ListView>(find.byType(ListView));
+      expect(lists.every((l) => l.scrollDirection == Axis.horizontal), isTrue);
+      expect(lists.length, 2);
+    });
+  });
+
+  group('store page header', () {
+    final phoneIcon = find.byWidgetPredicate(
+      (w) => w is BarqIconButton && w.icon == BarqIcons.phone,
+    );
+    final shareIcon = find.byWidgetPredicate(
+      (w) => w is BarqIconButton && w.icon == BarqIcons.share,
+    );
+
+    Map<String, Reply> replies({String? phone, String? address}) {
+      final all = _server();
+      all['GET /vendors/7'] = Reply(<String, Object?>{
+        ..._vendorJson,
+        'phone': phone,
+        'address': address,
+      });
+      return all;
+    }
+
+    testWidgets('back on the right, share and call on the left', (
+      tester,
+    ) async {
+      final app = await _open(
+        tester,
+        replies: replies(phone: '0599310001', address: 'غزة'),
+      );
+      await _go(tester, app, Routes.vendorOf(7));
+
+      final back = find.byWidgetPredicate(
+        (w) => w is BarqIconButton && w.icon == BarqIcons.back,
+      );
+      expect(tester.getCenter(back).dx, greaterThan(195));
+      expect(tester.getCenter(shareIcon).dx, lessThan(195));
+      expect(tester.getCenter(phoneIcon).dx, lessThan(195));
+    });
+
+    testWidgets('share sends name and address, call sends the phone', (
+      tester,
+    ) async {
+      final app = await _open(
+        tester,
+        replies: replies(phone: '0599310001', address: 'غزة'),
+      );
+      await _go(tester, app, Routes.vendorOf(7));
+      final actions = app.deps.vendorActions as FakeVendorActions;
+
+      await tester.tap(shareIcon);
+      await tester.tap(phoneIcon);
+      await app.settle(tester);
+
+      expect(actions.shared, ['ميني ماركت النور\nغزة']);
+      expect(actions.called, ['0599310001']);
+    });
+
+    testWidgets('no phone hides the call, no address shares the name', (
+      tester,
+    ) async {
+      final app = await _open(tester, replies: replies());
+      await _go(tester, app, Routes.vendorOf(7));
+      expect(phoneIcon, findsNothing);
+
+      await tester.tap(shareIcon);
+      await app.settle(tester);
+      expect((app.deps.vendorActions as FakeVendorActions).shared, [
+        'ميني ماركت النور',
+      ]);
+    });
+
+    testWidgets('a phone that cannot call says so', (tester) async {
+      final app = await _open(tester, replies: replies(phone: '059'));
+      (app.deps.vendorActions as FakeVendorActions).canCall = false;
+      await _go(tester, app, Routes.vendorOf(7));
+
+      await tester.tap(phoneIcon);
+      await tester.pumpAndSettle();
+      expect(find.text('تعذّر فتح الاتصال'), findsOneWidget);
     });
   });
 
@@ -956,7 +1198,8 @@ void main() {
 
       expect(find.text('متاجر منطقتك: النصيرات'), findsOneWidget);
       expect(find.text('الأوفر'), findsOneWidget);
-      expect(find.text('ناقص 1 · حليب'), findsOneWidget);
+      // A store missing items is not compared while complete ones exist.
+      expect(find.text('ماركت السلام'), findsNothing);
       expect(tester.takeException(), isNull);
 
       await tester.tap(find.text('اختيار الأوفر · 44.0 ₪'));

@@ -259,13 +259,10 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeSeeAll => 'عرض الكل';
 
   @override
-  String get homeNearStores => 'متاجر قريبة منك';
+  String get homeNearStores => 'متاجر قريبة';
 
   @override
   String get homeStores => 'المتاجر';
-
-  @override
-  String get homeDeal => 'عرض اليوم';
 
   @override
   String get searchHint => 'ابحث عن منتج أو متجر';
@@ -510,4 +507,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get scopeOnlyMine => 'متجر سلتي فقط';
+
+  @override
+  String get vendorsTitle => 'كل المتاجر';
+
+  @override
+  String get vendorsOpenNow => 'مفتوح الآن';
+
+  @override
+  String get vendorsEmpty => 'لا توجد متاجر حاليًا';
+
+  @override
+  String get vendorNew => 'جديد';
+
+  @override
+  String get vendorCategoryGrocery => 'بقالة';
+
+  @override
+  String get vendorCallFailed => 'تعذّر فتح الاتصال';
 }

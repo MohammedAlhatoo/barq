@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/location_repository.dart';
 import '../features/browse/data/browse_repository.dart';
+import '../features/browse/data/vendor_actions.dart';
 import '../features/cart/data/cart_repository.dart';
 import '../features/cart/state/cart_cubit.dart';
 import '../features/cart/state/shop_scope_cubit.dart';
@@ -32,6 +33,7 @@ class AppDependencies {
     required this.authRepository,
     required this.locationRepository,
     required this.browseRepository,
+    required this.vendorActions,
     required this.cartRepository,
     required this.cart,
     required this.scope,
@@ -47,6 +49,7 @@ class AppDependencies {
   final AuthRepository authRepository;
   final LocationRepository locationRepository;
   final BrowseRepository browseRepository;
+  final VendorActions vendorActions;
   final CartRepository cartRepository;
   final CartCubit cart;
   final ShopScopeCubit scope;
@@ -84,6 +87,7 @@ class AppDependencies {
       authRepository: ApiAuthRepository(api, prefs),
       locationRepository: GeolocatorLocationRepository(),
       browseRepository: browse,
+      vendorActions: DeviceVendorActions(),
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),

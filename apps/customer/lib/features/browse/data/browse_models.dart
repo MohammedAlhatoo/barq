@@ -138,6 +138,10 @@ class Vendor {
   const Vendor({
     required this.id,
     required this.name,
+    required this.logoUrl,
+    required this.category,
+    required this.phone,
+    required this.address,
     required this.distanceKm,
     required this.isOpen,
     required this.prepMinutes,
@@ -145,12 +149,16 @@ class Vendor {
     required this.ratingCount,
   });
 
-  factory Vendor.fromJson(Map<String, dynamic> json) {
+  factory Vendor.fromJson(Map<String, dynamic> json, {double? knownDistance}) {
     final rating = json['rating'];
     return Vendor(
       id: json['id'] as int,
       name: json['name'] as String,
-      distanceKm: (json['distance_km'] as num?)?.toDouble(),
+      logoUrl: json['logo_url'] as String?,
+      category: json['category'] as String?,
+      phone: json['phone'] as String?,
+      address: json['address'] as String?,
+      distanceKm: (json['distance_km'] as num?)?.toDouble() ?? knownDistance,
       isOpen: json['is_open_now'] as bool,
       prepMinutes: json['prep_minutes'] as int?,
       ratingAverage: rating is Map ? rating['average'] as num? : null,
@@ -160,6 +168,12 @@ class Vendor {
 
   final int id;
   final String name;
+  final String? logoUrl;
+
+  /// A key such as "grocery".
+  final String? category;
+  final String? phone;
+  final String? address;
 
   /// Only known when the request sent lat and lng.
   final double? distanceKm;

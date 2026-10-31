@@ -23,7 +23,7 @@ class CompareState {
   final CompareStatus status;
   final BasketComparison? comparison;
 
-  /// Quoted stores from the lowest total, then the rest in the server's order.
+  /// The nearest complete stores, best first.
   final List<BasketStore> ranked;
 
   /// Vendor id → the server's total with delivery. A store is missing here if
@@ -52,8 +52,8 @@ class CompareCubit extends Cubit<CompareState> {
   final CartRepository _cart;
   final List<CartLine> _lines;
 
-  /// How many stores get a quote: each one is a request.
-  static const _quotedStores = 3;
+  /// How many stores the screen compares. Each one is a quote request.
+  static const _comparedStores = 3;
 
   /// A request can end after the user left the screen.
   @override
@@ -74,11 +74,10 @@ class CompareCubit extends Cubit<CompareState> {
         addressId: address.id,
       );
       final stores = comparison.stores;
-      final totals = await _quote(comparison, address);
-      final ranked = _rank(stores, totals);
-      final best = totals.isEmpty
-          ? comparison.cheapestVendorId
-          : ranked.first.vendorId;
+      final compared = await _nearestComplete(comparison, address);
+      final totals = await _quote(compared, address);
+      final ranked = _rank(compared, stores, totals);
+      final best = ranked.isEmpty ? null : ranked.first.vendorId;
       emit(
         CompareState(
           status: CompareStatus.ready,
@@ -103,15 +102,39 @@ class CompareCubit extends Cubit<CompareState> {
     }
   }
 
-  /// Quotes the first complete stores. A failed quote only loses that store's
-  /// total: the screen then shows its items price.
-  Future<Map<int, Money>> _quote(
+  /// The nearest complete stores. `POST /baskets/compare` has no distance, so
+  /// it comes from `GET /vendors`. Without it the server's order decides.
+  Future<List<BasketStore>> _nearestComplete(
     BasketComparison comparison,
     SavedAddress address,
   ) async {
-    final stores = comparison.stores
-        .where((store) => store.complete)
-        .take(_quotedStores);
+    final complete = comparison.stores.where((s) => s.complete).toList();
+    var distances = <int, double>{};
+    try {
+      final vendors = await _browse.vendors(lat: address.lat, lng: address.lng);
+      distances = {for (final vendor in vendors) vendor.id: ?vendor.distanceKm};
+    } on ApiException {
+      // The comparison still works.
+    }
+    double distanceOf(BasketStore store) =>
+        distances[store.vendorId] ?? double.infinity;
+    final byDistance = [...complete]
+      ..sort((a, b) {
+        final order = distanceOf(a).compareTo(distanceOf(b));
+        // Dart's sort may swap equals: keep the server's order for a tie.
+        return order != 0
+            ? order
+            : complete.indexOf(a).compareTo(complete.indexOf(b));
+      });
+    return byDistance.take(_comparedStores).toList();
+  }
+
+  /// A failed quote only loses that store's total: the screen then shows its
+  /// items price.
+  Future<Map<int, Money>> _quote(
+    List<BasketStore> stores,
+    SavedAddress address,
+  ) async {
     final answers = await Future.wait([
       for (final store in stores)
         _cart
@@ -125,19 +148,29 @@ class CompareCubit extends Cubit<CompareState> {
     };
   }
 
-  /// Sorting only compares the server's numbers, it calculates nothing.
-  List<BasketStore> _rank(List<BasketStore> stores, Map<int, Money> totals) {
-    final quoted = stores.where((s) => totals.containsKey(s.vendorId)).toList()
-      ..sort((a, b) {
-        final byTotal = totals[a.vendorId]!.amount.compareTo(
-          totals[b.vendorId]!.amount,
-        );
-        // Dart's sort may swap equals: keep the server's order for a tie.
-        return byTotal != 0
-            ? byTotal
-            : stores.indexOf(a).compareTo(stores.indexOf(b));
-      });
-    return [...quoted, ...stores.where((s) => !totals.containsKey(s.vendorId))];
+  /// Quoted stores from the lowest total, then the others from the cheapest
+  /// items, which is the order [all] came in. Sorting only compares the
+  /// server's numbers, it calculates nothing.
+  List<BasketStore> _rank(
+    List<BasketStore> compared,
+    List<BasketStore> all,
+    Map<int, Money> totals,
+  ) {
+    final inServerOrder = all.where(compared.contains).toList();
+    final quoted =
+        inServerOrder.where((s) => totals.containsKey(s.vendorId)).toList()
+          ..sort((a, b) {
+            final byTotal = totals[a.vendorId]!.amount.compareTo(
+              totals[b.vendorId]!.amount,
+            );
+            return byTotal != 0
+                ? byTotal
+                : all.indexOf(a).compareTo(all.indexOf(b));
+          });
+    return [
+      ...quoted,
+      ...inServerOrder.where((s) => !totals.containsKey(s.vendorId)),
+    ];
   }
 
   void select(int vendorId) => emit(

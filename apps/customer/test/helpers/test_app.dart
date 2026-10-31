@@ -9,6 +9,7 @@ import 'package:barq_customer/app/locale_cubit.dart';
 import 'package:barq_customer/features/auth/data/auth_repository.dart';
 import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_repository.dart';
+import 'package:barq_customer/features/browse/data/vendor_actions.dart';
 import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_customer/features/cart/state/shop_scope_cubit.dart';
@@ -117,6 +118,21 @@ class FakeLocation implements LocationRepository {
   }
 }
 
+class FakeVendorActions implements VendorActions {
+  final List<String> shared = [];
+  final List<String> called = [];
+  bool canCall = true;
+
+  @override
+  Future<void> share(String text) async => shared.add(text);
+
+  @override
+  Future<bool> call(String phone) async {
+    called.add(phone);
+    return canCall;
+  }
+}
+
 const configJson = {
   'project': {'support_phone': '0592525487'},
   'delivery_confirmation': 'photo',
@@ -190,6 +206,7 @@ class TestApp {
       authRepository: ApiAuthRepository(api, sharedPrefs),
       locationRepository: location,
       browseRepository: browse,
+      vendorActions: FakeVendorActions(),
       cartRepository: ApiCartRepository(api),
       cart: cart,
       scope: ShopScopeCubit(cart: cart, browse: browse),

@@ -106,6 +106,7 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | تحميل / رسالة صغيرة داخل قائمة | `BarqLoadingView` · `BarqMessageView(title, message, actionLabel)` |
 | رسومات السلة الفارغة · خارج المنطقة · ناقص أصناف | `BarqEmptyCartArt` · `BarqOutOfZoneArt` · `BarqBasketArt(label)` |
 | شريط «تتسوّق من» فوق القوائم | `BarqScopeBar(text, action, onAction)` |
+| كرت متجر أفقي · صف متجر بقائمة | `BarqVendorCard(logo, name, meta)` · `BarqVendorRow(logo, name, subtitle, meta, trailing)` |
 | `.tg` / `.rad` / مربع الاختيار | `BarqToggle` / `BarqRadio` / `BarqCheckbox` |
 | `.pc` + `.gls` كرت المنتج | `BarqProductTile(name, price, compareAtPrice, vendorName, vendorMuted, badge, soldOut, tile)` |
 | صف منتج داخل كرت | `BarqProductRow(thumb: BarqThumb(...))` |

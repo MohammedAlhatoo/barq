@@ -16,6 +16,15 @@ abstract class BrowseRepository {
   /// [lat] and [lng] make the server fill `distance_km` and put the nearest
   /// first, after the open stores.
   Future<List<Vendor>> vendors({double? lat, double? lng});
+
+  /// One page of the stores list. [openNow] keeps only the open stores.
+  Future<Paged<Vendor>> vendorsPage({
+    double? lat,
+    double? lng,
+    bool openNow = false,
+    int page = 1,
+    int perPage,
+  });
   Future<Vendor> vendor(int id);
 
   /// The user's default address, or null if they have none.
@@ -38,6 +47,9 @@ class ApiBrowseRepository implements BrowseRepository {
 
   /// Vendor id → name, so tiles can show who sells each product.
   Map<int, String>? _vendorNames;
+
+  /// `GET /vendors/{id}` has no distance, so the last list's value is kept.
+  final Map<int, double> _distances = {};
 
   @override
   Future<List<Category>> categories({int? vendorId}) async {
@@ -86,21 +98,58 @@ class ApiBrowseRepository implements BrowseRepository {
 
   @override
   Future<List<Vendor>> vendors({double? lat, double? lng}) async {
-    final data = await _api.get(
-      '/vendors',
-      query: {'lat': ?lat, 'lng': ?lng, 'per_page': _vendorsPageSize},
+    final page = await vendorsPage(
+      lat: lat,
+      lng: lng,
+      perPage: _vendorsPageSize,
     );
-    final vendors = (data as List)
+    return page.items;
+  }
+
+  @override
+  Future<Paged<Vendor>> vendorsPage({
+    double? lat,
+    double? lng,
+    bool openNow = false,
+    int page = 1,
+    int perPage = _pageSize,
+  }) async {
+    final result = await _api.getPaged(
+      '/vendors',
+      query: {
+        'lat': ?lat,
+        'lng': ?lng,
+        // The server refuses `true` here: 422 unless it is 1.
+        if (openNow) 'open_now': 1,
+        'per_page': perPage,
+        'page': page,
+      },
+    );
+    final vendors = result.items
         .map((e) => Vendor.fromJson((e as Map).cast<String, dynamic>()))
         .toList();
-    _vendorNames = {for (final vendor in vendors) vendor.id: vendor.name};
-    return vendors;
+    _vendorNames = {
+      ...?_vendorNames,
+      for (final vendor in vendors) vendor.id: vendor.name,
+    };
+    for (final vendor in vendors) {
+      final km = vendor.distanceKm;
+      if (km != null) _distances[vendor.id] = km;
+    }
+    return Paged(
+      items: vendors,
+      nextPage: result.nextPage,
+      total: result.total,
+    );
   }
 
   @override
   Future<Vendor> vendor(int id) async {
     final data = await _api.get('/vendors/$id');
-    return Vendor.fromJson((data as Map).cast<String, dynamic>());
+    return Vendor.fromJson(
+      (data as Map).cast<String, dynamic>(),
+      knownDistance: _distances[id],
+    );
   }
 
   @override
