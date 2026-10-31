@@ -340,6 +340,9 @@ Map<String, Reply> quietServer() => {
 
 const logged = {'barq_token': 'saved'};
 
+/// Short, so a test sees the job end without waiting.
+const jobCheckEvery = Duration(milliseconds: 20);
+
 /// A full app with real repositories on top of [FakeServer].
 class TestApp {
   TestApp._(this.deps, this.server, this.location, this.actions, this.photos);
@@ -376,6 +379,7 @@ class TestApp {
       minIntervalSeconds: () => null,
     );
     final profile = ApiProfileRepository(api);
+    final jobs = ApiJobsRepository(api);
     final actions = FakeDeviceActions();
     final photos = FakeProofPhotos(api);
     final deps = AppDependencies(
@@ -393,14 +397,20 @@ class TestApp {
       ),
       authRepository: ApiAuthRepository(api, auth),
       profileRepository: profile,
-      jobsRepository: ApiJobsRepository(api),
+      jobsRepository: jobs,
       earningsRepository: ApiEarningsRepository(api),
       historyRepository: ApiHistoryRepository(api),
       notificationsRepository: ApiNotificationsRepository(api),
       proofPhotos: photos,
       deviceActions: actions,
       tracker: tracker,
-      driver: DriverCubit(repository: profile, tracker: tracker, auth: auth),
+      driver: DriverCubit(
+        repository: profile,
+        jobs: jobs,
+        tracker: tracker,
+        jobCheckEvery: () => jobCheckEvery,
+        auth: auth,
+      ),
     );
     return TestApp._(deps, server, location, actions, photos);
   }

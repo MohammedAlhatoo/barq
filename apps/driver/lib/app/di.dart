@@ -26,6 +26,9 @@ const appVersion = '1.0.0';
 /// maintenance, sessionExpired).
 const _preview = String.fromEnvironment('BARQ_PREVIEW');
 
+/// Used only until the config arrives.
+const _jobCheckSeconds = 30;
+
 /// Creates everything once. The app shares this one object through
 /// RepositoryProvider, because Provider refuses ChangeNotifiers such as AuthStore.
 class AppDependencies {
@@ -107,6 +110,7 @@ class AppDependencies {
           : null,
     );
     final profile = ApiProfileRepository(api);
+    final jobs = ApiJobsRepository(api);
     return AppDependencies(
       auth: auth,
       api: api,
@@ -116,14 +120,24 @@ class AppDependencies {
       system: system,
       authRepository: ApiAuthRepository(api, auth),
       profileRepository: profile,
-      jobsRepository: ApiJobsRepository(api),
+      jobsRepository: jobs,
       earningsRepository: ApiEarningsRepository(api),
       historyRepository: ApiHistoryRepository(api),
       notificationsRepository: ApiNotificationsRepository(api),
       proofPhotos: CameraProofPhotos(UploadService(api: api)),
       deviceActions: UrlDeviceActions(),
       tracker: tracker,
-      driver: DriverCubit(repository: profile, tracker: tracker, auth: auth),
+      driver: DriverCubit(
+        repository: profile,
+        jobs: jobs,
+        tracker: tracker,
+        jobCheckEvery: () => Duration(
+          seconds: config.isLoaded
+              ? config.config.polling.trackingSeconds ?? _jobCheckSeconds
+              : _jobCheckSeconds,
+        ),
+        auth: auth,
+      ),
       mapTileUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
     );
   }
