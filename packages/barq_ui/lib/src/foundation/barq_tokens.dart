@@ -61,6 +61,12 @@ abstract final class BarqColors {
   static const darkLabel = Color(0xFFD9CEC8);
   static const darkSuccessSoft = Color(0xFF123A24);
   static const darkSuccessText = Color(0xFF6EE09C);
+  static const darkDangerSoft = Color(0xFF3A1A15);
+  static const darkDangerText = Color(0xFFFFB3A8);
+  static const darkDangerIcon = Color(0xFFFF8A7A);
+  static const darkOrangeSoft = Color(0xFF3A2C25);
+  static const darkOrangeText = Color(0xFFFFD9A8);
+  static const mapDim = Color(0x73000000); // filter: brightness(.55) on tiles
   static const cashYellow = Color(0xFFFFC94D);
   static const cashYellowDeep = Color(0xFFFFAA1A);
 }
@@ -117,6 +123,16 @@ abstract final class BarqGradients {
       BarqColors.primaryDeep
     ],
     stops: [0, .55, 1],
+  );
+
+  /// The fill of the driver's cash bar.
+  static const cashProgress = LinearGradient(
+    colors: [BarqColors.cashYellow, BarqColors.primary],
+  );
+
+  /// The cash bar at the limit.
+  static const cashLimit = LinearGradient(
+    colors: [BarqColors.cashYellow, BarqColors.danger],
   );
 
   /// Orange hero (avatar, FAB, banners, active nav circle) — CSS 150deg.

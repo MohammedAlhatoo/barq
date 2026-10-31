@@ -6,6 +6,7 @@ import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
 import '../widgets/account.dart';
 import '../widgets/buttons.dart';
+import '../widgets/driver.dart';
 import '../widgets/indicators.dart';
 import '../widgets/inputs.dart';
 import '../widgets/layout.dart';
@@ -621,6 +622,35 @@ class _BarqGalleryState extends State<BarqGallery> {
                         ]),
                       ),
                       label('showBarqSheet / BarqSheet'),
+                      section('السائق'),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          BarqOnlineSwitch(
+                              online: true,
+                              label: 'متصل',
+                              onChanged: (_) {}),
+                          BarqOnlineSwitch(
+                              online: false,
+                              label: 'غير متصل',
+                              onChanged: (_) {}),
+                        ],
+                      ),
+                      label('BarqOnlineSwitch'),
+                      const BarqBanner(
+                          child: Row(children: [
+                        BarqBannerStat(value: '7', label: 'طلبات'),
+                      ])),
+                      label('BarqBannerStat'),
+                      Center(child: BarqPowerButton(onPressed: () {})),
+                      label('BarqPowerButton'),
+                      const BarqProgressBar(value: 0.84),
+                      label('BarqProgressBar'),
+                      BarqNote('سبقك سائق آخر لهذا الطلب',
+                          tone: BarqNoteTone.danger, onClose: () {}),
+                      label('BarqNote(onClose)'),
                     ],
                   ),
                 ),

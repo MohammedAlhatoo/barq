@@ -1,0 +1,75 @@
+import 'package:barq_core/barq_core.dart';
+import 'package:barq_ui/barq_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../features/system/ui/system_gate.dart';
+import '../l10n/generated/app_localizations.dart';
+import 'di.dart';
+import 'locale_cubit.dart';
+import 'router.dart';
+
+/// Theme, language, shared objects, and the system screens above all routes.
+class BarqDriverApp extends StatefulWidget {
+  const BarqDriverApp({super.key, required this.deps});
+
+  final AppDependencies deps;
+
+  @override
+  State<BarqDriverApp> createState() => _BarqDriverAppState();
+}
+
+class _BarqDriverAppState extends State<BarqDriverApp> {
+  late final GoRouter _router = createRouter(widget.deps.auth);
+
+  /// Labels from the server depend on the language.
+  Future<void> _reloadConfig() async {
+    try {
+      await widget.deps.config.load();
+    } on ApiException catch (e) {
+      debugPrint('Config not reloaded after language change: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final deps = widget.deps;
+    return RepositoryProvider.value(
+      value: deps,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: deps.locale),
+          BlocProvider.value(value: deps.system),
+          BlocProvider.value(value: deps.driver),
+        ],
+        child: ConfigScope(
+          store: deps.config,
+          child: BlocConsumer<LocaleCubit, Locale>(
+            listener: (_, _) => _reloadConfig(),
+            builder: (context, locale) => MaterialApp.router(
+              onGenerateTitle: (context) =>
+                  AppLocalizations.of(context).appName,
+              debugShowCheckedModeBanner: false,
+              theme: barqDarkTheme(),
+              locale: locale,
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              routerConfig: _router,
+              builder: (context, child) => SystemGate(
+                onLogin: () => _router.go(Routes.login),
+                child: child ?? const SizedBox.shrink(),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

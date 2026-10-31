@@ -66,5 +66,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>برق كابتن يرسل موقعك للزبون أثناء التوصيل.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>برق كابتن يرسل موقعك للزبون أثناء التوصيل حتى والتطبيق بالخلفية.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>برق كابتن يصوّر الطلب عند الاستلام والتسليم.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>

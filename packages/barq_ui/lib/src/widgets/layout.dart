@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../foundation/barq_asset_names.dart';
 import '../foundation/barq_assets.dart';
 import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
@@ -154,10 +155,10 @@ class BarqIconTile extends StatelessWidget {
           ? (BarqColors.darkChip, BarqColors.white)
           : (BarqColors.chipMuted, BarqColors.ink),
       BarqTileTone.red => dark
-          ? (const Color(0xFF3A1A15), const Color(0xFFFF8A7A))
+          ? (BarqColors.darkDangerSoft, BarqColors.darkDangerIcon)
           : (BarqColors.dangerSoft, BarqColors.danger),
       BarqTileTone.yellow => dark
-          ? (const Color(0xFF3A2C25), BarqColors.cashYellow)
+          ? (BarqColors.darkOrangeSoft, BarqColors.cashYellow)
           : (BarqColors.warningSoft, BarqColors.warningText),
       BarqTileTone.darkOrange => (BarqColors.primary, Colors.white),
     };
@@ -262,10 +263,16 @@ enum BarqNoteTone { info, warning, orange, success, danger }
 /// Tinted note row with an icon ("الأسعار بدون التوصيل", "إذا لم توافق خلال 60 دقيقة…").
 class BarqNote extends StatelessWidget {
   const BarqNote(this.text,
-      {super.key, this.icon = 'info', this.tone = BarqNoteTone.info});
+      {super.key,
+      this.icon = 'info',
+      this.tone = BarqNoteTone.info,
+      this.onClose});
   final String text;
   final String icon;
   final BarqNoteTone tone;
+
+  /// Shows an x at the end ("سبقك سائق آخر لهذا الطلب").
+  final VoidCallback? onClose;
 
   @override
   Widget build(BuildContext context) {
@@ -289,11 +296,13 @@ class BarqNote extends StatelessWidget {
           BarqColors.successText,
           BarqColors.successText
         ),
-      BarqNoteTone.danger => (
-          BarqColors.dangerSoft,
-          BarqColors.danger,
-          BarqColors.danger
-        ),
+      BarqNoteTone.danger => dark
+          ? (
+              BarqColors.darkDangerSoft,
+              BarqColors.darkDangerText,
+              BarqColors.darkDangerText
+            )
+          : (BarqColors.dangerSoft, BarqColors.danger, BarqColors.danger),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
@@ -307,6 +316,13 @@ class BarqNote extends StatelessWidget {
               child: BarqIcon(icon, size: BarqSizes.iconM, color: fg)),
           const SizedBox(width: 8),
           Expanded(child: Text(text, style: BarqText.t.copyWith(color: tc))),
+          if (onClose != null) ...[
+            const SizedBox(width: 8),
+            GestureDetector(
+              onTap: onClose,
+              child: BarqIcon(BarqIcons.x, size: BarqSizes.iconS, color: fg),
+            ),
+          ],
         ],
       ),
     );

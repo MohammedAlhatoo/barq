@@ -73,11 +73,12 @@ class BarqPill extends StatelessWidget {
       BarqPillTone.success => p.isDark
           ? (BarqColors.darkSuccessSoft, BarqColors.darkSuccessText)
           : (BarqColors.successSoft, BarqColors.successText),
-      BarqPillTone.orange => (
-          BarqColors.primarySoft,
-          BarqColors.primarySoftText
-        ),
-      BarqPillTone.danger => (BarqColors.dangerSoft, BarqColors.danger),
+      BarqPillTone.orange => p.isDark
+          ? (BarqColors.darkOrangeSoft, BarqColors.darkOrangeText)
+          : (BarqColors.primarySoft, BarqColors.primarySoftText),
+      BarqPillTone.danger => p.isDark
+          ? (BarqColors.darkDangerSoft, BarqColors.darkDangerText)
+          : (BarqColors.dangerSoft, BarqColors.danger),
       BarqPillTone.dark => (BarqColors.ink, Colors.white),
       BarqPillTone.white => (const Color(0xBFFFFFFF), BarqColors.ink),
       BarqPillTone.onOrange => (const Color(0x2E000000), Colors.white),

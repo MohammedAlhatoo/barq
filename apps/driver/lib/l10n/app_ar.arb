@@ -1,0 +1,168 @@
+{
+  "@@locale": "ar",
+  "appName": "برق كابتن",
+  "splashTagline": "وصّل بسرعة البرق",
+  "commonRetry": "إعادة المحاولة",
+  "commonBack": "رجوع",
+  "commonCancel": "إلغاء",
+  "comingSoon": "قريبًا",
+  "offlineTitle": "لا يوجد اتصال بالإنترنت",
+  "offlineBody": "تأكد من الاتصال وأعد المحاولة. مهمتك الحالية محفوظة ولم تتأثر.",
+  "updateTitle": "نسخة جديدة من برق كابتن",
+  "updateBody": "حدّث التطبيق لتكمل العمل. النسخة الجديدة أسرع وفيها إصلاحات مهمة.",
+  "updateVersion": "نسخة {version}",
+  "@updateVersion": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "updateNow": "تحديث الآن",
+  "maintenanceTitle": "برق تحت الصيانة",
+  "maintenanceBody": "نحسّن الخدمة وراجعين قريبًا. مهامك الحالية محفوظة.",
+  "maintenanceRefresh": "تحديث الصفحة",
+  "maintenanceContact": "للاستفسار: ",
+  "sessionTitle": "سجّل الدخول من جديد",
+  "sessionBody": "انتهت جلستك لحماية حسابك. أدخل رقمك وكلمة المرور.",
+  "sessionLogin": "تسجيل الدخول",
+  "navJobs": "الطلبات",
+  "navEarnings": "الأرباح",
+  "navHistory": "السجل",
+  "navAccount": "حسابي",
+  "loginCaptain": "كابتن",
+  "loginTitle": "سجّل دخولك كسائق",
+  "loginBody": "استخدم رقم الجوال وكلمة المرور اللي أعطاك إياهم فريق برق.",
+  "loginPhoneLabel": "رقم الجوال",
+  "loginPhoneHint": "059 000 0000",
+  "loginCountryCode": "+970",
+  "loginPasswordLabel": "كلمة المرور",
+  "loginShowPassword": "إظهار",
+  "loginHidePassword": "إخفاء",
+  "loginButton": "تسجيل الدخول",
+  "loginFootnote": "حسابات السائقين يفعّلها فريق برق فقط",
+  "locationServiceTitle": "برق كابتن",
+  "locationServiceBody": "موقعك يُرسل طالما أنت متصل",
+  "locationDenied": "اسمح للتطبيق باستخدام موقعك من الإعدادات لتصبح متصلًا.",
+  "locationServiceOff": "شغّل خدمة الموقع في الهاتف لتصبح متصلًا.",
+  "locationUnavailable": "تعذر تحديد موقعك. اخرج لمكان مفتوح وحاول مرة أخرى.",
+  "statusOnline": "متصل",
+  "statusOffline": "غير متصل",
+  "greetingMorning": "صباح الخير",
+  "greetingEvening": "مساء الخير",
+  "jobsTodayEarnings": "أرباح اليوم",
+  "jobsOrdersStat": "طلبات",
+  "jobsRatingStat": "تقييم",
+  "jobsNearby": "طلبات قريبة ({count})",
+  "@jobsNearby": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobsAutoRefresh": "تحديث تلقائي",
+  "jobsEmptyTitle": "لا توجد طلبات قريبة الآن",
+  "jobsEmptyBody": "ابقَ متصلًا، والطلبات الجديدة بتظهر هون.",
+  "jobsTaken": "سبقك سائق آخر لهذا الطلب",
+  "jobTo": "إلى {place}",
+  "@jobTo": {
+    "placeholders": {
+      "place": {}
+    }
+  },
+  "distanceKm": "{distance} كم",
+  "@distanceKm": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "jobItems": "{count, plural, =1{منتج واحد} =2{منتجان} few{{count} منتجات} many{{count} منتج} other{{count} منتج}}",
+  "@jobItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "jobYourFare": "أجرتك",
+  "jobCollect": "تحصيل {amount}",
+  "@jobCollect": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "jobAccept": "قبول",
+  "offlineJobsTitle": "أنت غير متصل",
+  "offlineJobsBody": "اضغط الزر لتبدأ باستقبال طلبات منطقتك.",
+  "offerTitle": "طلب جديد!",
+  "offerPickup": "الاستلام",
+  "offerPickupDistance": "الاستلام · {distance} كم منك",
+  "@offerPickupDistance": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "offerDropoff": "التسليم",
+  "offerDropoffDistance": "التسليم · {distance} كم",
+  "@offerDropoffDistance": {
+    "placeholders": {
+      "distance": {}
+    }
+  },
+  "offerCollect": "تحصيل من الزبون",
+  "offerCash": "{amount} نقدًا",
+  "@offerCash": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "offerAccept": "قبول الطلب",
+  "offerIgnore": "تجاهل",
+  "cashLimitTitle": "وصلت للحد الأعلى للنقد",
+  "cashLimitBody": "معك {amount} نقدًا. سدّدها في مكتب برق لتستقبل طلبات جديدة.",
+  "@cashLimitBody": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "cashLimitCollected": "النقد المحصّل",
+  "cashLimitMax": "الحد الأعلى {amount}",
+  "@cashLimitMax": {
+    "placeholders": {
+      "amount": {}
+    }
+  },
+  "cashLimitSupport": "تواصل مع الدعم",
+  "taskHeading": "{status} · {target}",
+  "@taskHeading": {
+    "placeholders": {
+      "status": {},
+      "target": {}
+    }
+  },
+  "taskToStore": "توجّه للمتجر",
+  "taskToCustomer": "توجّه للزبون",
+  "taskNavigate": "الملاحة",
+  "taskCall": "اتصال",
+  "taskItem": "{name} × {qty}",
+  "@taskItem": {
+    "placeholders": {
+      "name": {},
+      "qty": {
+        "type": "int"
+      }
+    }
+  },
+  "taskMoreItems": "+ {count} منتج آخر",
+  "@taskMoreItems": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "taskPhotoHint": "هاي الخطوة بتطلب صورة",
+  "taskNoStep": "بانتظار تحديث الطلب من السيرفر.",
+  "taskDeliverNext": "خطوة التسليم بالصورة جاية بالمرحلة الجاية من البناء.",
+  "taskEmptyTitle": "ما عندك مهمة حالية",
+  "taskEmptyBody": "اقبل طلبًا من القائمة لتبدأ."
+}
