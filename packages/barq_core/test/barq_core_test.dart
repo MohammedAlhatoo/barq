@@ -253,16 +253,34 @@ void main() {
       expect(icon('map-pin').barqIcon, 'pin');
     });
 
-    test('timeline ends with delivered unless the order was cancelled', () {
-      const steps = ['awaiting_vendor', 'pending', 'accepted', 'on_the_way'];
-      expect(config.timeline('pending').map((s) => s.key), [
-        ...steps,
-        'delivered',
-      ]);
-      expect(config.timeline('cancelled').map((s) => s.key), [
-        ...steps,
-        'cancelled',
-      ]);
+    group('timeline', () {
+      const keys = ['awaiting_vendor', 'pending', 'on_the_way', 'delivered'];
+      int index(String current) =>
+          config.timelineIndex(config.timeline(keys, current), current);
+
+      test('shows the given keys in order', () {
+        expect(config.timeline(keys, 'pending').map((s) => s.key), keys);
+        expect(index('pending'), 1);
+      });
+
+      test('a status without a row stays on the row before it', () {
+        expect(index('accepted'), 1);
+      });
+
+      test('cancelled replaces the last row', () {
+        expect(config.timeline(keys, 'cancelled').map((s) => s.key), [
+          'awaiting_vendor',
+          'pending',
+          'on_the_way',
+          'cancelled',
+        ]);
+        expect(index('cancelled'), 3);
+      });
+
+      test('the lists hold the five keys of each screen', () {
+        expect(OrderTimelines.waiting, hasLength(5));
+        expect(OrderTimelines.tracking, hasLength(5));
+      });
     });
   });
 
@@ -417,7 +435,10 @@ void main() {
             child: const Column(
               children: [
                 OrderStatusPill('on_the_way'),
-                OrderStatusTimeline(current: 'accepted'),
+                OrderStatusTimeline(
+                  keys: ['accepted', 'on_the_way', 'delivered'],
+                  current: 'accepted',
+                ),
               ],
             ),
           ),

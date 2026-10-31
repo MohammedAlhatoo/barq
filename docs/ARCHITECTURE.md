@@ -149,7 +149,8 @@ class PushService { Future<void> init(); Future<void> registerToken(); Stream<Pu
 
 // ── عرض الحالة ── (في barq_core/lib/src/status/ ويستخدم BarqPill/BarqTimeline)
 class OrderStatusPill extends StatelessWidget { const OrderStatusPill(String statusKey); }
-class OrderStatusTimeline extends StatelessWidget { /* الحالات بالترتيب حسب step من الإعدادات */ }
+class OrderStatusTimeline extends StatelessWidget { const OrderStatusTimeline({required keys, required current}); } // keys من OrderTimelines
+abstract final class OrderTimelines { static const waiting = [...]; static const tracking = [...]; } // الاستثناء الوحيد للقاعدة 4
 
 // ── موديلات مشتركة ──
 class Money { final int amount; final String formatted; }   // اعرض formatted دائمًا

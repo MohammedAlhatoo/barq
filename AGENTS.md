@@ -35,7 +35,7 @@ docs/ARCHITECTURE.md      folder structure, state management, barq_core contract
 3. **Never invent API fields.** Check `docs/api/openapi.json` for exact paths, bodies and responses. All requests go through `ApiClient` from barq_core — no other Dio/http client.
 4. **The server decides, the app displays:**
    - Prices: show `Money.formatted`; never calculate prices or totals.
-   - Order statuses: labels/colors/steps from `GET /app/config` (`ConfigStore.statuses`). Never hard-code status names.
+   - Order statuses: labels/colors/steps from `GET /app/config` (`ConfigStore.statuses`). Never hard-code status names. **Only exception:** `OrderTimelines` in `packages/barq_core/lib/src/status/order_timelines.dart` lists which status keys each screen's timeline shows; labels and colors still come from config.
    - Customer buttons from `available_actions`; driver buttons from `next_action` (`to`, `label`, `requires`, `geofence_meters`, `confirm`). Never hard-code the order flow.
    - Durations (quote expiry, offer TTL, geofence, polling) from responses/config, never constants.
 5. **Every screen has loading, empty and error states.** Errors show `ApiException.messageAr`.

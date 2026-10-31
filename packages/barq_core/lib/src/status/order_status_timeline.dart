@@ -3,13 +3,17 @@ import 'package:flutter/widgets.dart';
 
 import '../config/config_scope.dart';
 
-/// Vertical order progress. Rows and their order come from the server config.
+/// Vertical order progress. [keys] picks the rows; labels come from the config.
 class OrderStatusTimeline extends StatelessWidget {
   const OrderStatusTimeline({
     super.key,
+    required this.keys,
     required this.current,
     this.currentTrailing,
   });
+
+  /// One of the lists in [OrderTimelines].
+  final List<String> keys;
 
   /// The order's status key.
   final String current;
@@ -19,10 +23,11 @@ class OrderStatusTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rows = ConfigScope.of(context).config.timeline(current);
+    final config = ConfigScope.of(context).config;
+    final rows = config.timeline(keys, current);
     return BarqTimeline(
       items: [for (final row in rows) (icon: row.barqIcon, label: row.label)],
-      current: rows.indexWhere((row) => row.key == current),
+      current: config.timelineIndex(rows, current),
       currentTrailing: currentTrailing,
     );
   }

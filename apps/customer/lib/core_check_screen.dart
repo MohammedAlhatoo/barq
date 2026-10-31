@@ -82,6 +82,7 @@ class _CoreCheckScreenState extends State<CoreCheckScreen> {
         ),
         const SizedBox(height: BarqSpacing.section),
         OrderStatusTimeline(
+          keys: OrderTimelines.waiting,
           current: statuses[statuses.length ~/ 2].key,
           currentTrailing: const BarqPill('الآن'),
         ),

@@ -25,8 +25,8 @@
 ```
 
 ### P3-02 · عرض الحالة (للكل)
-`OrderStatusPill('on_the_way')` و `OrderStatusTimeline(current: …)` في `packages/barq_core/lib/src/status/`.
-الاسم واللون والترتيب من `ConfigStore.config.statuses` (`label`, `color`, `step`, `is_terminal`) — **ولا اسم حالة مكتوب بالكود**. مبنيين على `BarqPill` و `BarqStepProgress` / `BarqTimeline` من barq_ui.
+`OrderStatusPill('on_the_way')` و `OrderStatusTimeline(keys: OrderTimelines.waiting, current: …)` في `packages/barq_core/lib/src/status/`.
+الاسم واللون والترتيب من `ConfigStore.config.statuses` (`label`, `color`, `step`, `is_terminal`) — **ولا اسم حالة مكتوب بالكود**. الاستثناء الوحيد: قوائم `OrderTimelines`. مبنيين على `BarqPill` و `BarqStepProgress` / `BarqTimeline` من barq_ui.
 
 ### P3-03 · المستودع + Fake
 `OrdersRepository` (abstract) + `ApiOrdersRepository` + `FakeOrdersRepository` (بيانات من التصميم: #B-1042، ميني ماركت النور…). الموديلات: `Order`, `OrderSummary`, `Tracking`, `Receipt`, `ShareLink`, `AppNotification` — الحقول من `docs/api/openapi.json`.

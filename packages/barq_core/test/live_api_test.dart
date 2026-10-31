@@ -30,9 +30,9 @@ void main() {
     expect(config.polling.notificationsSeconds, isNotNull);
     expect(config.polling.configSeconds, isNotNull);
 
-    final finalRow = config.timeline(config.statuses.first.key).last;
-    expect(finalRow.isTerminal, isTrue);
-    expect(finalRow.step, lessThan(config.statuses.last.step));
+    final known = config.statuses.map((s) => s.key);
+    expect(known, containsAll(OrderTimelines.waiting));
+    expect(known, containsAll(OrderTimelines.tracking));
   }, skip: _hasRealKey ? false : 'needs a real BARQ_PROJECT_KEY');
 
   test('a second config load uses the ETag cache', () async {

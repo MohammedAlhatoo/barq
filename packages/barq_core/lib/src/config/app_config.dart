@@ -56,18 +56,22 @@ class AppConfig {
 
   /// The rows of the status timeline for an order now at [currentKey].
   ///
-  /// Sorted by step. Only one final status shows: the current one if the order
-  /// has finished, otherwise the first one (the normal end of an order; the
-  /// server gives the cancelled status a later step).
-  List<StatusInfo> timeline(String currentKey) {
-    final sorted = [...statuses]..sort((a, b) => a.step.compareTo(b.step));
-    final finals = sorted.where((s) => s.isTerminal).toList();
-    final shownFinal = finals.any((s) => s.key == currentKey)
-        ? finals.firstWhere((s) => s.key == currentKey)
-        : finals.firstOrNull;
-    return [
-      for (final status in sorted)
-        if (!status.isTerminal || status == shownFinal) status,
-    ];
+  /// [keys] are the screen's rows, from OrderTimelines. A finished order whose
+  /// status is not in [keys] (cancelled) replaces the last row, so it never
+  /// looks like it reached the normal end.
+  List<StatusInfo> timeline(List<String> keys, String currentKey) {
+    final rows = [for (final key in keys) status(key)];
+    final current = status(currentKey);
+    if (current.isTerminal && !keys.contains(currentKey)) {
+      rows[rows.length - 1] = current;
+    }
+    return rows;
+  }
+
+  /// The row to highlight: the last row the order has reached. A status with
+  /// no row of its own stays on the row before it. -1 means none reached yet.
+  int timelineIndex(List<StatusInfo> rows, String currentKey) {
+    final step = status(currentKey).step;
+    return rows.lastIndexWhere((row) => row.step <= step);
   }
 }
