@@ -407,9 +407,9 @@ class TestApp {
 
   /// Dio works with real timers, so waits run outside the fake clock.
   Future<void> settle(WidgetTester tester) async {
-    for (var i = 0; i < 8; i++) {
+    for (var i = 0; i < 12; i++) {
       await tester.runAsync(
-        () => Future<void>.delayed(const Duration(milliseconds: 15)),
+        () => Future<void>.delayed(const Duration(milliseconds: 40)),
       );
       await tester.pump(const Duration(milliseconds: 300));
     }
