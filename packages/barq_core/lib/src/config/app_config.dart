@@ -56,31 +56,18 @@ class AppConfig {
 
   /// The rows of the status timeline for an order now at [currentKey].
   ///
-  /// Sorted by step, one row per step (the current status wins its step).
-  /// Only one final status shows: the current one if the order has finished,
-  /// otherwise the final status with the highest step.
+  /// Sorted by step. Only one final status shows: the current one if the order
+  /// has finished, otherwise the first one (the normal end of an order; the
+  /// server gives the cancelled status a later step).
   List<StatusInfo> timeline(String currentKey) {
     final sorted = [...statuses]..sort((a, b) => a.step.compareTo(b.step));
-    final rows = <int, StatusInfo>{};
-    for (final status in sorted) {
-      if (status.isTerminal) continue;
-      if (status.key == currentKey || !rows.containsKey(status.step)) {
-        rows[status.step] = status;
-      }
-    }
-
     final finals = sorted.where((s) => s.isTerminal).toList();
-    if (finals.isNotEmpty) {
-      var shown = finals.first;
-      for (final status in finals) {
-        if (status.key == currentKey) {
-          shown = status;
-          break;
-        }
-        if (status.step > shown.step) shown = status;
-      }
-      rows[shown.step] = shown;
-    }
-    return rows.values.toList()..sort((a, b) => a.step.compareTo(b.step));
+    final shownFinal = finals.any((s) => s.key == currentKey)
+        ? finals.firstWhere((s) => s.key == currentKey)
+        : finals.firstOrNull;
+    return [
+      for (final status in sorted)
+        if (!status.isTerminal || status == shownFinal) status,
+    ];
   }
 }

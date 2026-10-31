@@ -28,7 +28,7 @@ Claude Code بيبني المشروع **مرحلة مرحلة** بالترتيب
 - [x] P3-01 · `Poller`
 - [x] P3-02 · `OrderStatusPill` + `OrderStatusTimeline`
 - [x] P1-09 · `PushService` (FCM) — بيحتاج Firebase project؛ إذا مش جاهز، اعمل الكود وأجّل الربط. (الكود جاهز، وربط Firebase مؤجّل)
-- [ ] تجربة حقيقية: `GET /app/config` بيرجع بيانات، ومفتاح غلط بيرجع `ApiException`. (المفتاح الغلط نجح؛ `GET /app/config` بيستنى مفتاح حقيقي)
+- [x] تجربة حقيقية: `GET /app/config` بيرجع بيانات، ومفتاح غلط بيرجع `ApiException`.
 
 ## المرحلة 2 · هيكل تطبيق الزبون + الدخول + شاشات النظام — فرع `phase-2-customer-auth`
 (مرجع: `01_…`)

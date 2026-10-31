@@ -38,8 +38,20 @@ class StatusInfo {
   final int step;
   final bool isTerminal;
 
-  /// [icon] when barq_ui has it. The server names icons on its own.
-  String get barqIcon => BarqIcons.all.contains(icon) ? icon : BarqIcons.clock;
+  /// Server icon names that barq_ui has under another name.
+  static const _iconNames = {
+    'badge-check': BarqIcons.check,
+    'chef-hat': BarqIcons.package,
+    'circle-check': BarqIcons.check,
+    'circle-x': BarqIcons.x,
+    'map-pin': BarqIcons.pin,
+  };
+
+  /// The barq_ui icon for [icon], or a clock for a name we do not know.
+  String get barqIcon {
+    if (BarqIcons.all.contains(icon)) return icon;
+    return _iconNames[icon] ?? BarqIcons.clock;
+  }
 
   static Color _parseHex(String hex) {
     final value = int.tryParse(hex.replaceFirst('#', ''), radix: 16);

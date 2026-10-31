@@ -29,6 +29,30 @@ void main() {
     expect(config.polling.availableOrdersSeconds, isNotNull);
     expect(config.polling.notificationsSeconds, isNotNull);
     expect(config.polling.configSeconds, isNotNull);
+
+    final finalRow = config.timeline(config.statuses.first.key).last;
+    expect(finalRow.isTerminal, isTrue);
+    expect(finalRow.step, lessThan(config.statuses.last.step));
+  }, skip: _hasRealKey ? false : 'needs a real BARQ_PROJECT_KEY');
+
+  test('a second config load uses the ETag cache', () async {
+    final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
+    await ConfigStore(api: api, app: BarqAppKind.customer).load();
+
+    final second = ConfigStore(api: api, app: BarqAppKind.customer);
+    await second.load();
+
+    expect(second.isLoaded, isTrue);
+  }, skip: _hasRealKey ? false : 'needs a real BARQ_PROJECT_KEY');
+
+  test('getPaged reads the real meta', () async {
+    final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
+
+    final page = await api.getPaged('/vendors', query: {'per_page': 2});
+
+    expect(page.items, hasLength(2));
+    expect(page.nextPage, 2);
+    expect(page.total, greaterThan(2));
   }, skip: _hasRealKey ? false : 'needs a real BARQ_PROJECT_KEY');
 
   test('a wrong key gives ApiException(invalid_project_key)', () async {

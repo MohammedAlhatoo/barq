@@ -62,12 +62,12 @@ final _configJson = <String, dynamic>{
   'delivery_confirmation': 'photo',
   'payment_methods': ['cash_on_delivery'],
   'statuses': [
-    _status('awaiting_vendor', 1),
-    _status('pending', 2),
-    _status('accepted', 2),
-    _status('on_the_way', 3),
-    _status('delivered', 4, terminal: true),
-    _status('cancelled', 4, terminal: true),
+    _status('awaiting_vendor', 5),
+    _status('pending', 10),
+    _status('accepted', 20),
+    _status('on_the_way', 40),
+    _status('delivered', 60, terminal: true),
+    _status('cancelled', 90, terminal: true),
   ],
   'polling': {'tracking_seconds': 30, 'events_seconds': 5},
   'driver': null,
@@ -116,7 +116,7 @@ void main() {
       final adapter = _FakeAdapter(
         (_) => _json(200, {
           'data': [1, 2],
-          'meta': {'current_page': 1, 'last_page': 3, 'total': 6},
+          'meta': {'page': 1, 'per_page': 2, 'last_page': 3, 'total': 6},
         }),
       );
       final page = await _client(AuthStore(), adapter).getPaged('/list');
@@ -245,23 +245,22 @@ void main() {
       expect(config.status('new_status').label, 'new_status');
     });
 
-    test('timeline keeps one row per step and one final status', () {
-      expect(config.timeline('awaiting_vendor').map((s) => s.key), [
-        'awaiting_vendor',
-        'pending',
-        'on_the_way',
-        'delivered',
-      ]);
-      expect(config.timeline('accepted').map((s) => s.key), [
-        'awaiting_vendor',
-        'accepted',
-        'on_the_way',
+    test('maps server icon names to barq_ui icons', () {
+      StatusInfo icon(String name) =>
+          StatusInfo.fromJson({..._status('x', 1), 'icon': name});
+      expect(icon('store').barqIcon, 'store');
+      expect(icon('chef-hat').barqIcon, 'package');
+      expect(icon('map-pin').barqIcon, 'pin');
+    });
+
+    test('timeline ends with delivered unless the order was cancelled', () {
+      const steps = ['awaiting_vendor', 'pending', 'accepted', 'on_the_way'];
+      expect(config.timeline('pending').map((s) => s.key), [
+        ...steps,
         'delivered',
       ]);
       expect(config.timeline('cancelled').map((s) => s.key), [
-        'awaiting_vendor',
-        'pending',
-        'on_the_way',
+        ...steps,
         'cancelled',
       ]);
     });
@@ -428,6 +427,6 @@ void main() {
 
     expect(find.text('label on_the_way'), findsNWidgets(2));
     expect(find.text('label accepted'), findsOneWidget);
-    expect(find.text('label pending'), findsNothing);
+    expect(find.text('label cancelled'), findsNothing);
   });
 }
