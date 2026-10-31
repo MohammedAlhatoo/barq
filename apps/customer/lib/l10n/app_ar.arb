@@ -164,13 +164,11 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "compareBest": "الأوفر",
-  "compareForItems": "للمنتجات",
   "compareAvailable": "{available} من {total} متوفرة",
   "@compareAvailable": {
     "placeholders": { "available": { "type": "int" }, "total": { "type": "int" } }
   },
   "compareOthers": "متاجر أخرى بمنطقتك",
-  "compareNote": "الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية",
   "comparePickBest": "اختيار الأوفر · {price}",
   "@comparePickBest": {
     "placeholders": { "price": { "type": "String" } }
@@ -202,5 +200,15 @@
   "noAddressTitle": "ما عندك عنوان توصيل",
   "noAddressBody": "أضف عنوانك عشان نقارن سلتك بالمتاجر اللي بتوصّلك.",
   "noAddressAdd": "إضافة عنوان",
-  "checkoutTitle": "تأكيد الطلب"
+  "checkoutTitle": "تأكيد الطلب",
+
+  "compareWithDelivery": "شامل التوصيل",
+  "compareDeliveryLater": "التوصيل يُحسب لاحقًا",
+  "scopeShoppingFrom": "تتسوّق من: {store}",
+  "@scopeShoppingFrom": {
+    "placeholders": { "store": { "type": "String" } }
+  },
+  "scopeCartStore": "متجر سلتك",
+  "scopeAllStores": "كل المتاجر",
+  "scopeOnlyMine": "متجر سلتي فقط"
 }

@@ -854,12 +854,6 @@ abstract class AppLocalizations {
   /// **'الأوفر'**
   String get compareBest;
 
-  /// No description provided for @compareForItems.
-  ///
-  /// In ar, this message translates to:
-  /// **'للمنتجات'**
-  String get compareForItems;
-
   /// No description provided for @compareAvailable.
   ///
   /// In ar, this message translates to:
@@ -871,12 +865,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'متاجر أخرى بمنطقتك'**
   String get compareOthers;
-
-  /// No description provided for @compareNote.
-  ///
-  /// In ar, this message translates to:
-  /// **'الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية'**
-  String get compareNote;
 
   /// No description provided for @comparePickBest.
   ///
@@ -979,6 +967,42 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تأكيد الطلب'**
   String get checkoutTitle;
+
+  /// No description provided for @compareWithDelivery.
+  ///
+  /// In ar, this message translates to:
+  /// **'شامل التوصيل'**
+  String get compareWithDelivery;
+
+  /// No description provided for @compareDeliveryLater.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوصيل يُحسب لاحقًا'**
+  String get compareDeliveryLater;
+
+  /// No description provided for @scopeShoppingFrom.
+  ///
+  /// In ar, this message translates to:
+  /// **'تتسوّق من: {store}'**
+  String scopeShoppingFrom(String store);
+
+  /// No description provided for @scopeCartStore.
+  ///
+  /// In ar, this message translates to:
+  /// **'متجر سلتك'**
+  String get scopeCartStore;
+
+  /// No description provided for @scopeAllStores.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل المتاجر'**
+  String get scopeAllStores;
+
+  /// No description provided for @scopeOnlyMine.
+  ///
+  /// In ar, this message translates to:
+  /// **'متجر سلتي فقط'**
+  String get scopeOnlyMine;
 }
 
 class _AppLocalizationsDelegate

@@ -10,6 +10,7 @@ import '../state/home_cubit.dart';
 import 'widgets/category_chips.dart';
 import 'widgets/product_card.dart';
 import 'widgets/product_grid.dart';
+import 'widgets/shop_scope_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -43,6 +44,7 @@ class HomeScreen extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _HomeHeader(name: state.name)),
+                const SliverToBoxAdapter(child: ShopScopeBar()),
                 if (message != null)
                   SliverFillRemaining(hasScrollBody: false, child: message)
                 else ...[

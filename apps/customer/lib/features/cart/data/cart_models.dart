@@ -110,6 +110,7 @@ class BasketLine {
     required this.productId,
     required this.storeProductId,
     required this.name,
+    required this.qty,
     required this.unitPrice,
     required this.available,
     required this.reason,
@@ -121,6 +122,7 @@ class BasketLine {
       productId: json['product_id'] as int,
       storeProductId: json['store_product_id'] as int?,
       name: json['name'] as String,
+      qty: json['qty'] as int,
       unitPrice: unitPrice is Map
           ? Money.fromJson(unitPrice.cast<String, dynamic>())
           : null,
@@ -135,6 +137,7 @@ class BasketLine {
   /// The same product in this store.
   final int? storeProductId;
   final String name;
+  final int qty;
   final Money? unitPrice;
   final bool available;
 

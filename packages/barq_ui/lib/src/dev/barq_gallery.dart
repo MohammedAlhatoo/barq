@@ -451,6 +451,12 @@ class _BarqGalleryState extends State<BarqGallery> {
                         ),
                       ),
                       label('BarqProductTile(vendorName)'),
+                      BarqScopeBar(
+                        text: 'تتسوّق من: ميني ماركت النور',
+                        action: 'كل المتاجر',
+                        onAction: () {},
+                      ),
+                      label('BarqScopeBar'),
                       const BarqEmptyCartArt(),
                       label('BarqEmptyCartArt'),
                       const BarqOutOfZoneArt(),

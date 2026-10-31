@@ -4,6 +4,7 @@ import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
 
@@ -61,8 +62,14 @@ class SearchState {
 }
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(this._repository, this._prefs)
-    : super(SearchState(recent: _prefs.getStringList(_recentKey) ?? const []));
+  SearchCubit(this._repository, this._prefs, ShopScopeCubit scope)
+    : _vendorId = scope.state.filterVendorId,
+      super(SearchState(recent: _prefs.getStringList(_recentKey) ?? const [])) {
+    _scope = scope.stream
+        .map((s) => s.filterVendorId)
+        .distinct()
+        .listen(_scopeTo);
+  }
 
   static const _recentKey = 'barq_recent_searches';
   static const _recentCount = 3;
@@ -71,6 +78,10 @@ class SearchCubit extends Cubit<SearchState> {
   final BrowseRepository _repository;
   final SharedPreferences _prefs;
   Timer? _timer;
+  late final StreamSubscription<int?> _scope;
+
+  /// The cart's store, or null for every store.
+  int? _vendorId;
 
   /// Answers of an older word are ignored.
   int _request = 0;
@@ -95,6 +106,11 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
+  void _scopeTo(int? vendorId) {
+    _vendorId = vendorId;
+    if (state.query.isNotEmpty) search(state.query);
+  }
+
   void changed(String text) {
     _timer?.cancel();
     final query = text.trim();
@@ -117,7 +133,10 @@ class SearchCubit extends Cubit<SearchState> {
       ),
     );
     try {
-      final page = await _repository.products(query: query);
+      final page = await _repository.products(
+        query: query,
+        vendorId: _vendorId,
+      );
       if (request != _request || isClosed) return;
       emit(
         state.copyWith(
@@ -139,7 +158,11 @@ class SearchCubit extends Cubit<SearchState> {
     final request = _request;
     emit(state.copyWith(nextPage: next, loadingMore: true));
     try {
-      final page = await _repository.products(query: state.query, page: next);
+      final page = await _repository.products(
+        query: state.query,
+        vendorId: _vendorId,
+        page: next,
+      );
       if (request != _request || isClosed) return;
       emit(
         state.copyWith(
@@ -178,6 +201,7 @@ class SearchCubit extends Cubit<SearchState> {
   @override
   Future<void> close() {
     _timer?.cancel();
+    _scope.cancel();
     return super.close();
   }
 }

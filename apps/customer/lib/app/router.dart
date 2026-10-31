@@ -164,7 +164,8 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
         final deps = context.read<AppDependencies>();
         return BlocProvider(
           create: (_) =>
-              SearchCubit(deps.browseRepository, deps.prefs)..loadVendors(),
+              SearchCubit(deps.browseRepository, deps.prefs, deps.scope)
+                ..loadVendors(),
           child: const SearchScreen(),
         );
       },
@@ -205,9 +206,10 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
             GoRoute(
               path: Routes.home,
               builder: (context, _) => BlocProvider(
-                create: (context) =>
-                    HomeCubit(context.read<AppDependencies>().browseRepository)
-                      ..load(),
+                create: (context) => HomeCubit(
+                  context.read<AppDependencies>().browseRepository,
+                  context.read<AppDependencies>().scope,
+                )..load(),
                 child: const HomeScreen(),
               ),
             ),
@@ -228,6 +230,7 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
                   create: (context) => ProductsCubit(
                     context.read<AppDependencies>().browseRepository,
                     categoryId: category,
+                    scope: context.read<AppDependencies>().scope,
                   )..load(),
                   child: CategoryScreen(fromHome: category != null),
                 );

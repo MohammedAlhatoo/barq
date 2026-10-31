@@ -439,6 +439,42 @@ class BarqIconCard extends StatelessWidget {
       );
 }
 
+/// Thin bar above a list: what the list is limited to, and a link to change it
+/// ("تتسوّق من: ميني ماركت النور · كل المتاجر").
+class BarqScopeBar extends StatelessWidget {
+  const BarqScopeBar(
+      {super.key, required this.text, required this.action, this.onAction});
+
+  final String text;
+  final String action;
+  final VoidCallback? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = BarqPalette.of(context);
+    return BarqCard(
+      radius: BarqRadius.pill,
+      padding: const EdgeInsets.symmetric(
+          horizontal: BarqSpacing.section, vertical: BarqSpacing.sm),
+      child: Row(
+        children: [
+          const BarqIcon('store',
+              size: BarqSizes.iconS, color: BarqColors.primary),
+          const SizedBox(width: BarqSpacing.xs),
+          Flexible(
+            child: Text(text,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BarqText.t.copyWith(color: p.text)),
+          ),
+          Text(' · ', style: BarqText.t.copyWith(color: p.textMuted)),
+          BarqLink(action, onPressed: onAction),
+        ],
+      ),
+    );
+  }
+}
+
 /// Spinner for a screen or list that is loading.
 class BarqLoadingView extends StatelessWidget {
   const BarqLoadingView({super.key});

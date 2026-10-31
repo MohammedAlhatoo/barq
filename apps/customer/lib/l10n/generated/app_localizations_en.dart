@@ -424,18 +424,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get compareBest => 'Best price';
 
   @override
-  String get compareForItems => 'for products';
-
-  @override
   String compareAvailable(int available, int total) {
     return '$available of $total available';
   }
 
   @override
   String get compareOthers => 'Other stores in your area';
-
-  @override
-  String get compareNote => 'Prices exclude delivery, shown in the next step';
 
   @override
   String comparePickBest(String price) {
@@ -499,4 +493,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checkoutTitle => 'Confirm order';
+
+  @override
+  String get compareWithDelivery => 'Delivery included';
+
+  @override
+  String get compareDeliveryLater => 'Delivery calculated later';
+
+  @override
+  String scopeShoppingFrom(String store) {
+    return 'Shopping from: $store';
+  }
+
+  @override
+  String get scopeCartStore => 'your cart\'s store';
+
+  @override
+  String get scopeAllStores => 'All stores';
+
+  @override
+  String get scopeOnlyMine => 'My cart\'s store only';
 }

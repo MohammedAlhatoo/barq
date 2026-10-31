@@ -10,6 +10,7 @@ import '../state/products_cubit.dart';
 import 'widgets/category_chips.dart';
 import 'widgets/load_more_listener.dart';
 import 'widgets/product_grid.dart';
+import 'widgets/shop_scope_bar.dart';
 
 /// The categories tab. Also opens on one category from the home chips, and
 /// then has a back button.
@@ -50,6 +51,7 @@ class CategoryScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SliverToBoxAdapter(child: ShopScopeBar()),
                   SliverPadding(
                     padding: const EdgeInsets.only(
                       top: BarqSpacing.xs,

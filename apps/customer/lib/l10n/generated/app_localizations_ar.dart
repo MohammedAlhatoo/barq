@@ -421,18 +421,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get compareBest => 'الأوفر';
 
   @override
-  String get compareForItems => 'للمنتجات';
-
-  @override
   String compareAvailable(int available, int total) {
     return '$available من $total متوفرة';
   }
 
   @override
   String get compareOthers => 'متاجر أخرى بمنطقتك';
-
-  @override
-  String get compareNote => 'الأسعار بدون التوصيل، وبيظهر بالخطوة الجاية';
 
   @override
   String comparePickBest(String price) {
@@ -496,4 +490,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get checkoutTitle => 'تأكيد الطلب';
+
+  @override
+  String get compareWithDelivery => 'شامل التوصيل';
+
+  @override
+  String get compareDeliveryLater => 'التوصيل يُحسب لاحقًا';
+
+  @override
+  String scopeShoppingFrom(String store) {
+    return 'تتسوّق من: $store';
+  }
+
+  @override
+  String get scopeCartStore => 'متجر سلتك';
+
+  @override
+  String get scopeAllStores => 'كل المتاجر';
+
+  @override
+  String get scopeOnlyMine => 'متجر سلتي فقط';
 }

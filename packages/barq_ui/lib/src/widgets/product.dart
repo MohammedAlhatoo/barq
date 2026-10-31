@@ -116,6 +116,7 @@ class BarqProductTile extends StatelessWidget {
     this.compareAtPrice,
     this.unit,
     this.vendorName,
+    this.vendorMuted = false,
     this.badge,
     this.topBadge,
     this.isFavorite,
@@ -145,6 +146,9 @@ class BarqProductTile extends StatelessWidget {
 
   /// The store selling it, under the name.
   final String? vendorName;
+
+  /// Greys the store name: not the store the user is shopping from.
+  final bool vendorMuted;
 
   /// Discount badge text, e.g. "−25%" (green pill, top-left).
   final String? badge;
@@ -250,7 +254,10 @@ class BarqProductTile extends StatelessWidget {
                               Text(vendorName!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: BarqText.xs),
+                                  style: BarqText.xs.copyWith(
+                                      color: vendorMuted
+                                          ? BarqColors.placeholder
+                                          : BarqColors.ink)),
                             BarqPrice(price,
                                 compareAt: compareAtPrice,
                                 unit: unit,

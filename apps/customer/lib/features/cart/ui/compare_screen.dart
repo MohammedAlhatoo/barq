@@ -1,3 +1,4 @@
+import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,6 +90,10 @@ class _StoresView extends StatelessWidget {
   final BasketComparison comparison;
   final CompareState state;
 
+  /// The server's total, or the items price when there is no quote.
+  String _shown(CompareState state, BasketStore store) =>
+      (state.totals[store.vendorId] ?? store.itemsTotal).formatted;
+
   void _choose(BuildContext context, BasketStore store) {
     context.read<CartCubit>().switchStore(store);
     context.pop();
@@ -98,8 +103,8 @@ class _StoresView extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<CompareCubit>();
-    final best = comparison.storeOf(comparison.cheapestVendorId);
-    final others = comparison.stores.where((s) => s != best).toList();
+    final best = comparison.storeOf(state.bestVendorId);
+    final others = state.ranked.where((s) => s != best).toList();
     final selected = state.selected;
     final count = context.read<CartCubit>().state.count;
     return DesignOverlay(
@@ -138,6 +143,7 @@ class _StoresView extends StatelessWidget {
                       if (best != null)
                         _BestCard(
                           store: best,
+                          total: state.totals[best.vendorId],
                           onTap: () => cubit.select(best.vendorId),
                         ),
                       if (others.isNotEmpty)
@@ -145,6 +151,7 @@ class _StoresView extends StatelessWidget {
                       for (final store in others)
                         _StoreRow(
                           store: store,
+                          total: state.totals[store.vendorId],
                           selected: selected == store,
                           onTap: () => cubit.select(store.vendorId),
                         ),
@@ -162,14 +169,13 @@ class _StoresView extends StatelessWidget {
                 BarqSpacing.stateBottom,
               ),
               children: [
-                BarqNote(l10n.compareNote),
                 if (selected != null)
                   BarqButton(
                     label: selected == best
-                        ? l10n.comparePickBest(selected.itemsTotal.formatted)
+                        ? l10n.comparePickBest(_shown(state, selected))
                         : l10n.comparePick(
                             selected.vendorName,
-                            selected.itemsTotal.formatted,
+                            _shown(state, selected),
                           ),
                     variant: selected == best
                         ? BarqButtonVariant.green
@@ -186,9 +192,14 @@ class _StoresView extends StatelessWidget {
 }
 
 class _BestCard extends StatelessWidget {
-  const _BestCard({required this.store, required this.onTap});
+  const _BestCard({
+    required this.store,
+    required this.total,
+    required this.onTap,
+  });
 
   final BasketStore store;
+  final Money? total;
   final VoidCallback onTap;
 
   @override
@@ -234,12 +245,17 @@ class _BestCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      store.itemsTotal.formatted,
+                      (total ?? store.itemsTotal).formatted,
                       style: BarqText.h1.copyWith(
                         color: BarqColors.successText,
                       ),
                     ),
-                    Text(l10n.compareForItems, style: BarqText.xs),
+                    Text(
+                      total == null
+                          ? l10n.compareDeliveryLater
+                          : l10n.compareWithDelivery,
+                      style: BarqText.xs,
+                    ),
                   ],
                 ),
               ],
@@ -269,11 +285,13 @@ class _BestCard extends StatelessWidget {
 class _StoreRow extends StatelessWidget {
   const _StoreRow({
     required this.store,
+    required this.total,
     required this.selected,
     required this.onTap,
   });
 
   final BasketStore store;
+  final Money? total;
   final bool selected;
   final VoidCallback onTap;
 
@@ -311,7 +329,19 @@ class _StoreRow extends StatelessWidget {
               ),
             ),
             const SizedBox(width: BarqSpacing.sm),
-            Text(store.itemsTotal.formatted, style: BarqText.h3),
+            BarqGap(
+              gap: 0,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text((total ?? store.itemsTotal).formatted, style: BarqText.h3),
+                Text(
+                  total == null
+                      ? l10n.compareDeliveryLater
+                      : l10n.compareWithDelivery,
+                  style: BarqText.xs,
+                ),
+              ],
+            ),
           ],
         ),
       ),

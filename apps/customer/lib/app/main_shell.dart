@@ -23,6 +23,7 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     _startPush();
+    context.read<AppDependencies>().scope.loadName();
   }
 
   /// Only after login, because the token is saved on the user's account.

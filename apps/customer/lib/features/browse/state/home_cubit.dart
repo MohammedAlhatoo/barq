@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../auth/data/auth_models.dart';
+import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
 
@@ -26,9 +29,23 @@ class HomeState {
 }
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._repository) : super(const HomeState());
+  HomeCubit(this._repository, ShopScopeCubit scope)
+    : _vendorId = scope.state.filterVendorId,
+      super(const HomeState()) {
+    _scope = scope.stream
+        .map((s) => s.filterVendorId)
+        .distinct()
+        .listen(_scopeTo);
+  }
 
   final BrowseRepository _repository;
+  late final StreamSubscription<int?> _scope;
+
+  /// The cart's store, or null for every store.
+  int? _vendorId;
+
+  /// Answers of an older scope are ignored.
+  int _request = 0;
 
   /// A request can end after the user left the screen.
   @override
@@ -37,23 +54,56 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> load() async {
+    final request = ++_request;
     emit(const HomeState());
     try {
       final categories = await _repository.categories();
       final vendors = await _vendors();
-      final page = await _repository.products();
+      final page = await _repository.products(vendorId: _vendorId);
+      final name = await _name();
+      if (request != _request) return;
       emit(
         HomeState(
           loading: false,
           categories: categories,
           products: page.items,
           vendors: vendors,
-          name: await _name(),
+          name: name,
         ),
       );
     } on ApiException catch (e) {
+      if (request != _request) return;
       emit(HomeState(loading: false, error: e.messageAr));
     }
+  }
+
+  /// Swaps the products without a spinner: this runs right after a tap on "+".
+  Future<void> _scopeTo(int? vendorId) async {
+    _vendorId = vendorId;
+    if (state.loading || state.error != null) return load();
+    final request = ++_request;
+    try {
+      final page = await _repository.products(vendorId: vendorId);
+      if (request != _request) return;
+      emit(
+        HomeState(
+          loading: false,
+          categories: state.categories,
+          products: page.items,
+          vendors: state.vendors,
+          name: state.name,
+        ),
+      );
+    } on ApiException catch (e) {
+      if (request != _request) return;
+      emit(HomeState(loading: false, error: e.messageAr));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _scope.cancel();
+    return super.close();
   }
 
   /// Sends the default address so the nearest stores come first. The products

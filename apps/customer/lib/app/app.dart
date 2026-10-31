@@ -48,6 +48,7 @@ class _BarqCustomerAppState extends State<BarqCustomerApp> {
           BlocProvider.value(value: deps.locale),
           BlocProvider.value(value: deps.system),
           BlocProvider.value(value: deps.cart),
+          BlocProvider.value(value: deps.scope),
         ],
         child: ConfigScope(
           store: deps.config,

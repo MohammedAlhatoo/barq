@@ -7,6 +7,12 @@ abstract class CartRepository {
     required List<CartLine> lines,
     required int addressId,
   });
+
+  /// The server's total for buying from [store]: items plus delivery.
+  Future<Money> quotedTotal({
+    required BasketStore store,
+    required int addressId,
+  });
 }
 
 class ApiCartRepository implements CartRepository {
@@ -36,5 +42,25 @@ class ApiCartRepository implements CartRepository {
       },
     );
     return BasketComparison.fromJson((data as Map).cast<String, dynamic>());
+  }
+
+  @override
+  Future<Money> quotedTotal({
+    required BasketStore store,
+    required int addressId,
+  }) async {
+    final data = await _api.post(
+      '/orders/quote',
+      body: {
+        'vendor_id': store.vendorId,
+        // Each store sells the product under its own id.
+        'cart': [
+          for (final line in store.lines)
+            {'product_id': line.storeProductId, 'qty': line.qty},
+        ],
+        'dropoff_address_id': addressId,
+      },
+    );
+    return Money.fromJson(((data as Map)['total'] as Map).cast());
   }
 }

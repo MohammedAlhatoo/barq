@@ -7,6 +7,7 @@ import '../features/auth/data/location_repository.dart';
 import '../features/browse/data/browse_repository.dart';
 import '../features/cart/data/cart_repository.dart';
 import '../features/cart/state/cart_cubit.dart';
+import '../features/cart/state/shop_scope_cubit.dart';
 import '../features/system/state/system_cubit.dart';
 import 'locale_cubit.dart';
 
@@ -33,6 +34,7 @@ class AppDependencies {
     required this.browseRepository,
     required this.cartRepository,
     required this.cart,
+    required this.scope,
     required this.prefs,
   });
 
@@ -47,6 +49,7 @@ class AppDependencies {
   final BrowseRepository browseRepository;
   final CartRepository cartRepository;
   final CartCubit cart;
+  final ShopScopeCubit scope;
   final SharedPreferences prefs;
 
   static Future<AppDependencies> create() async {
@@ -70,6 +73,7 @@ class AppDependencies {
       initial: kDebugMode ? SystemIssue.values.asNameMap()[_preview] : null,
     );
     final browse = ApiBrowseRepository(api);
+    final cart = CartCubit(prefs: prefs, config: config, browse: browse);
     return AppDependencies(
       auth: auth,
       api: api,
@@ -81,7 +85,8 @@ class AppDependencies {
       locationRepository: GeolocatorLocationRepository(),
       browseRepository: browse,
       cartRepository: ApiCartRepository(api),
-      cart: CartCubit(prefs: prefs, config: config, browse: browse),
+      cart: cart,
+      scope: ShopScopeCubit(cart: cart, browse: browse),
       prefs: prefs,
     );
   }

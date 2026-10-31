@@ -164,13 +164,11 @@
     "placeholders": { "count": { "type": "int" } }
   },
   "compareBest": "Best price",
-  "compareForItems": "for products",
   "compareAvailable": "{available} of {total} available",
   "@compareAvailable": {
     "placeholders": { "available": { "type": "int" }, "total": { "type": "int" } }
   },
   "compareOthers": "Other stores in your area",
-  "compareNote": "Prices exclude delivery, shown in the next step",
   "comparePickBest": "Choose best · {price}",
   "@comparePickBest": {
     "placeholders": { "price": { "type": "String" } }
@@ -202,5 +200,15 @@
   "noAddressTitle": "You have no delivery address",
   "noAddressBody": "Add your address so we can compare your cart with stores that deliver to you.",
   "noAddressAdd": "Add address",
-  "checkoutTitle": "Confirm order"
+  "checkoutTitle": "Confirm order",
+
+  "compareWithDelivery": "Delivery included",
+  "compareDeliveryLater": "Delivery calculated later",
+  "scopeShoppingFrom": "Shopping from: {store}",
+  "@scopeShoppingFrom": {
+    "placeholders": { "store": { "type": "String" } }
+  },
+  "scopeCartStore": "your cart's store",
+  "scopeAllStores": "All stores",
+  "scopeOnlyMine": "My cart's store only"
 }

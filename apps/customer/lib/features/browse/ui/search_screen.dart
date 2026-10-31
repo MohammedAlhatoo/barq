@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../state/search_cubit.dart';
 import 'widgets/load_more_listener.dart';
 import 'widgets/product_row_card.dart';
+import 'widgets/shop_scope_bar.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -76,6 +78,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ? null
                     : _RecentSearches(words: state.recent, onTap: _useRecent),
               ),
+              const ShopScopeBar(),
               Expanded(child: _Results(state: state)),
             ],
           ),
@@ -139,7 +142,11 @@ class _Results extends StatelessWidget {
         onAction: () => cubit.search(state.query),
       );
     }
-    final vendors = state.matchingVendors;
+    // A store match is off topic while the list is limited to one store.
+    final scoped = context.select<ShopScopeCubit, bool>(
+      (scope) => scope.state.filterVendorId != null,
+    );
+    final vendors = scoped ? const <Vendor>[] : state.matchingVendors;
     if (state.items.isEmpty && vendors.isEmpty) {
       return BarqMessageView(
         title: l10n.searchNoResults,

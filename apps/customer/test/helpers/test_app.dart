@@ -11,6 +11,7 @@ import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_repository.dart';
 import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
+import 'package:barq_customer/features/cart/state/shop_scope_cubit.dart';
 import 'package:barq_customer/features/system/state/system_cubit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,9 @@ class FakeServer implements HttpClientAdapter {
   final Map<String, Object?> bodies = {};
   final Map<String, Map<String, dynamic>> queries = {};
 
+  /// For a request whose answer depends on its body. Wins over [replies].
+  final Map<String, Reply Function(Object? body)> handlers = {};
+
   /// True makes every request fail like a dead connection.
   bool offline = false;
 
@@ -57,7 +61,10 @@ class FakeServer implements HttpClientAdapter {
     calls.add(key);
     bodies[key] = options.data;
     queries[key] = options.queryParameters;
-    final reply = replies[key] ?? const Reply(null, status: 500, error: 'x');
+    final reply =
+        handlers[key]?.call(options.data) ??
+        replies[key] ??
+        const Reply(null, status: 500, error: 'x');
     final code = reply.error;
     final body = code == null
         ? {
@@ -165,6 +172,7 @@ class TestApp {
     final network = FakeNetwork();
     final location = FakeLocation();
     final browse = ApiBrowseRepository(api);
+    final cart = CartCubit(prefs: sharedPrefs, config: config, browse: browse);
     final deps = AppDependencies(
       auth: auth,
       api: api,
@@ -183,7 +191,8 @@ class TestApp {
       locationRepository: location,
       browseRepository: browse,
       cartRepository: ApiCartRepository(api),
-      cart: CartCubit(prefs: sharedPrefs, config: config, browse: browse),
+      cart: cart,
+      scope: ShopScopeCubit(cart: cart, browse: browse),
       prefs: sharedPrefs,
     );
     return TestApp._(deps, server, network, location);

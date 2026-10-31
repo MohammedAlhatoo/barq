@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
 
@@ -47,11 +50,27 @@ class ProductsState {
 
 /// A filtered product list with paging: the category tab and the store page.
 class ProductsCubit extends Cubit<ProductsState> {
-  ProductsCubit(this._repository, {int? categoryId, this.vendorId})
-    : super(ProductsState(selectedCategory: categoryId));
+  ProductsCubit(
+    this._repository, {
+    int? categoryId,
+    this.vendorId,
+    ShopScopeCubit? scope,
+  }) : _scopeVendorId = scope?.state.filterVendorId,
+       super(ProductsState(selectedCategory: categoryId)) {
+    _scope = scope?.stream
+        .map((s) => s.filterVendorId)
+        .distinct()
+        .listen(_scopeTo);
+  }
 
   final BrowseRepository _repository;
+
+  /// The store page's own store. Never changes.
   final int? vendorId;
+  StreamSubscription<int?>? _scope;
+
+  /// The cart's store on the categories tab, or null for every store.
+  int? _scopeVendorId;
 
   /// Answers of an older chip are ignored.
   int _request = 0;
@@ -84,6 +103,38 @@ class ProductsCubit extends Cubit<ProductsState> {
       emit(
         ProductsState(
           loading: false,
+          selectedCategory: selected,
+          error: e.messageAr,
+        ),
+      );
+    }
+  }
+
+  /// Swaps the products without a spinner: this runs right after a tap on "+".
+  Future<void> _scopeTo(int? vendorId) async {
+    _scopeVendorId = vendorId;
+    if (state.loading || state.error != null) return load();
+    final categories = state.categories;
+    final selected = state.selectedCategory;
+    final request = ++_request;
+    try {
+      final page = await _page(selected, 1);
+      if (request != _request) return;
+      emit(
+        ProductsState(
+          loading: false,
+          categories: categories,
+          selectedCategory: selected,
+          items: page.items,
+          nextPage: page.nextPage,
+        ),
+      );
+    } on ApiException catch (e) {
+      if (request != _request) return;
+      emit(
+        ProductsState(
+          loading: false,
+          categories: categories,
           selectedCategory: selected,
           error: e.messageAr,
         ),
@@ -144,6 +195,16 @@ class ProductsCubit extends Cubit<ProductsState> {
     }
   }
 
-  Future<Paged<Product>> _page(int? categoryId, int page) => _repository
-      .products(categoryId: categoryId, vendorId: vendorId, page: page);
+  Future<Paged<Product>> _page(int? categoryId, int page) =>
+      _repository.products(
+        categoryId: categoryId,
+        vendorId: vendorId ?? _scopeVendorId,
+        page: page,
+      );
+
+  @override
+  Future<void> close() {
+    _scope?.cancel();
+    return super.close();
+  }
 }
