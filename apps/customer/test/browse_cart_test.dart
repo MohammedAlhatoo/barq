@@ -1,4 +1,5 @@
 import 'package:barq_customer/app/router.dart';
+import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_models.dart';
 import 'package:barq_customer/features/browse/ui/widgets/product_art.dart';
 import 'package:barq_customer/features/cart/data/cart_models.dart';
@@ -550,7 +551,7 @@ void main() {
       );
     });
 
-    testWidgets('home works without an address or stores', (tester) async {
+    testWidgets('home works without any location or stores', (tester) async {
       final replies = _server();
       replies['GET /addresses'] = const Reply(<Object>[]);
       replies['GET /vendors'] = const Reply(
@@ -558,7 +559,12 @@ void main() {
         status: 500,
         error: 'server_error',
       );
-      final app = await _open(tester, replies: replies);
+      final app = await TestApp.create(
+        replies,
+        secure: {'barq_token': 'saved'},
+      );
+      app.location.failure = const LocationException(LocationProblem.denied);
+      await app.pump(tester);
       expect(app.server.queries['GET /vendors']!.containsKey('lat'), isFalse);
       expect(find.text('بندورة'), findsOneWidget);
       expect(find.text('متاجر قريبة'), findsNothing);
@@ -607,6 +613,119 @@ void main() {
       expect(find.text('بقالة البركة'), findsOneWidget);
       expect(find.text('ميني ماركت النور'), findsNothing);
       expect(find.text('متاجر منطقتك: النصيرات'), findsOneWidget);
+    });
+  });
+
+  group('nearest', () {
+    Map<String, Reply> stores() {
+      final replies = _server();
+      replies['GET /addresses'] = Reply([
+        <String, Object?>{..._address, 'lat': 31.1, 'lng': 34.1},
+      ]);
+      replies['GET /vendors'] = Reply([
+        <String, Object?>{
+          ..._vendorJson,
+          'id': 5,
+          'is_open_now': false,
+          'distance_km': 0.1,
+        },
+        <String, Object?>{..._vendorJson, 'id': 8, 'distance_km': 0.8},
+        <String, Object?>{..._vendorJson, 'id': 7, 'distance_km': 2.0},
+      ]);
+      return replies;
+    }
+
+    testWidgets('the default address wins over GPS', (tester) async {
+      final app = await _open(tester, replies: stores());
+      expect(app.server.queries['GET /vendors']!['lat'], 31.1);
+    });
+
+    testWidgets('no address uses GPS, on home and all stores', (tester) async {
+      final replies = stores();
+      replies['GET /addresses'] = const Reply(<Object>[]);
+      final app = await _open(tester, replies: replies);
+      expect(app.server.queries['GET /vendors']!['lat'], 31.45);
+
+      await _go(tester, app, Routes.vendors);
+      expect(app.server.queries['GET /vendors']!['lng'], 34.39);
+    });
+
+    testWidgets('search uses GPS too', (tester) async {
+      final replies = stores();
+      replies['GET /addresses'] = const Reply(<Object>[]);
+      final app = await _open(tester, replies: replies);
+      app.server.queries.remove('GET /vendors');
+      await _go(tester, app, Routes.search);
+      expect(app.server.queries['GET /vendors']!['lat'], 31.45);
+    });
+
+    testWidgets('a GPS that never answers does not stall home', (tester) async {
+      final replies = stores();
+      replies['GET /addresses'] = const Reply(<Object>[]);
+      final app = await TestApp.create(
+        replies,
+        secure: {'barq_token': 'saved'},
+      );
+      app.location.hang = true;
+      await app.pump(tester);
+      await tester.pump(const Duration(seconds: 9));
+      await app.settle(tester);
+      expect(find.text('بندورة'), findsOneWidget);
+      expect(app.server.queries['GET /vendors']!.containsKey('lat'), isFalse);
+    });
+
+    testWidgets('an empty cart shows the nearest open store on home', (
+      tester,
+    ) async {
+      final app = await _open(tester, replies: stores());
+      expect(app.server.queries['GET /products']!['vendor'], 8);
+      expect(find.byType(BarqScopeBar), findsNothing);
+    });
+
+    testWidgets('home follows the cart, then returns to the nearest', (
+      tester,
+    ) async {
+      final app = await _open(tester, replies: stores());
+      _addToCart(app);
+      await app.settle(tester);
+      expect(app.server.queries['GET /products']!['vendor'], 7);
+
+      await tester.tap(find.text('كل المتاجر'));
+      await app.settle(tester);
+      expect(
+        app.server.queries['GET /products']!.containsKey('vendor'),
+        isFalse,
+      );
+
+      app.deps.cart.clear();
+      await app.settle(tester);
+      expect(app.server.queries['GET /products']!['vendor'], 8);
+    });
+
+    testWidgets('a nearest store with no products falls back to all', (
+      tester,
+    ) async {
+      final app = await TestApp.create(
+        stores(),
+        secure: {'barq_token': 'saved'},
+      );
+      app.server.handlers['GET /products'] = (_) => Reply(
+        app.server.lastQueryOf('GET /products')?['vendor'] == 8
+            ? const <Object>[]
+            : [_product(1, 'بندورة')],
+      );
+      await app.pump(tester);
+      expect(find.text('بندورة'), findsOneWidget);
+    });
+
+    testWidgets('the categories tab still shows every store', (tester) async {
+      final app = await _open(tester, replies: stores());
+      await tester.tap(find.text('الأقسام'));
+      await app.settle(tester);
+      expect(
+        app.server.queries['GET /products']!.containsKey('vendor'),
+        isFalse,
+      );
     });
   });
 

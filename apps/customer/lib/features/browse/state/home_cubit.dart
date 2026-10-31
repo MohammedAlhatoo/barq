@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../auth/data/auth_models.dart';
 import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
+import '../data/user_location.dart';
 
 class HomeState {
   const HomeState({
@@ -29,20 +29,21 @@ class HomeState {
 }
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this._repository, ShopScopeCubit scope)
-    : _vendorId = scope.state.filterVendorId,
-      super(const HomeState()) {
-    _scope = scope.stream
-        .map((s) => s.filterVendorId)
-        .distinct()
-        .listen(_scopeTo);
+  HomeCubit(this._repository, this._location, this._shop)
+    : super(const HomeState()) {
+    _scope = _shop.stream.listen((_) => _scopeChanged());
   }
 
   final BrowseRepository _repository;
-  late final StreamSubscription<int?> _scope;
+  final UserLocation _location;
+  final ShopScopeCubit _shop;
+  late final StreamSubscription<ShopScope> _scope;
 
-  /// The cart's store, or null for every store.
-  int? _vendorId;
+  /// The nearest open store, or null when no location is known.
+  int? _nearest;
+
+  /// The store whose products are showing. Null is every store.
+  int? _shown;
 
   /// Answers of an older scope are ignored.
   int _request = 0;
@@ -59,7 +60,8 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       final categories = await _repository.categories();
       final vendors = await _vendors();
-      final page = await _repository.products(vendorId: _vendorId);
+      _nearest = _nearestOf(vendors);
+      final page = await _products();
       final name = await _name();
       if (request != _request) return;
       emit(
@@ -77,13 +79,35 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  /// With an empty cart Home starts from the nearest store. With items it
+  /// follows the cart, or every store after "كل المتاجر".
+  int? get _target =>
+      _shop.state.vendorId == null ? _nearest : _shop.state.filterVendorId;
+
+  static int? _nearestOf(List<Vendor> vendors) {
+    for (final vendor in vendors) {
+      if (vendor.isOpen && vendor.distanceKm != null) return vendor.id;
+    }
+    return null;
+  }
+
+  /// An empty nearest store must not leave Home with nothing to show.
+  Future<Paged<Product>> _products() async {
+    final target = _target;
+    _shown = target;
+    final page = await _repository.products(vendorId: target);
+    final fromNearest = target != null && _shop.state.vendorId == null;
+    if (page.items.isNotEmpty || !fromNearest) return page;
+    return _repository.products();
+  }
+
   /// Swaps the products without a spinner: this runs right after a tap on "+".
-  Future<void> _scopeTo(int? vendorId) async {
-    _vendorId = vendorId;
+  Future<void> _scopeChanged() async {
+    if (_target == _shown) return;
     if (state.loading || state.error != null) return load();
     final request = ++_request;
     try {
-      final page = await _repository.products(vendorId: vendorId);
+      final page = await _products();
       if (request != _request) return;
       emit(
         HomeState(
@@ -106,23 +130,14 @@ class HomeCubit extends Cubit<HomeState> {
     return super.close();
   }
 
-  /// Sends the default address so the nearest stores come first. The products
+  /// Sends the user's location so the nearest stores come first. The products
   /// still show if this part fails.
   Future<List<Vendor>> _vendors() async {
     try {
-      final address = await _address();
-      return await _repository.vendors(lat: address?.lat, lng: address?.lng);
+      final location = await _location.current();
+      return await _repository.vendors(lat: location?.lat, lng: location?.lng);
     } on ApiException {
       return const [];
-    }
-  }
-
-  /// Without an address the stores just come in the server's default order.
-  Future<SavedAddress?> _address() async {
-    try {
-      return await _repository.defaultAddress();
-    } on ApiException {
-      return null;
     }
   }
 

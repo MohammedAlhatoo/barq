@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../features/auth/data/auth_repository.dart';
 import '../features/auth/data/location_repository.dart';
 import '../features/browse/data/browse_repository.dart';
+import '../features/browse/data/user_location.dart';
 import '../features/browse/data/vendor_actions.dart';
 import '../features/cart/data/cart_repository.dart';
 import '../features/cart/state/cart_cubit.dart';
@@ -33,6 +34,7 @@ class AppDependencies {
     required this.authRepository,
     required this.locationRepository,
     required this.browseRepository,
+    required this.userLocation,
     required this.vendorActions,
     required this.cartRepository,
     required this.cart,
@@ -49,6 +51,7 @@ class AppDependencies {
   final AuthRepository authRepository;
   final LocationRepository locationRepository;
   final BrowseRepository browseRepository;
+  final UserLocation userLocation;
   final VendorActions vendorActions;
   final CartRepository cartRepository;
   final CartCubit cart;
@@ -76,6 +79,7 @@ class AppDependencies {
       initial: kDebugMode ? SystemIssue.values.asNameMap()[_preview] : null,
     );
     final browse = ApiBrowseRepository(api);
+    final location = GeolocatorLocationRepository();
     final cart = CartCubit(prefs: prefs, config: config, browse: browse);
     return AppDependencies(
       auth: auth,
@@ -85,8 +89,9 @@ class AppDependencies {
       locale: locale,
       system: system,
       authRepository: ApiAuthRepository(api, prefs),
-      locationRepository: GeolocatorLocationRepository(),
+      locationRepository: location,
       browseRepository: browse,
+      userLocation: UserLocation(browse, location),
       vendorActions: DeviceVendorActions(),
       cartRepository: ApiCartRepository(api),
       cart: cart,

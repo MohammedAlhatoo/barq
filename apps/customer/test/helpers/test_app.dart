@@ -9,6 +9,7 @@ import 'package:barq_customer/app/locale_cubit.dart';
 import 'package:barq_customer/features/auth/data/auth_repository.dart';
 import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_repository.dart';
+import 'package:barq_customer/features/browse/data/user_location.dart';
 import 'package:barq_customer/features/browse/data/vendor_actions.dart';
 import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
@@ -44,6 +45,8 @@ class FakeServer implements HttpClientAdapter {
 
   /// True makes every request fail like a dead connection.
   bool offline = false;
+
+  Map<String, dynamic>? lastQueryOf(String key) => queries[key];
 
   @override
   Future<ResponseBody> fetch(
@@ -110,8 +113,12 @@ class FakeNetwork extends NetworkMonitor {
 class FakeLocation implements LocationRepository {
   LocationException? failure;
 
+  /// True is a phone that never gets a GPS fix.
+  bool hang = false;
+
   @override
   Future<({double lat, double lng})> current() async {
+    if (hang) return Completer<({double lat, double lng})>().future;
     final problem = failure;
     if (problem != null) throw problem;
     return (lat: 31.45, lng: 34.39);
@@ -206,6 +213,7 @@ class TestApp {
       authRepository: ApiAuthRepository(api, sharedPrefs),
       locationRepository: location,
       browseRepository: browse,
+      userLocation: UserLocation(browse, location),
       vendorActions: FakeVendorActions(),
       cartRepository: ApiCartRepository(api),
       cart: cart,

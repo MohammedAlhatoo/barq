@@ -1,9 +1,9 @@
 import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../auth/data/auth_models.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
+import '../data/user_location.dart';
 
 class VendorsState {
   const VendorsState({
@@ -29,11 +29,13 @@ class VendorsState {
 
 /// The "كل المتاجر" list with paging.
 class VendorsCubit extends Cubit<VendorsState> {
-  VendorsCubit(this._repository) : super(const VendorsState());
+  VendorsCubit(this._repository, this._location) : super(const VendorsState());
 
   final BrowseRepository _repository;
-  SavedAddress? _address;
-  bool _addressLoaded = false;
+  final UserLocation _location;
+
+  /// Without one the list still shows, only without distances.
+  ({double lat, double lng})? _point;
 
   /// Answers of an older chip are ignored.
   int _request = 0;
@@ -54,10 +56,10 @@ class VendorsCubit extends Cubit<VendorsState> {
     final request = ++_request;
     emit(VendorsState(openOnly: openOnly));
     try {
-      final address = await _loadAddress();
+      _point = await _location.current();
       final page = await _repository.vendorsPage(
-        lat: address?.lat,
-        lng: address?.lng,
+        lat: _point?.lat,
+        lng: _point?.lng,
         openNow: openOnly,
       );
       if (request != _request) return;
@@ -77,18 +79,6 @@ class VendorsCubit extends Cubit<VendorsState> {
     }
   }
 
-  /// Without an address the list still shows, only without distances.
-  Future<SavedAddress?> _loadAddress() async {
-    if (_addressLoaded) return _address;
-    try {
-      _address = await _repository.defaultAddress();
-      _addressLoaded = true;
-    } on ApiException {
-      return null;
-    }
-    return _address;
-  }
-
   Future<void> loadMore() async {
     final next = state.nextPage;
     if (next == null || state.loadingMore || state.loading) return;
@@ -96,8 +86,8 @@ class VendorsCubit extends Cubit<VendorsState> {
     emit(_more(next, loadingMore: true));
     try {
       final page = await _repository.vendorsPage(
-        lat: _address?.lat,
-        lng: _address?.lng,
+        lat: _point?.lat,
+        lng: _point?.lng,
         openNow: state.openOnly,
         page: next,
       );

@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
+import '../data/user_location.dart';
 
 class SearchState {
   const SearchState({
@@ -62,8 +63,12 @@ class SearchState {
 }
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(this._repository, this._prefs, ShopScopeCubit scope)
-    : _vendorId = scope.state.filterVendorId,
+  SearchCubit(
+    this._repository,
+    this._prefs,
+    this._location,
+    ShopScopeCubit scope,
+  ) : _vendorId = scope.state.filterVendorId,
       super(SearchState(recent: _prefs.getStringList(_recentKey) ?? const [])) {
     _scope = scope.stream
         .map((s) => s.filterVendorId)
@@ -77,6 +82,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   final BrowseRepository _repository;
   final SharedPreferences _prefs;
+  final UserLocation _location;
   Timer? _timer;
   late final StreamSubscription<int?> _scope;
 
@@ -88,10 +94,10 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> loadVendors() async {
     try {
-      final address = await _repository.defaultAddress();
+      final location = await _location.current();
       final vendors = await _repository.vendors(
-        lat: address?.lat,
-        lng: address?.lng,
+        lat: location?.lat,
+        lng: location?.lng,
       );
       if (isClosed) return;
       emit(
