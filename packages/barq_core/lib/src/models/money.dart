@@ -13,19 +13,26 @@ class Money {
   /// The one sanctioned price calculation: how much two server totals differ
   /// ("وفّر ₪X"). Decided by the team as an exception to "never calculate".
   /// It changes nothing that is charged. Only the display uses it.
+  ///
+  /// [minorUnits] is `currency.minor_units`: how many minor units make one
+  /// major unit (100 agorot in a shekel), not a number of decimals.
   Money savedAgainst(
     Money other, {
     required String symbol,
     required int minorUnits,
   }) {
     final saved = other.amount - amount;
-    var scale = 1;
-    for (var i = 0; i < minorUnits; i++) {
-      scale *= 10;
+    final major = (saved / minorUnits).toStringAsFixed(_decimals(minorUnits));
+    return Money(amount: saved, formatted: '$major $symbol');
+  }
+
+  /// log10 of [minorUnits]: 100 is 2 decimals, 1 is none. Whole numbers only,
+  /// because a double log10 of 1000 comes out just under 3.
+  static int _decimals(int minorUnits) {
+    var decimals = 0;
+    for (var unit = minorUnits; unit >= 10; unit ~/= 10) {
+      decimals++;
     }
-    return Money(
-      amount: saved,
-      formatted: '${(saved / scale).toStringAsFixed(minorUnits)} $symbol',
-    );
+    return decimals;
   }
 }

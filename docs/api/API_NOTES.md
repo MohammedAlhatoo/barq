@@ -79,3 +79,4 @@
 - `GET /app/config`: شكل `zones[].polygon` مش موضّح بـ `openapi.json` (`additionalProperties: true`).
 - مش موضّح بـ `openapi.json`: شو بيصير للافتراضي لما ينحذف العنوان الافتراضي، ولما المستخدم يبعت `is_default: false` على عنوانه الوحيد. `test/live_account_test.dart` بيطبع الأول.
 - `DELETE /me`: `openapi.json` ما بيذكر كود الخطأ لما يكون في طلب جاري، مع إن التصميم بيقول «الطلبات الجارية يجب أن تنتهي أولًا». التطبيق بيعرض `messageAr` لأي رفض.
+- `currency.minor_units` هو عدد الوحدات الصغيرة بالوحدة الكبيرة (100 أغورة بالشيكل)، مش عدد الخانات العشرية. `openapi.json` بيقول `integer` بس بدون شرح.

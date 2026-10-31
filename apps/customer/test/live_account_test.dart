@@ -19,6 +19,24 @@ const _sandboxCode = '1234';
 bool get _hasSandboxKey => BarqEnv.projectKey.startsWith('pk_test_');
 
 void main() {
+  test('the real currency config formats a saving', () async {
+    FlutterSecureStorage.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({});
+    final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
+    final store = ConfigStore(api: api, app: BarqAppKind.customer);
+    await store.load();
+
+    const cart = Money(amount: 2650, formatted: '26.50 ₪');
+    const cheaper = Money(amount: 2250, formatted: '22.50 ₪');
+    final saved = cheaper.savedAgainst(
+      cart,
+      symbol: store.config.currencySymbol,
+      minorUnits: store.config.currencyMinorUnits,
+    );
+    expect(store.config.currencyMinorUnits, 100);
+    expect(saved.formatted, '4.00 ${store.config.currencySymbol}');
+  }, skip: _hasSandboxKey ? false : 'needs a pk_test key');
+
   test(
     'profile and addresses against the sandbox',
     () async {

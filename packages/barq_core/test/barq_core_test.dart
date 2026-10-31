@@ -71,7 +71,7 @@ final _configJson = <String, dynamic>{
   ],
   'polling': {'tracking_seconds': 30, 'events_seconds': 5},
   'driver': null,
-  'currency': {'code': 'ILS', 'symbol': '₪', 'minor_units': 2},
+  'currency': {'code': 'ILS', 'symbol': '₪', 'minor_units': 100},
   'min_app_version': '1.0.0',
   'modules': ['coupons'],
 };
@@ -519,8 +519,48 @@ void main() {
   test('savedAgainst formats the difference of two server totals', () {
     const cart = Money(amount: 2650, formatted: '26.50 ₪');
     const cheaper = Money(amount: 2250, formatted: '22.50 ₪');
-    final saved = cheaper.savedAgainst(cart, symbol: '₪', minorUnits: 2);
+    final saved = cheaper.savedAgainst(cart, symbol: '₪', minorUnits: 100);
     expect(saved.amount, 400);
     expect(saved.formatted, '4.00 ₪');
+  });
+
+  test('savedAgainst keeps the agorot', () {
+    const cart = Money(amount: 2650, formatted: '26.50 ₪');
+    const cheaper = Money(amount: 2215, formatted: '22.15 ₪');
+    final saved = cheaper.savedAgainst(cart, symbol: '₪', minorUnits: 100);
+    expect(saved.formatted, '4.35 ₪');
+  });
+
+  test('savedAgainst reads minor_units as units, not decimals', () {
+    const cart = Money(amount: 7000, formatted: '7000');
+    const cheaper = Money(amount: 2000, formatted: '2000');
+    String saved(int minorUnits) => cheaper
+        .savedAgainst(cart, symbol: 'X', minorUnits: minorUnits)
+        .formatted;
+    expect(saved(1), '5000 X');
+    expect(saved(10), '500.0 X');
+    expect(saved(100), '50.00 X');
+    expect(saved(1000), '5.000 X');
+  });
+
+  test('savedAgainst works with minor_units from the config', () {
+    final config = AppConfig.fromJson(_configJson);
+    expect(config.currencyMinorUnits, 100);
+    const cart = Money(amount: 2650, formatted: '26.50 ₪');
+    const cheaper = Money(amount: 2250, formatted: '22.50 ₪');
+    final saved = cheaper.savedAgainst(
+      cart,
+      symbol: config.currencySymbol,
+      minorUnits: config.currencyMinorUnits,
+    );
+    expect(saved.formatted, '4.00 ₪');
+  });
+
+  test('a config with no minor_units falls back to 100', () {
+    final json = {
+      ..._configJson,
+      'currency': {'code': 'ILS', 'symbol': '₪'},
+    };
+    expect(AppConfig.fromJson(json).currencyMinorUnits, 100);
   });
 }

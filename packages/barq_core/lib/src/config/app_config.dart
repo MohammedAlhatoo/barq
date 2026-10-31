@@ -16,7 +16,7 @@ class AppConfig {
     required this.modules,
     required this.supportPhone,
     required this.termsUrl,
-    this.currencyMinorUnits = 2,
+    this.currencyMinorUnits = 100,
     this.cartMaxLines = 50,
     this.cartMaxQty = 99,
   });
@@ -40,7 +40,8 @@ class AppConfig {
           ? DriverConfig.fromJson(driver.cast<String, dynamic>())
           : null,
       currencySymbol: (json['currency'] as Map)['symbol'] as String,
-      currencyMinorUnits: (json['currency'] as Map)['minor_units'] as int? ?? 2,
+      currencyMinorUnits:
+          (json['currency'] as Map)['minor_units'] as int? ?? 100,
       minAppVersion: json['min_app_version'] as String?,
       modules: (json['modules'] as List).cast<String>(),
       supportPhone: project is Map ? project['support_phone'] as String? : null,
@@ -56,6 +57,8 @@ class AppConfig {
   final PollingConfig polling;
   final DriverConfig? driver;
   final String currencySymbol;
+
+  /// Minor units in one major unit: 100 for the shekel. Not a decimal count.
   final int currencyMinorUnits;
   final String? minAppVersion;
   final List<String> modules;

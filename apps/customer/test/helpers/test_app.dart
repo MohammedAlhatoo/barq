@@ -157,7 +157,7 @@ const configJson = {
   'payment_methods': ['cash_on_delivery'],
   'statuses': <Object>[],
   'polling': <String, Object>{},
-  'currency': {'symbol': '₪'},
+  'currency': {'code': 'ILS', 'symbol': '₪', 'minor_units': 100},
   'min_app_version': '1.0.0',
   'modules': <String>[],
   'terms_url': 'https://example.com/terms',
