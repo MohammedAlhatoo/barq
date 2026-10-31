@@ -88,6 +88,11 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | `.icb` زر دائري | `BarqIconButton(icon: BarqIcons.back, showDot)` |
 | `.plus` زر الإضافة | `BarqPlusButton(count)` |
 | `.lnk` رابط | `BarqLink('عرض الكل')` |
+| صفحة نموذج: المحتوى بيسكرول والزر تحت (`margin-top:auto`) | `BarqFillScroll(children, footer)` |
+| الدوائر البيضاء على الخلفية البرتقالية | `BarqDecorCircles` |
+| شعار داخل مربع (بداية / تحديث) · محتوى شاشة البداية | `BarqLogoTile(glass)` · `BarqSplashContent(tagline)` |
+| دائرة بيضاء وجواها أيقونة برتقالية (رمز التحقق) | `BarqRingBadge(icon)` |
+| مبدّل ع / EN | `BarqLanguageSwitch(isArabic, onChanged)` |
 | `.card` / `.card.gl` | `BarqCard(borderColor, glass, clip)` |
 | `.sheet` + `.grab` + `.scrim` | `BarqSheet` / `showBarqSheet()` / `BarqScrim` |
 | `.pill.ok/.or/.no/.dk/.wh` | `BarqPill(tone: success/orange/danger/dark/white/successSolid/neutral)` |

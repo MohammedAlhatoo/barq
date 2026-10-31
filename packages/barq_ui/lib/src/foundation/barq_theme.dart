@@ -105,6 +105,9 @@ abstract final class BarqText {
       fontWeight: FontWeight.w600,
       color: BarqColors.ink);
 
+  /// Technical error codes ("422 out_of_zone") in monospace.
+  static const code = TextStyle(fontFamily: 'monospace', fontSize: 12);
+
   /// Struck-through "compare at" price.
   static const strike = TextStyle(
       fontFamily: family,

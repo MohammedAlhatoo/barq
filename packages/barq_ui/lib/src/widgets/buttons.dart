@@ -43,6 +43,7 @@ class BarqButton extends StatelessWidget {
     this.loading = false,
     this.expand = true,
     this.trailing,
+    this.labelColor,
   });
 
   final String label;
@@ -57,6 +58,9 @@ class BarqButton extends StatelessWidget {
 
   /// Optional widget at the end (e.g. price "₪46" in "عرض السلة").
   final Widget? trailing;
+
+  /// Replaces the variant's text color ("تحديث الآن" on orange screens).
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +105,7 @@ class BarqButton extends StatelessWidget {
         fg = BarqColors.primaryText;
         shadow = const [];
     }
+    fg = labelColor ?? fg;
     if (disabled) {
       bg = p.disabledButton;
       fg = p.disabledButtonText;

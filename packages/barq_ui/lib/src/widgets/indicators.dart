@@ -21,6 +21,9 @@ enum BarqPillTone {
   /// translucent white (.pill.wh)
   white,
 
+  /// translucent black on orange screens
+  onOrange,
+
   /// solid green with white text — discount badge "−25%"
   successSolid,
 
@@ -38,8 +41,10 @@ class BarqPill extends StatelessWidget {
       this.tone = BarqPillTone.orange,
       this.color,
       this.icon,
+      this.iconColor,
       this.padding,
-      this.fontSize});
+      this.fontSize,
+      this.mono = false});
 
   final String label;
   final BarqPillTone tone;
@@ -50,8 +55,14 @@ class BarqPill extends StatelessWidget {
 
   /// A [BarqIcons] name shown before the label.
   final String? icon;
+
+  /// Defaults to the text color.
+  final Color? iconColor;
   final EdgeInsetsGeometry? padding;
   final double? fontSize;
+
+  /// Monospace, for technical codes.
+  final bool mono;
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +80,7 @@ class BarqPill extends StatelessWidget {
       BarqPillTone.danger => (BarqColors.dangerSoft, BarqColors.danger),
       BarqPillTone.dark => (BarqColors.ink, Colors.white),
       BarqPillTone.white => (const Color(0xBFFFFFFF), BarqColors.ink),
+      BarqPillTone.onOrange => (const Color(0x2E000000), Colors.white),
       BarqPillTone.successSolid => (BarqColors.success, Colors.white),
       BarqPillTone.orangeSolid => (BarqColors.primary, Colors.white),
       BarqPillTone.neutral => p.isDark
@@ -84,12 +96,16 @@ class BarqPill extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            BarqIcon(icon!, size: BarqSizes.iconS, color: fg),
+            BarqIcon(icon!, size: BarqSizes.iconS, color: iconColor ?? fg),
             const SizedBox(width: 4)
           ],
-          Text(label,
-              style: BarqText.pill.copyWith(color: fg, fontSize: fontSize),
-              maxLines: 1),
+          Flexible(
+            child: Text(label,
+                style: (mono ? BarqText.code : BarqText.pill)
+                    .copyWith(color: fg, fontSize: fontSize),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis),
+          ),
         ],
       ),
     );
@@ -239,11 +255,15 @@ class BarqDots extends StatelessWidget {
       required this.count,
       required this.index,
       this.activeColor,
-      this.inactiveColor});
+      this.inactiveColor,
+      this.activeWidth = 26});
   final int count;
   final int index;
   final Color? activeColor;
   final Color? inactiveColor;
+
+  /// 26 = the long dark dash; 8 = a round dot (splash).
+  final double activeWidth;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -253,7 +273,7 @@ class BarqDots extends StatelessWidget {
             if (i > 0) const SizedBox(width: 6),
             AnimatedContainer(
               duration: BarqDurations.normal,
-              width: i == index ? 26 : 8,
+              width: i == index ? activeWidth : 8,
               height: 8,
               decoration: BoxDecoration(
                 color: i == index

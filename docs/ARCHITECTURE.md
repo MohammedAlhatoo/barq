@@ -98,6 +98,7 @@ class ApiClient {
   Future<Paged<dynamic>> getPaged(String path, {Map<String, dynamic>? query}); // data + meta
   // بيرجع "data" من الرد مباشرة. بيضيف تلقائيًا: X-Project-Key, Authorization,
   // Accept-Language, X-App-Version, X-Dev-Member. أي خطأ → ApiException.
+  Stream<ApiException> get systemErrors;  // تحديث إجباري وصيانة من أي طلب
 }
 class Paged<T> { final List<T> items; final int? nextPage; final int? total; }
 
@@ -107,6 +108,8 @@ class ApiException implements Exception {
   final String messageAr;    // جاهز للعرض (من hint.ar أو message)
   final Map<String, dynamic>? details;
   bool get isNetwork;        // انقطاع نت / timeout
+  bool get isUpdateRequired; // app_update_required
+  bool get isMaintenance;    // maintenance · project_frozen
 }
 
 // ── الدخول ──
@@ -131,12 +134,18 @@ class AppConfig {
   final String currencySymbol;                 // ₪
   final String? minAppVersion;                 // أقدم نسخة مسموحة → شاشة "تحديث إجباري"
   bool hasModule(String m);                    // basket_compare, coupons, public_tracking…
+  bool requiresUpdate(String appVersion);      // النسخة أقدم من minAppVersion
+  final String? supportPhone;                  // project.support_phone
+  final String? termsUrl;                      // terms_url
 }
 // الصيانة ما إلها حقل بالإعدادات: بتيجي كخطأ ApiException(code: 'maintenance')،
 // والتحديث الإجباري كمان ممكن ييجي كخطأ 426 app_update_required.
 
 // ── الرفع ──
 class UploadService { Future<int> upload(File file, {required String purpose}); } // يرجع upload_id
+
+// ── الشبكة ── (في barq_core/lib/src/network/)
+class NetworkMonitor { Future<bool> isOnline(); Stream<bool> get onlineChanges; }
 
 // ── التحديث الدوري ── (في barq_core/lib/src/polling/)
 class Poller {  // بيوقف لحاله لما التطبيق بالخلفية

@@ -61,6 +61,12 @@ class ApiException implements Exception {
   /// True for no internet or a timeout.
   bool get isNetwork => code == networkCode;
 
+  /// The server refuses this app version: show "تحديث إجباري".
+  bool get isUpdateRequired => code == 'app_update_required';
+
+  /// The whole service is stopped: show "صيانة".
+  bool get isMaintenance => code == 'maintenance' || code == 'project_frozen';
+
   static bool _isConnectionProblem(DioException e) => switch (e.type) {
     DioExceptionType.connectionTimeout ||
     DioExceptionType.sendTimeout ||

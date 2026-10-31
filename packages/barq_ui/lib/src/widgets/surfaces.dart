@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../foundation/barq_theme.dart';
@@ -81,6 +83,68 @@ class BarqScreen extends StatelessWidget {
   }
 }
 
+/// Page whose [children] scroll on short screens while [footer] stays at the
+/// bottom on tall ones (.pad with margin-top:auto). Don't put a PageView inside.
+class BarqFillScroll extends StatelessWidget {
+  const BarqFillScroll({
+    super.key,
+    required this.children,
+    this.footer,
+    this.padding = EdgeInsets.zero,
+    this.crossAxisAlignment = CrossAxisAlignment.stretch,
+  });
+
+  final List<Widget> children;
+  final Widget? footer;
+  final EdgeInsetsGeometry padding;
+  final CrossAxisAlignment crossAxisAlignment;
+
+  @override
+  Widget build(BuildContext context) => CustomScrollView(
+        slivers: [
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: padding,
+              child: Column(
+                crossAxisAlignment: crossAxisAlignment,
+                children: [
+                  ...children,
+                  if (footer != null) ...[const Spacer(), footer!],
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
+}
+
+/// The two soft white circles on orange screens (splash, forced update).
+/// Put it in a Stack behind the content.
+class BarqDecorCircles extends StatelessWidget {
+  const BarqDecorCircles({super.key, this.showBottom = true});
+
+  /// The forced update design only has the top circle.
+  final bool showBottom;
+
+  static const _color = Color(0x14FFFFFF);
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        children: [
+          const Positioned(
+              top: -120,
+              right: -160,
+              child: BarqBlob(size: 420, color: _color)),
+          if (showBottom)
+            const Positioned(
+                bottom: -60,
+                left: -120,
+                child: BarqBlob(size: 300, color: _color)),
+        ],
+      );
+}
+
 /// .card — white rounded card (dark card on driver screens).
 class BarqCard extends StatelessWidget {
   const BarqCard({
@@ -126,14 +190,22 @@ class BarqCard extends StatelessWidget {
         border: borderColor != null
             ? Border.all(color: borderColor!, width: borderWidth)
             : (glass ? Border.all(color: const Color(0xCCFFFFFF)) : null),
-        boxShadow: shadow ?? p.cardShadow,
+        // A shadow would show through the see-through glass.
+        boxShadow: glass ? null : (shadow ?? p.cardShadow),
       ),
       child: child,
     );
+    final surface = glass
+        ? ClipRRect(
+            borderRadius: BorderRadius.circular(radius),
+            child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14), child: card),
+          )
+        : card;
     return onTap == null
-        ? card
+        ? surface
         : GestureDetector(
-            onTap: onTap, behavior: HitTestBehavior.opaque, child: card);
+            onTap: onTap, behavior: HitTestBehavior.opaque, child: surface);
   }
 }
 
@@ -283,12 +355,16 @@ class BarqIllustrationArea extends StatelessWidget {
       required this.child,
       this.blobSize,
       this.blobGradient,
+      this.blobTop,
       this.overlays = const []});
 
   final double height;
   final Widget child;
   final double? blobSize;
   final Gradient? blobGradient;
+
+  /// Distance from the top. Null centers the blob.
+  final double? blobTop;
 
   /// Extra positioned widgets (badges like "انتهت المهلة", floating pills).
   final List<Widget> overlays;
@@ -301,7 +377,9 @@ class BarqIllustrationArea extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             if (blobSize != null)
-              BarqBlob(size: blobSize!, gradient: blobGradient),
+              Positioned(
+                  top: blobTop,
+                  child: BarqBlob(size: blobSize!, gradient: blobGradient)),
             child,
             ...overlays,
           ],

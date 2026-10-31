@@ -542,6 +542,49 @@ class BarqSegmented<T> extends StatelessWidget {
   }
 }
 
+/// The ع / EN switch on the onboarding screens. [isArabic] picks the dark side.
+class BarqLanguageSwitch extends StatelessWidget {
+  const BarqLanguageSwitch(
+      {super.key, required this.isArabic, required this.onChanged});
+  final bool isArabic;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget option(String label, bool arabic) {
+      final on = arabic == isArabic;
+      return GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => onChanged(arabic),
+        child: AnimatedContainer(
+          duration: BarqDurations.fast,
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+          decoration: BoxDecoration(
+            color: on ? BarqColors.ink : Colors.transparent,
+            borderRadius: BorderRadius.circular(BarqRadius.pill),
+          ),
+          child: Text(label,
+              style: BarqText.pill
+                  .copyWith(color: on ? Colors.white : BarqColors.muted)),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(BarqRadius.pill),
+        boxShadow: BarqShadows.chip,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [option('ع', true), option('EN', false)],
+      ),
+    );
+  }
+}
+
 /// .qty — quantity stepper (+ orange, − grey; shows trash at 1 when [trashAtOne]).
 class BarqQtyStepper extends StatelessWidget {
   const BarqQtyStepper(

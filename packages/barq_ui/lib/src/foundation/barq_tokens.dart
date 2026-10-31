@@ -162,6 +162,15 @@ abstract final class BarqSpacing {
   static const headerTop = 52.0;
   static const gap = 12.0; // .row / .stk default gap
   static const section = 16.0;
+  static const xxs = 4.0;
+  static const xs = 6.0;
+  static const sm = 8.0;
+  static const md = 10.0;
+  static const lg = 26.0;
+
+  /// Space under the last button: forms (34) and state screens (30).
+  static const formBottom = 34.0;
+  static const stateBottom = 30.0;
 }
 
 abstract final class BarqSizes {
@@ -180,6 +189,24 @@ abstract final class BarqSizes {
   static const mapPin = 52.0;
   static const otpWidth = 62.0;
   static const otpHeight = 66.0;
+
+  // Illustration areas of the login flow (height · blob · image).
+  static const onboardingArt = 450.0;
+  static const onboardingBlob = 330.0;
+  static const onboardingImage = 330.0;
+  static const onboardingPillTop = 70.0;
+  static const onboardingBlobTop = 50.0;
+  static const onboardingImageTop = 40.0;
+  static const onboardingScooterWidth = 360.0;
+  static const onboardingScooterHeight = 300.0;
+  static const compareImage = 46.0;
+  static const phoneArt = 230.0;
+  static const phoneBlob = 190.0;
+  static const phoneImage = 200.0;
+  static const otpArt = 210.0;
+  static const wordmarkHeader = 40.0;
+  static const welcomeMap = 120.0;
+  static const welcomePin = 64.0;
 
   // Icon sizes (.i.s / .i / .i.m / .i.l / .i.xl)
   static const iconS = 16.0;

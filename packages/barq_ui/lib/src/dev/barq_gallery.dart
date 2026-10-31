@@ -227,6 +227,31 @@ class _BarqGalleryState extends State<BarqGallery> {
                             onChanged: (v) => setState(() => stars = v))
                       ]),
                       label('BarqDots · BarqStars'),
+                      BarqLanguageSwitch(isArabic: true, onChanged: (_) {}),
+                      label('BarqLanguageSwitch'),
+                      const Row(children: [
+                        BarqRingBadge(icon: BarqIcons.shield),
+                        SizedBox(width: 12),
+                        BarqLogoTile(),
+                      ]),
+                      label('BarqRingBadge · BarqLogoTile'),
+                      Container(
+                        height: 320,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                            gradient: BarqGradients.orangeScreen,
+                            borderRadius: BorderRadius.circular(24)),
+                        child: const BarqSplashContent(tagline: 'برق'),
+                      ),
+                      label('BarqSplashContent · BarqDecorCircles'),
+                      SizedBox(
+                        height: 120,
+                        child: BarqFillScroll(
+                          footer: BarqButton(label: 'تحت', onPressed: () {}),
+                          children: const [Text('محتوى')],
+                        ),
+                      ),
+                      label('BarqFillScroll'),
                       const BarqPrice('₪6', compareAt: '₪8', unit: '/ كغ'),
                       label('BarqPrice(price, compareAt, unit)'),
                       const BarqDivider(dashed: true),

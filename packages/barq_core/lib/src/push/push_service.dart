@@ -29,6 +29,7 @@ class PushService {
   /// Connects Firebase and asks for permission. Listen to [onOpen] first, so
   /// a tap that opened the app is not missed.
   Future<void> init() async {
+    if (_ready) return;
     try {
       await Firebase.initializeApp();
     } on Object catch (e) {

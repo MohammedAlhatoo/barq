@@ -13,6 +13,7 @@ export 'src/config/driver_config.dart';
 export 'src/config/polling_config.dart';
 export 'src/config/status_info.dart';
 export 'src/models/money.dart';
+export 'src/network/network_monitor.dart';
 export 'src/polling/poller.dart';
 export 'src/push/push_message.dart';
 export 'src/push/push_service.dart';

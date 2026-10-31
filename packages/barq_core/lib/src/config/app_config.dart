@@ -14,10 +14,13 @@ class AppConfig {
     required this.currencySymbol,
     required this.minAppVersion,
     required this.modules,
+    required this.supportPhone,
+    required this.termsUrl,
   });
 
   factory AppConfig.fromJson(Map<String, dynamic> json) {
     final driver = json['driver'];
+    final project = json['project'];
     return AppConfig(
       deliveryConfirmation: json['delivery_confirmation'] as String,
       paymentMethods: (json['payment_methods'] as List).cast<String>(),
@@ -33,6 +36,8 @@ class AppConfig {
       currencySymbol: (json['currency'] as Map)['symbol'] as String,
       minAppVersion: json['min_app_version'] as String?,
       modules: (json['modules'] as List).cast<String>(),
+      supportPhone: project is Map ? project['support_phone'] as String? : null,
+      termsUrl: json['terms_url'] as String?,
     );
   }
 
@@ -44,6 +49,8 @@ class AppConfig {
   final String currencySymbol;
   final String? minAppVersion;
   final List<String> modules;
+  final String? supportPhone;
+  final String? termsUrl;
 
   StatusInfo status(String key) {
     for (final status in statuses) {
@@ -53,6 +60,24 @@ class AppConfig {
   }
 
   bool hasModule(String module) => modules.contains(module);
+
+  /// True when [appVersion] (like "1.0.0") is older than [minAppVersion].
+  bool requiresUpdate(String appVersion) {
+    final minimum = minAppVersion;
+    if (minimum == null) return false;
+    final current = _versionParts(appVersion);
+    final required = _versionParts(minimum);
+    for (var i = 0; i < 3; i++) {
+      if (current[i] != required[i]) return current[i] < required[i];
+    }
+    return false;
+  }
+
+  /// Always three numbers: "1.2" becomes [1, 2, 0].
+  static List<int> _versionParts(String version) {
+    final parts = version.split('.').map((p) => int.tryParse(p) ?? 0).toList();
+    return [...parts, 0, 0, 0].take(3).toList();
+  }
 
   /// The rows of the status timeline for an order now at [currentKey].
   ///

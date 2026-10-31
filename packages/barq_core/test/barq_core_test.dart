@@ -227,6 +227,71 @@ void main() {
     });
   });
 
+  group('system errors', () {
+    ResponseBody failure(int status, String code) => _json(status, {
+      'message': 'stopped',
+      'error': {'code': code, 'details': null},
+    });
+
+    for (final (status, code) in [
+      (426, 'app_update_required'),
+      (503, 'maintenance'),
+      (403, 'project_frozen'),
+    ]) {
+      test('$code reaches systemErrors from any request', () async {
+        final api = _client(
+          AuthStore(),
+          _FakeAdapter((_) => failure(status, code)),
+        );
+        final fired = expectLater(
+          api.systemErrors,
+          emits(isA<ApiException>().having((e) => e.code, 'code', code)),
+        );
+        await expectLater(api.get('/products'), throwsA(isA<ApiException>()));
+        await fired;
+      });
+    }
+
+    test('an ordinary error stays with its screen', () async {
+      final api = _client(
+        AuthStore(),
+        _FakeAdapter((_) => failure(422, 'validation_failed')),
+      );
+      var fired = false;
+      api.systemErrors.listen((_) => fired = true);
+      await expectLater(api.get('/products'), throwsA(isA<ApiException>()));
+      await Future<void>.delayed(Duration.zero);
+      expect(fired, isFalse);
+    });
+  });
+
+  group('AppConfig.requiresUpdate', () {
+    AppConfig withMinimum(String? version) =>
+        AppConfig.fromJson({..._configJson, 'min_app_version': version});
+
+    test('compares numbers, not text', () {
+      expect(withMinimum('1.10.0').requiresUpdate('1.9.0'), isTrue);
+      expect(withMinimum('1.9.0').requiresUpdate('1.10.0'), isFalse);
+    });
+
+    test('accepts equal, shorter and missing versions', () {
+      expect(withMinimum('1.0.0').requiresUpdate('1.0.0'), isFalse);
+      expect(withMinimum('2.4').requiresUpdate('2.4.0'), isFalse);
+      expect(withMinimum('2.4').requiresUpdate('2.3.9'), isTrue);
+      expect(withMinimum(null).requiresUpdate('0.0.1'), isFalse);
+    });
+
+    test('reads the support phone and the terms link', () {
+      final config = AppConfig.fromJson({
+        ..._configJson,
+        'project': {'support_phone': '059'},
+        'terms_url': 'https://example.com',
+      });
+      expect(config.supportPhone, '059');
+      expect(config.termsUrl, 'https://example.com');
+    });
+  });
+
   group('AppConfig', () {
     final config = AppConfig.fromJson(_configJson);
 

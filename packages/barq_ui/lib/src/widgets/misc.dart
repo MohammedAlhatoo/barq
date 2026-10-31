@@ -38,6 +38,106 @@ class BarqWordmark extends StatelessWidget {
       );
 }
 
+/// App logo in a rounded square: glass on the splash, white on forced update.
+class BarqLogoTile extends StatelessWidget {
+  const BarqLogoTile({super.key, this.glass = false});
+  final bool glass;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = glass ? 170.0 : 150.0;
+    return Container(
+      width: size,
+      height: size,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: glass ? const Color(0x2EFFFFFF) : Colors.white,
+        borderRadius: BorderRadius.circular(glass ? 48 : 46),
+        border: glass ? Border.all(color: const Color(0x59FFFFFF)) : null,
+        boxShadow: glass
+            ? null
+            : const [
+                BoxShadow(
+                    color: Color(0x99782800),
+                    offset: Offset(0, 24),
+                    blurRadius: 40,
+                    spreadRadius: -18)
+              ],
+      ),
+      child: BarqWordmark(
+          size: glass ? 92 : 76,
+          color: glass ? Colors.white : BarqColors.primary),
+    );
+  }
+}
+
+/// .ph.or splash content: decor circles, glass logo, tagline and the dots.
+class BarqSplashContent extends StatelessWidget {
+  const BarqSplashContent({super.key, required this.tagline});
+  final String tagline;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+        alignment: Alignment.center,
+        children: [
+          const Positioned.fill(child: BarqDecorCircles()),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const BarqLogoTile(glass: true),
+              const SizedBox(height: 26),
+              Text(tagline,
+                  textAlign: TextAlign.center,
+                  style: BarqText.h2.copyWith(color: Colors.white)),
+            ],
+          ),
+          const Positioned(
+            bottom: 70,
+            child: BarqDots(
+                count: 3,
+                index: 0,
+                activeWidth: 8,
+                activeColor: Colors.white,
+                inactiveColor: Color(0x80FFFFFF)),
+          ),
+        ],
+      );
+}
+
+/// White ring + orange gradient circle with an icon (OTP screen shield).
+class BarqRingBadge extends StatelessWidget {
+  const BarqRingBadge({super.key, required this.icon});
+
+  /// A [BarqIcons] name.
+  final String icon;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 150,
+        height: 150,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+                color: Color(0xB3FF7A21),
+                offset: Offset(0, 20),
+                blurRadius: 40,
+                spreadRadius: -20)
+          ],
+        ),
+        child: Container(
+          width: 96,
+          height: 96,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+              shape: BoxShape.circle, gradient: BarqGradients.orange),
+          child: BarqIcon(icon, size: BarqSizes.iconXL, color: Colors.white),
+        ),
+      );
+}
+
 /// Round avatar with an initial ("م") — orange gradient (customer) or black (driver).
 class BarqAvatar extends StatelessWidget {
   const BarqAvatar(this.initial,
@@ -249,38 +349,40 @@ class BarqStateView extends StatelessWidget {
     final bodyColor = onOrange
         ? const Color(0xFFFFEADF)
         : (p.isDark ? BarqColors.darkSubtle : BarqColors.muted);
-    return Padding(
-      padding:
-          const EdgeInsets.fromLTRB(BarqSpacing.page, 60, BarqSpacing.page, 30),
-      child: Column(
-        children: [
-          BarqIllustrationArea(
-            height: 400,
-            blobSize: 270,
-            blobGradient: onOrange
-                ? const RadialGradient(
-                    colors: [Color(0x24FFFFFF), Color(0x24FFFFFF)])
-                : blobGradient,
-            child: illustration,
-          ),
-          Text(title,
-              textAlign: TextAlign.center,
-              style: BarqText.h1.copyWith(color: titleColor)),
-          const SizedBox(height: 8),
-          Text(message,
-              textAlign: TextAlign.center,
-              style: BarqText.body.copyWith(color: bodyColor)),
-          if (code != null) ...[
-            const SizedBox(height: 12),
-            Directionality(
-                textDirection: TextDirection.ltr,
-                child: BarqPill(code!,
-                    tone: onOrange ? BarqPillTone.dark : BarqPillTone.neutral)),
-          ],
-          const Spacer(),
-          BarqGap(gap: 10, children: [...actions, if (footer != null) footer!]),
+    return BarqFillScroll(
+      padding: const EdgeInsets.fromLTRB(
+          BarqSpacing.page, 60, BarqSpacing.page, BarqSpacing.stateBottom),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      footer: BarqGap(
+          gap: BarqSpacing.md,
+          children: [...actions, if (footer != null) footer!]),
+      children: [
+        BarqIllustrationArea(
+          height: 400,
+          blobSize: 270,
+          blobGradient: onOrange
+              ? const RadialGradient(
+                  colors: [Color(0x24FFFFFF), Color(0x24FFFFFF)])
+              : blobGradient,
+          child: illustration,
+        ),
+        Text(title,
+            textAlign: TextAlign.center,
+            style: BarqText.h1.copyWith(color: titleColor)),
+        const SizedBox(height: 8),
+        Text(message,
+            textAlign: TextAlign.center,
+            style: BarqText.body.copyWith(color: bodyColor)),
+        if (code != null) ...[
+          const SizedBox(height: 12),
+          Directionality(
+              textDirection: TextDirection.ltr,
+              child: BarqPill(code!,
+                  mono: true,
+                  tone:
+                      onOrange ? BarqPillTone.onOrange : BarqPillTone.white)),
         ],
-      ),
+      ],
     );
   }
 }

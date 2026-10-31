@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 
 import '../auth/auth_store.dart';
@@ -32,6 +34,11 @@ class ApiClient {
   final AuthStore _authStore;
   final String _appVersion;
   final String Function() _language;
+  final _systemErrors = StreamController<ApiException>.broadcast();
+
+  /// Fires for errors that stop the whole app (forced update, maintenance),
+  /// whichever screen made the request.
+  Stream<ApiException> get systemErrors => _systemErrors.stream;
 
   /// Current language code, used to keep one config cache per language.
   String get language => _language();
@@ -136,6 +143,9 @@ class ApiClient {
     } on DioException catch (e) {
       final exception = ApiException.fromDio(e);
       if (exception.status == 401) await _authStore.expireSession();
+      if (exception.isUpdateRequired || exception.isMaintenance) {
+        _systemErrors.add(exception);
+      }
       throw exception;
     }
   }
