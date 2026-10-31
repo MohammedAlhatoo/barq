@@ -1,0 +1,23 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+pubspec_overrides.yaml
+**/ios/Pods/
+**/ios/.symlinks/
+**/android/.gradle/
+**/android/local.properties
+**/android/app/debug/
+**/android/app/release/
+*.iml
+.idea/
+.vscode/
+# secrets — never commit
+*.env
+.env*
+**/postman/*environment*.json
+**/android/key.properties
+**/*.jks
+**/*.keystore
