@@ -2144,6 +2144,18 @@ abstract class AppLocalizations {
   /// **'مش لاقي {name}. يمكن بدك:'**
   String assistantNotFoundPick(String name);
 
+  /// No description provided for @assistantSoldByKilo.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} بتنباع بالكيلو، حطيتلك {qty, plural, =1{كيلو} =2{كيلوين} other{{qty} كيلو}}'**
+  String assistantSoldByKilo(String name, int qty);
+
+  /// No description provided for @assistantSoldByLiter.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} بتنباع باللتر، حطيتلك {qty, plural, =1{لتر} =2{لترين} other{{qty} لتر}}'**
+  String assistantSoldByLiter(String name, int qty);
+
   /// No description provided for @assistantRounded.
   ///
   /// In ar, this message translates to:

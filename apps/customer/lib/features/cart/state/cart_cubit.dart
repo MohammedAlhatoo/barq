@@ -128,22 +128,8 @@ class CartCubit extends Cubit<Cart> {
   void switchStore(BasketStore store) => fillFrom(store, state.lines);
 
   /// Replaces the cart with what [store] has of [wanted], at its prices.
-  void fillFrom(BasketStore store, List<CartLine> wanted) {
-    final lines = <CartLine>[];
-    for (final line in wanted) {
-      for (final offer in store.lines) {
-        if (offer.productId == line.productId && offer.available) {
-          lines.add(
-            line.copyWith(
-              productId: offer.storeProductId,
-              unitPrice: offer.unitPrice,
-            ),
-          );
-        }
-      }
-    }
-    emit(Cart(vendorId: store.vendorId, lines: lines));
-  }
+  void fillFrom(BasketStore store, List<CartLine> wanted) =>
+      emit(Cart(vendorId: store.vendorId, lines: store.linesFor(wanted)));
 
   /// Fills the cart again from an old order ("اطلب نفس السلة"). An order item
   /// has only a name and a quantity, and no reorder endpoint exists, so each

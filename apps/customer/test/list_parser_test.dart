@@ -182,6 +182,209 @@ void main() {
     });
   });
 
+  group('what was asked for is kept', () {
+    void expectWanted(String text, double amount, ItemMeasure measure) {
+      final wanted = ListParser.parse(text).single.wanted;
+      expect(wanted?.amount, closeTo(amount, 0.0001), reason: text);
+      expect(wanted?.measure, measure, reason: text);
+    }
+
+    test('نص كيلو', () {
+      _expect('نص كيلو بندورة', [('بندورة', 1, true)]);
+      expectWanted('نص كيلو بندورة', 0.5, ItemMeasure.weight);
+    });
+
+    test('كيلو ونص', () {
+      _expect('كيلو ونص بندورة', [('بندورة', 2, true)]);
+      expectWanted('كيلو ونص بندورة', 1.5, ItemMeasure.weight);
+    });
+
+    test('ربع', () {
+      _expect('ربع كيلو لبنة', [('لبنة', 1, true)]);
+      expectWanted('ربع كيلو لبنة', 0.25, ItemMeasure.weight);
+    });
+
+    test('كيلو وربع and two and a half', () {
+      expectWanted('كيلو وربع موز', 1.25, ItemMeasure.weight);
+      expectWanted('2 ونص كيلو موز', 2.5, ItemMeasure.weight);
+    });
+
+    test('litres and pieces', () {
+      expectWanted('لتر ونص حليب', 1.5, ItemMeasure.volume);
+      expectWanted('5 حبات خيار', 5, ItemMeasure.pieces);
+    });
+
+    test('a box has no measure', () {
+      expect(ListParser.parse('علبة لبنة').single.wanted, isNull);
+      expect(ListParser.parse('3 بيض').single.wanted, isNull);
+    });
+  });
+
+  group('the size in a product name', () {
+    void expectPack(String name, double? amount, [ItemMeasure? measure]) {
+      final pack = ListParser.packOf(name);
+      expect(pack?.amount, amount, reason: name);
+      expect(pack?.measure, measure, reason: name);
+    }
+
+    test('Arabic names', () {
+      expectPack('بندورة ١ كغ', 1, ItemMeasure.weight);
+      expectPack('لبنة ٥٠٠ غ', 0.5, ItemMeasure.weight);
+      expectPack('حليب ١ لتر', 1, ItemMeasure.volume);
+      expectPack('بيض (طبق ٣٠)', 30, ItemMeasure.pieces);
+      expectPack('خبز عربي (ربطة)', null);
+      expectPack('سائل جلي', null);
+    });
+
+    test('English names', () {
+      expectPack('Tomatoes 1 kg', 1, ItemMeasure.weight);
+      expectPack('Potatoes 1kg', 1, ItemMeasure.weight);
+      expectPack('Labneh 500g', 0.5, ItemMeasure.weight);
+      expectPack('Milk 1L', 1, ItemMeasure.volume);
+      expectPack('Eggs (tray of 30)', 30, ItemMeasure.pieces);
+      expectPack('Arabic Bread (bundle)', null);
+    });
+
+    test('a choice label', () {
+      expectPack('500 غ', 0.5, ItemMeasure.weight);
+      expectPack('نص كيلو', 0.5, ItemMeasure.weight);
+    });
+  });
+
+  group('English', () {
+    test('the example of the spec', () {
+      _expect('1 kg tomatoes, 2 kg potatoes and 1 liter milk', [
+        ('tomatoes', 1, false),
+        ('potatoes', 2, false),
+        ('milk', 1, false),
+      ]);
+    });
+
+    test('new lines and a comma before and', () {
+      _expect('bread\n2 milk, eggs, and rice', [
+        ('bread', 1, false),
+        ('milk', 2, false),
+        ('eggs', 1, false),
+        ('rice', 1, false),
+      ]);
+    });
+
+    test('every spelling of kilo and litre', () {
+      _expect('2 kilos of rice, 3 litres milk, 1 kilogram sugar, 2 l water', [
+        ('rice', 2, false),
+        ('milk', 3, false),
+        ('sugar', 1, false),
+        ('water', 2, false),
+      ]);
+    });
+
+    test('a number stuck to its unit', () {
+      _expect('2kg potatoes and 500g labneh', [
+        ('potatoes', 2, false),
+        ('labneh', 1, true),
+      ]);
+    });
+
+    test('half and quarter', () {
+      _expect('half a kilo of tomatoes and a quarter kg cheese', [
+        ('tomatoes', 1, true),
+        ('cheese', 1, true),
+      ]);
+    });
+
+    test('and a half stays with its amount', () {
+      _expect('1 and a half kg tomatoes and 1 kg potatoes', [
+        ('tomatoes', 2, true),
+        ('potatoes', 1, false),
+      ]);
+      _expect('a kilo and a half of rice', [('rice', 2, true)]);
+    });
+
+    test('pack, box and piece', () {
+      _expect('2 packs of labneh, a box of tea, 3 pieces cucumber', [
+        ('labneh', 2, false),
+        ('tea', 1, false),
+        ('cucumber', 3, false),
+      ]);
+    });
+
+    test('a dozen is twelve pieces', () {
+      _expect('a dozen eggs and half a dozen bananas', [
+        ('eggs', 12, false),
+        ('bananas', 6, false),
+      ]);
+      expect(
+        ListParser.parse('a dozen eggs').single.wanted?.measure,
+        ItemMeasure.pieces,
+      );
+    });
+
+    test('دزينة too', () {
+      _expect('دزينة بيض', [('بيض', 12, false)]);
+    });
+
+    test('number words and capitals', () {
+      _expect('Two KG Tomatoes and ONE Liter Milk', [
+        ('Tomatoes', 2, false),
+        ('Milk', 1, false),
+      ]);
+    });
+
+    test('the quantity after the name', () {
+      _expect('tomatoes 2 kg, milk x3', [
+        ('tomatoes', 2, false),
+        ('milk', 3, false),
+      ]);
+    });
+
+    test('request words', () {
+      _expect('please get me 2 kg of the tomatoes', [('tomatoes', 2, false)]);
+      _expect('I need some rice', [('rice', 1, false)]);
+    });
+
+    test('a letter that only looks like a quantity', () {
+      _expect('vitamin a', [('vitamin a', 1, false)]);
+    });
+
+    test('a word with a unit inside it stays whole', () {
+      _expect('2 canned beans', [('canned beans', 2, false)]);
+    });
+
+    test('a quantity with no product is dropped', () {
+      expect(ListParser.parse('2 kg'), isEmpty);
+      expect(ListParser.parse('and'), isEmpty);
+    });
+  });
+
+  group('mixed lists', () {
+    test('English units with Arabic names', () {
+      _expect('2 kg بندورة and 1 liter حليب', [
+        ('بندورة', 2, false),
+        ('حليب', 1, false),
+      ]);
+    });
+
+    test('Arabic units with English names', () {
+      _expect('كيلو tomatoes وكيلوين potatoes', [
+        ('tomatoes', 1, false),
+        ('potatoes', 2, false),
+      ]);
+    });
+
+    test('both ways of saying and in one list', () {
+      _expect('لتر حليب and 1 kg rice و نص كيلو خيار, eggs', [
+        ('حليب', 1, false),
+        ('rice', 1, false),
+        ('خيار', 1, true),
+        ('eggs', 1, false),
+      ]);
+    });
+
+    test('Arabic digits with English words', () {
+      _expect('٢ kg tomatoes', [('tomatoes', 2, false)]);
+    });
+  });
+
   group('words around the list', () {
     test('polite and request words', () {
       _expect('بدي كيلو بندورة لو سمحت', [('بندورة', 1, false)]);

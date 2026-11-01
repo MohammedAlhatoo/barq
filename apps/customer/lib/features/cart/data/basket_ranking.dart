@@ -45,15 +45,23 @@ class BasketRanking {
   }
 
   /// A failed quote only loses that store's total: the screen then shows its
-  /// items price.
+  /// items price. [wanted] carries quantities and choices that differ from the
+  /// comparison's own lines, which have no choices.
   Future<Map<int, Money>> quote(
     List<BasketStore> stores,
-    SavedAddress address,
-  ) async {
+    SavedAddress address, {
+    List<CartLine>? wanted,
+  }) async {
+    Future<Quote> quoteOf(BasketStore store) => wanted == null
+        ? _cart.quoteStore(store: store, addressId: address.id)
+        : _cart.quoteCart(
+            vendorId: store.vendorId,
+            lines: store.linesFor(wanted),
+            addressId: address.id,
+          );
     final answers = await Future.wait([
       for (final store in stores)
-        _cart
-            .quoteStore(store: store, addressId: address.id)
+        quoteOf(store)
             .then<Money?>((quote) => quote.total)
             .catchError((Object _) => null, test: (e) => e is ApiException),
     ]);

@@ -201,6 +201,17 @@ class BasketStore {
   int get availableCount => lines.where((line) => line.available).length;
   List<BasketLine> get missingLines =>
       lines.where((line) => !line.available).toList();
+
+  /// What this store has of [wanted], under its own ids and at its prices.
+  List<CartLine> linesFor(List<CartLine> wanted) => [
+    for (final line in wanted)
+      for (final offer in lines)
+        if (offer.productId == line.productId && offer.available)
+          line.copyWith(
+            productId: offer.storeProductId,
+            unitPrice: offer.unitPrice,
+          ),
+  ];
 }
 
 /// Answer of `POST /baskets/compare`.

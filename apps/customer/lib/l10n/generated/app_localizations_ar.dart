@@ -1147,6 +1147,30 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String assistantSoldByKilo(String name, int qty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      qty,
+      locale: localeName,
+      other: '$qty كيلو',
+      two: 'كيلوين',
+      one: 'كيلو',
+    );
+    return '$name بتنباع بالكيلو، حطيتلك $_temp0';
+  }
+
+  @override
+  String assistantSoldByLiter(String name, int qty) {
+    String _temp0 = intl.Intl.pluralLogic(
+      qty,
+      locale: localeName,
+      other: '$qty لتر',
+      two: 'لترين',
+      one: 'لتر',
+    );
+    return '$name بتنباع باللتر، حطيتلك $_temp0';
+  }
+
+  @override
   String assistantRounded(String name, int qty) {
     return 'قرّبت كمية $name لـ $qty، لأن الطلب بالأعداد الكاملة بس.';
   }

@@ -200,6 +200,16 @@ Future<void> _compare(WidgetTester tester, TestApp app, String list) async {
 
 const _list = 'كيلوين بندورة ولتر حليب';
 
+/// An open confirmation bubble: the product's name, and its quantity in a stepper.
+void _expectLine(WidgetTester tester, String name, int qty) {
+  final row = find.ancestor(of: find.text(name), matching: find.byType(Row));
+  final stepper = find.descendant(
+    of: row.first,
+    matching: find.byType(BarqQtyStepper),
+  );
+  expect(tester.widget<BarqQtyStepper>(stepper).value, qty, reason: name);
+}
+
 void main() {
   group('ProductMatcher', () {
     Product product(int id, String name, {bool inStock = true}) =>
@@ -288,8 +298,8 @@ void main() {
       await _send(tester, app, _list);
 
       expect(find.text(_list), findsOneWidget);
-      expect(find.text('بندورة ١ كغ × 2'), findsOneWidget);
-      expect(find.text('حليب ١ لتر × 1'), findsOneWidget);
+      _expectLine(tester, 'بندورة ١ كغ', 2);
+      _expectLine(tester, 'حليب ١ لتر', 1);
       expect(app.server.calls, isNot(contains('POST /baskets/compare')));
     });
 
@@ -297,21 +307,21 @@ void main() {
       final app = await _open(tester);
       await _send(tester, app, 'نص كيلو خيار');
 
-      expect(find.text('خيار ١ كغ × 1'), findsOneWidget);
-      expect(find.textContaining('قرّبت كمية خيار ١ كغ لـ 1'), findsOneWidget);
+      _expectLine(tester, 'خيار ١ كغ', 1);
+      expect(find.text('الخيار بتنباع بالكيلو، حطيتلك كيلو'), findsOneWidget);
     });
 
     testWidgets('another spelling still finds the product', (tester) async {
       final app = await _open(tester);
       await _send(tester, app, 'كيلو رز');
-      expect(find.text('أرز ١ كغ × 1'), findsOneWidget);
+      _expectLine(tester, 'أرز ١ كغ', 1);
     });
 
     testWidgets('says what it could not find', (tester) async {
       final app = await _open(tester);
       await _send(tester, app, 'لتر حليب وكيلو كمبيوتر');
 
-      expect(find.text('حليب ١ لتر × 1'), findsOneWidget);
+      _expectLine(tester, 'حليب ١ لتر', 1);
       expect(find.text('مش لاقي كمبيوتر'), findsOneWidget);
     });
 
@@ -330,7 +340,7 @@ void main() {
       expect(find.text('مش لاقي بندورة بلدية حمرا. يمكن بدك:'), findsOneWidget);
       await _tap(tester, app, 'بندورة ١ كغ');
 
-      expect(find.text('بندورة ١ كغ × 1'), findsOneWidget);
+      _expectLine(tester, 'بندورة ١ كغ', 1);
       expect(find.text('تمام، قارن المتاجر'), findsOneWidget);
     });
 
@@ -379,7 +389,7 @@ void main() {
 
       app.server.handlers['GET /products'] = working;
       await _tap(tester, app, 'إعادة المحاولة');
-      expect(find.text('حليب ١ لتر × 1'), findsOneWidget);
+      _expectLine(tester, 'حليب ١ لتر', 1);
     });
   });
 
@@ -582,13 +592,181 @@ void main() {
     });
   });
 
+  group('quantities', () {
+    Map<String, Object?> weights({bool required = true}) => {
+      'key': 'weight',
+      'label': 'الوزن',
+      'type': 'single',
+      'required': required,
+      'choices': [
+        {'key': 'half', 'label': '٥٠٠ غ', 'price': _money(0)},
+        {'key': 'kilo', 'label': '١ كغ', 'price': _money(300)},
+      ],
+    };
+
+    tearDown(() => _catalog.remove('جبنة'));
+
+    testWidgets('a choice that matches the weight is used', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [
+        _product(1, 'جبنة بيضاء', options: [weights()]),
+      ];
+      await _send(tester, app, 'نص كيلو جبنة');
+
+      _expectLine(tester, 'جبنة بيضاء · ٥٠٠ غ', 1);
+      expect(find.textContaining('بتنباع'), findsNothing);
+      await _tap(tester, app, 'تمام، قارن المتاجر');
+
+      final quote =
+          app.server.bodies['POST /orders/quote']! as Map<String, dynamic>;
+      expect((quote['cart'] as List).first, {
+        'product_id': (quote['vendor_id'] as int) * 100 + 1,
+        'qty': 1,
+        'options': {'weight': 'half'},
+      });
+      await _tap(tester, app, 'أكمل الطلب · 26.00 ₪');
+      expect(app.deps.cart.state.lines.first.options, {'weight': 'half'});
+      expect(app.deps.cart.state.lines.first.optionsLabel, '٥٠٠ غ');
+    });
+
+    testWidgets('a kilo and a half is three of 500 g', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [
+        _product(1, 'جبنة بيضاء', options: [weights()]),
+      ];
+      await _send(tester, app, 'كيلو ونص جبنة');
+      _expectLine(tester, 'جبنة بيضاء · ٥٠٠ غ', 3);
+    });
+
+    testWidgets('a required choice with no fit is not matched', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [
+        _product(1, 'جبنة بيضاء', options: [weights()]),
+      ];
+      await _send(tester, app, 'ربع كيلو جبنة');
+      expect(find.text('مش لاقي جبنة'), findsOneWidget);
+    });
+
+    testWidgets('an optional choice with no fit rounds up', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [
+        _product(1, 'جبنة ١ كغ', options: [weights(required: false)]),
+      ];
+      await _send(tester, app, 'ربع كيلو جبنة');
+      _expectLine(tester, 'جبنة ١ كغ', 1);
+      expect(find.text('الجبنة بتنباع بالكيلو، حطيتلك كيلو'), findsOneWidget);
+    });
+
+    testWidgets('كيلو ونص rounds up to the next kilo', (tester) async {
+      final app = await _open(tester);
+      await _send(tester, app, 'كيلو ونص بندورة');
+      _expectLine(tester, 'بندورة ١ كغ', 2);
+      expect(
+        find.text('البندورة بتنباع بالكيلو، حطيتلك كيلوين'),
+        findsOneWidget,
+      );
+    });
+
+    testWidgets('half a litre is sold by the litre', (tester) async {
+      final app = await _open(tester);
+      await _send(tester, app, 'نص لتر حليب');
+      expect(find.text('الحليب بتنباع باللتر، حطيتلك لتر'), findsOneWidget);
+    });
+
+    testWidgets('the pack in the name makes the amount exact', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [_product(1, 'جبنة ٥٠٠ غ')];
+      await _send(tester, app, 'كيلو جبنة');
+
+      _expectLine(tester, 'جبنة ٥٠٠ غ', 2);
+      expect(find.textContaining('قرّبت'), findsNothing);
+      expect(find.textContaining('بتنباع'), findsNothing);
+    });
+
+    testWidgets('a pack that is not a kilo is never called one', (
+      tester,
+    ) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [_product(1, 'جبنة ٥٠٠ غ')];
+      await _send(tester, app, 'كيلو ونص وربع جبنة');
+
+      expect(find.textContaining('بالكيلو'), findsNothing);
+    });
+
+    testWidgets('a tray of 30 covers a dozen', (tester) async {
+      final app = await _open(tester);
+      _catalog['جبنة'] = [_product(1, 'جبنة (طبق ٣٠)')];
+      await _send(tester, app, 'دزينة جبنة');
+
+      _expectLine(tester, 'جبنة (طبق ٣٠)', 1);
+      expect(find.textContaining('قرّبت كمية'), findsOneWidget);
+    });
+
+    testWidgets('quantities can be edited before comparing', (tester) async {
+      final app = await _open(tester);
+      await _send(tester, app, 'نص كيلو بندورة');
+      expect(find.textContaining('بتنباع'), findsOneWidget);
+
+      await tester.tap(
+        find
+            .descendant(
+              of: find.byType(BarqQtyStepper),
+              matching: find.byType(GestureDetector),
+            )
+            .first,
+      );
+      await app.settle(tester);
+
+      _expectLine(tester, 'بندورة ١ كغ', 2);
+      expect(find.textContaining('بتنباع'), findsNothing);
+      await _tap(tester, app, 'تمام، قارن المتاجر');
+      final body =
+          app.server.bodies['POST /baskets/compare']! as Map<String, dynamic>;
+      expect(body['cart'], [
+        {'product_id': 1, 'qty': 2},
+      ]);
+      // A sent list is only for reading.
+      expect(find.byType(BarqQtyStepper), findsNothing);
+      expect(find.text('بندورة ١ كغ × 2'), findsOneWidget);
+    });
+  });
+
+  group('English', () {
+    testWidgets('plurals search with the singular first', (tester) async {
+      expect(ProductMatcher.searchTerms('cucumbers').first, 'cucumber');
+      expect(ProductMatcher.searchTerms('tomatoes').first, 'tomato');
+      expect(ProductMatcher.searchTerms('Eggs').first, 'Egg');
+      expect(ProductMatcher.searchTerms('berries').first, 'berry');
+      expect(ProductMatcher.searchTerms('glass'), ['glass']);
+    });
+
+    testWidgets('replies follow the app language', (tester) async {
+      _catalog['tomato'] = [_product(21, 'Tomatoes 1 kg')];
+      _catalog['milk'] = [_product(22, 'Milk 1L')];
+      addTearDown(() {
+        _catalog.remove('tomato');
+        _catalog.remove('milk');
+      });
+      final app = await _open(tester, prefs: {'barq_language': 'en'});
+      await _send(tester, app, 'half a kilo of tomatoes and 2 liter milk');
+
+      _expectLine(tester, 'Tomatoes 1 kg', 1);
+      _expectLine(tester, 'Milk 1L', 2);
+      expect(find.text('Here is what I found:'), findsOneWidget);
+      expect(
+        find.text('tomatoes: sold by the kilo, so I added 1 kg.'),
+        findsOneWidget,
+      );
+    });
+  });
+
   group('suggestions', () {
     testWidgets('a preset runs as a list', (tester) async {
       final app = await _open(tester);
       await _tap(tester, app, 'خضار وفواكه');
 
-      expect(find.text('بندورة ١ كغ × 1'), findsOneWidget);
-      expect(find.text('خيار ١ كغ × 1'), findsOneWidget);
+      _expectLine(tester, 'بندورة ١ كغ', 1);
+      _expectLine(tester, 'خيار ١ كغ', 1);
     });
 
     testWidgets('اكتب قائمتك shows how to write it', (tester) async {
@@ -627,8 +805,8 @@ void main() {
       final app = await _open(tester, replies: replies);
       await _tap(tester, app, 'أعد آخر طلب');
 
-      expect(find.text('بندورة ١ كغ × 3'), findsOneWidget);
-      expect(find.text('حليب ١ لتر × 2'), findsOneWidget);
+      _expectLine(tester, 'بندورة ١ كغ', 3);
+      _expectLine(tester, 'حليب ١ لتر', 2);
     });
 
     testWidgets('no last order', (tester) async {

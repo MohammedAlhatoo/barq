@@ -206,7 +206,9 @@ class AssistantCubit extends Cubit<AssistantState> {
       for (final item in taken) {
         final found = await _matcher.find(item);
         matched.add(
-          found.qty > _cart.maxQty ? found.withQty(_cart.maxQty) : found,
+          found.qty > _cart.maxQty
+              ? found.withQty(_cart.maxQty, capped: true)
+              : found,
         );
       }
       _add(
@@ -236,15 +238,29 @@ class AssistantCubit extends Cubit<AssistantState> {
     );
   }
 
-  /// The list as the server wants it: each product once.
+  /// The customer changed a quantity in the confirmation bubble.
+  void changeQty(MatchedItem item, int qty) {
+    final message = state.messages.last;
+    if (message is! MatchesMessage || state.busy) return;
+    _replaceLast(
+      MatchesMessage(
+        items: [
+          for (final other in message.items)
+            identical(other, item) ? other.withQty(qty) : other,
+        ],
+        droppedCount: message.droppedCount,
+      ),
+    );
+  }
+
+  /// The list as the cart wants it: each product with each choice once.
   List<CartLine> _linesOf(List<MatchedItem> items) {
-    final lines = <int, CartLine>{};
+    final lines = <String, CartLine>{};
     for (final item in items) {
       final line = item.line;
       if (line == null) continue;
-      final known = lines[line.productId];
-      final qty = line.qty + (known?.qty ?? 0);
-      lines[line.productId] = line.copyWith(
+      final qty = line.qty + (lines[line.key]?.qty ?? 0);
+      lines[line.key] = line.copyWith(
         qty: qty > _cart.maxQty ? _cart.maxQty : qty,
       );
     }
@@ -307,7 +323,11 @@ class AssistantCubit extends Cubit<AssistantState> {
         .take(BasketRanking.comparedStores)
         .toList();
     final partial = _partialStores(comparison, distances, complete.length);
-    final totals = await _ranking.quote([...complete, ...partial], address);
+    final totals = await _ranking.quote(
+      [...complete, ...partial],
+      address,
+      wanted: _lines,
+    );
     return [
       for (final store in [
         ..._ranking.rank(complete, comparison.stores, totals),

@@ -9,6 +9,8 @@ import '../../../app/router.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../account/ui/widgets/address_picker_sheet.dart';
 import '../../cart/state/cart_cubit.dart';
+import '../data/assistant_models.dart';
+import '../data/quantity_fit.dart';
 import '../state/assistant_cubit.dart';
 import 'widgets/assistant_store_card.dart';
 
@@ -169,6 +171,26 @@ class _MatchesBubble extends StatelessWidget {
   final MatchesMessage message;
   final bool canAnswer;
 
+  /// "بندورة" reads as "البندورة" at the start of the Arabic sentence.
+  static String _subject(AppLocalizations l10n, String name) =>
+      l10n.localeName == 'ar' && RegExp(r'^[؀-ۿ]+$').hasMatch(name)
+      ? 'ال$name'
+      : name;
+
+  static String? _note(AppLocalizations l10n, MatchedItem item) =>
+      switch (item.note) {
+        QuantityNote.none => null,
+        QuantityNote.rounded => l10n.assistantRounded(item.title!, item.qty),
+        QuantityNote.soldByKilo => l10n.assistantSoldByKilo(
+          _subject(l10n, item.item.name),
+          item.qty,
+        ),
+        QuantityNote.soldByLiter => l10n.assistantSoldByLiter(
+          _subject(l10n, item.item.name),
+          item.qty,
+        ),
+      };
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -185,15 +207,36 @@ class _MatchesBubble extends StatelessWidget {
             style: BarqText.tBold,
           ),
           for (final item in found)
-            BarqMetaRow(
-              items: [
-                (
-                  icon: BarqIcons.check,
-                  text: l10n.assistantLine(item.product!.name, item.qty),
-                  iconColor: BarqColors.successText,
-                ),
-              ],
-            ),
+            if (canAnswer)
+              Row(
+                children: [
+                  Expanded(child: Text(item.title!, style: BarqText.t)),
+                  const SizedBox(width: BarqSpacing.sm),
+                  BarqQtyStepper(
+                    value: item.qty,
+                    min: 1,
+                    max: context.read<CartCubit>().maxQty,
+                    onChanged: (qty) => cubit.changeQty(item, qty),
+                  ),
+                ],
+              )
+            else
+              Row(
+                children: [
+                  const BarqIcon(
+                    BarqIcons.check,
+                    size: BarqSizes.iconS,
+                    color: BarqColors.successText,
+                  ),
+                  const SizedBox(width: BarqSpacing.xxs),
+                  Expanded(
+                    child: Text(
+                      l10n.assistantLine(item.title!, item.qty),
+                      style: BarqText.xs,
+                    ),
+                  ),
+                ],
+              ),
           for (final item in notFound) ...[
             Text(
               item.alternatives.isEmpty
@@ -217,15 +260,12 @@ class _MatchesBubble extends StatelessWidget {
               ),
           ],
           for (final item in found)
-            if (item.item.rounded)
-              Text(
-                l10n.assistantRounded(item.product!.name, item.qty),
-                style: BarqText.xs,
-              ),
+            if (_note(l10n, item) case final note?)
+              Text(note, style: BarqText.xs),
           for (final item in found)
             if (item.capped)
               Text(
-                l10n.assistantCapped(item.product!.name, item.qty),
+                l10n.assistantCapped(item.title!, item.qty),
                 style: BarqText.xs,
               ),
           if (message.droppedCount > 0)

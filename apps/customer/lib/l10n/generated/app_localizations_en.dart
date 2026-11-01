@@ -1117,7 +1117,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantHint =>
-      'Write each item with its quantity, like: 2 tomato, 1 milk';
+      'Write each item with its quantity, like: 1 kg tomatoes, 2 kg potatoes and 1 liter milk';
 
   @override
   String get assistantInputHint => 'Write your list here…';
@@ -1136,10 +1136,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantListVegetables =>
-      '1 tomato, 1 cucumber, 1 potato, 1 banana';
+      '1 kg tomatoes, 1 kg cucumbers, 1 kg potatoes, 1 kg bananas';
 
   @override
-  String get assistantListBreakfast => '1 bread, 1 eggs, 1 milk, 1 labneh';
+  String get assistantListBreakfast =>
+      '1 bundle bread, 1 tray eggs, 1 liter milk, 1 pack labneh';
 
   @override
   String get assistantFound => 'Here is what I found:';
@@ -1163,6 +1164,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String assistantSoldByKilo(String name, int qty) {
+    return '$name: sold by the kilo, so I added $qty kg.';
+  }
+
+  @override
+  String assistantSoldByLiter(String name, int qty) {
+    return '$name: sold by the liter, so I added $qty L.';
+  }
+
+  @override
   String assistantRounded(String name, int qty) {
     return 'I rounded $name up to $qty, as orders take whole numbers only.';
   }
@@ -1182,7 +1193,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantNotUnderstood =>
-      'I did not get that. Write your list like: 2 tomato, 1 milk';
+      'I did not get that. Write your list like: 1 kg tomatoes and 1 liter milk';
 
   @override
   String assistantBest(String store) {

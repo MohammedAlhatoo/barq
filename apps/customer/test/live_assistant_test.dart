@@ -50,14 +50,20 @@ void main() {
     );
 
     // The texts of the two preset chips, and the spellings the server misses.
-    for (final list in const [
-      'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز',
-      'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة',
-      'كيلو بندوره وكيلو رز ونص كيلو البطاطا',
-    ]) {
+    // Then English and mixed lists, with the quantities they must end up with.
+    const lists = {
+      'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز': [1, 1, 1, 1],
+      'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة': [1, 1, 1, 1],
+      'كيلو بندوره وكيلو رز ونص كيلو البطاطا': [1, 1, 1],
+      '1 kg tomatoes, 2 kg cucumbers and 1 liter milk': [1, 2, 1],
+      'كيلو لبنة and a dozen eggs': [2, 1],
+      'half a kilo of potatoes و 2 kg rice': [1, 2],
+    };
+    for (final MapEntry(key: list, value: quantities) in lists.entries) {
       final cubit = assistant();
       await cubit.send(list);
       final found = cubit.state.messages.last as MatchesMessage;
+      expect(found.items.map((item) => item.qty), quantities, reason: list);
       debugPrint(
         found.items
             .map((i) => '${i.item.name} → ${i.product?.name} × ${i.qty}')
