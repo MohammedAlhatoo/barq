@@ -1113,6 +1113,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get assistantChipBreakfast => 'طلبات الفطور';
 
   @override
+  String get assistantChipCooking => 'طبخة اليوم';
+
+  @override
   String get assistantChipReorder => 'أعد آخر طلب';
 
   @override
@@ -1120,10 +1123,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assistantListVegetables =>
-      'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز';
+      'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو تفاح وكيلو موز';
 
   @override
-  String get assistantListBreakfast => 'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة';
+  String get assistantListBreakfast =>
+      'ربطة خبز وطبق بيض وعلبة جبنة بيضاء وعلبة لبنة ولتر حليب وعلبة شاي';
+
+  @override
+  String get assistantListCooking =>
+      'كيلو دجاج وكيلو أرز وباكيت معكرونة ولتر زيت زيتون وكيلو عدس';
 
   @override
   String get assistantFound => 'هاد اللي لقيته:';

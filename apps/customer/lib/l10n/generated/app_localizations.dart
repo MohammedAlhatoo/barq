@@ -2090,6 +2090,12 @@ abstract class AppLocalizations {
   /// **'طلبات الفطور'**
   String get assistantChipBreakfast;
 
+  /// No description provided for @assistantChipCooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'طبخة اليوم'**
+  String get assistantChipCooking;
+
   /// No description provided for @assistantChipReorder.
   ///
   /// In ar, this message translates to:
@@ -2105,14 +2111,20 @@ abstract class AppLocalizations {
   /// No description provided for @assistantListVegetables.
   ///
   /// In ar, this message translates to:
-  /// **'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز'**
+  /// **'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو تفاح وكيلو موز'**
   String get assistantListVegetables;
 
   /// No description provided for @assistantListBreakfast.
   ///
   /// In ar, this message translates to:
-  /// **'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة'**
+  /// **'ربطة خبز وطبق بيض وعلبة جبنة بيضاء وعلبة لبنة ولتر حليب وعلبة شاي'**
   String get assistantListBreakfast;
+
+  /// No description provided for @assistantListCooking.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيلو دجاج وكيلو أرز وباكيت معكرونة ولتر زيت زيتون وكيلو عدس'**
+  String get assistantListCooking;
 
   /// No description provided for @assistantFound.
   ///

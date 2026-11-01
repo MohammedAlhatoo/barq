@@ -1,4 +1,6 @@
 import 'package:barq_customer/features/assistant/data/list_parser.dart';
+import 'package:barq_customer/l10n/generated/app_localizations_ar.dart';
+import 'package:barq_customer/l10n/generated/app_localizations_en.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void _expect(String text, List<(String, int, bool)> expected) {
@@ -11,6 +13,64 @@ void _expect(String text, List<(String, int, bool)> expected) {
 }
 
 void main() {
+  group('presets of the assistant', () {
+    final ar = AppLocalizationsAr();
+    final en = AppLocalizationsEn();
+
+    test('خضار وفواكه', () {
+      _expect(ar.assistantListVegetables, [
+        ('بندورة', 1, false),
+        ('خيار', 1, false),
+        ('بطاطا', 1, false),
+        ('تفاح', 1, false),
+        ('موز', 1, false),
+      ]);
+      _expect(en.assistantListVegetables, [
+        ('tomatoes', 1, false),
+        ('cucumbers', 1, false),
+        ('potatoes', 1, false),
+        ('apples', 1, false),
+        ('bananas', 1, false),
+      ]);
+    });
+
+    test('طلبات الفطور', () {
+      _expect(ar.assistantListBreakfast, [
+        ('خبز', 1, false),
+        ('بيض', 1, false),
+        ('جبنة بيضاء', 1, false),
+        ('لبنة', 1, false),
+        ('حليب', 1, false),
+        ('شاي', 1, false),
+      ]);
+      _expect(en.assistantListBreakfast, [
+        ('bread', 1, false),
+        ('eggs', 1, false),
+        ('white cheese', 1, false),
+        ('labneh', 1, false),
+        ('milk', 1, false),
+        ('tea', 1, false),
+      ]);
+    });
+
+    test('طبخة اليوم', () {
+      _expect(ar.assistantListCooking, [
+        ('دجاج', 1, false),
+        ('أرز', 1, false),
+        ('معكرونة', 1, false),
+        ('زيت زيتون', 1, false),
+        ('عدس', 1, false),
+      ]);
+      _expect(en.assistantListCooking, [
+        ('chicken', 1, false),
+        ('rice', 1, false),
+        ('pasta', 1, false),
+        ('olive oil', 1, false),
+        ('lentils', 1, false),
+      ]);
+    });
+  });
+
   group('splitting', () {
     test('the example of the spec', () {
       _expect('كيلو بندورة وكيلو بطاطا وكيلو خيار ولتر حليب', [

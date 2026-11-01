@@ -289,6 +289,7 @@ void main() {
       for (final chip in const [
         'خضار وفواكه',
         'طلبات الفطور',
+        'طبخة اليوم',
         'أعد آخر طلب',
         'اكتب قائمتك',
       ]) {
@@ -785,6 +786,58 @@ void main() {
       _expectLine(tester, 'بندورة ١ كغ', 1);
       _expectLine(tester, 'خيار ١ كغ', 1);
     });
+
+    const presets = {
+      'خضار وفواكه': [
+        'بندورة ١ كغ',
+        'خيار ١ كغ',
+        'بطاطا ١ كغ',
+        'تفاح ١ كغ',
+        'موز ١ كغ',
+      ],
+      'طلبات الفطور': [
+        'خبز عربي (ربطة)',
+        'بيض (طبق ٣٠)',
+        'جبنة بيضاء ٥٠٠ غ',
+        'لبنة ٥٠٠ غ',
+        'حليب ١ لتر',
+        'شاي ١٠٠ غ',
+      ],
+      'طبخة اليوم': [
+        'دجاج ١ كغ',
+        'أرز ١ كغ',
+        'معكرونة ٥٠٠ غ',
+        'زيت زيتون ١ لتر',
+        'عدس ١ كغ',
+      ],
+    };
+    for (final MapEntry(key: chip, value: products) in presets.entries) {
+      testWidgets('$chip finds one of everything', (tester) async {
+        final extra = {
+          'بطاطا': [_product(20, 'بطاطا ١ كغ')],
+          'تفاح': [_product(21, 'تفاح ١ كغ')],
+          'موز': [_product(22, 'موز ١ كغ')],
+          'خبز': [_product(23, 'خبز عربي (ربطة)')],
+          'بيض': [_product(24, 'بيض (طبق ٣٠)')],
+          'جبنة بيضاء': [_product(25, 'جبنة بيضاء ٥٠٠ غ')],
+          'لبنة': [_product(26, 'لبنة ٥٠٠ غ')],
+          'شاي': [_product(27, 'شاي ١٠٠ غ')],
+          'دجاج': [_product(28, 'دجاج ١ كغ')],
+          'معكرونة': [_product(29, 'معكرونة ٥٠٠ غ')],
+          'زيت زيتون': [_product(34, 'زيت زيتون ١ لتر')],
+          'عدس': [_product(35, 'عدس ١ كغ')],
+        };
+        _catalog.addAll(extra);
+        addTearDown(() => extra.keys.forEach(_catalog.remove));
+
+        final app = await _open(tester);
+        await _tap(tester, app, chip);
+
+        for (final product in products) {
+          _expectLine(tester, product, 1);
+        }
+      });
+    }
 
     testWidgets('اكتب قائمتك shows how to write it', (tester) async {
       final app = await _open(tester);

@@ -1129,6 +1129,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantChipBreakfast => 'Breakfast';
 
   @override
+  String get assistantChipCooking => 'Today\'s cooking';
+
+  @override
   String get assistantChipReorder => 'Repeat my last order';
 
   @override
@@ -1136,11 +1139,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantListVegetables =>
-      '1 kg tomatoes, 1 kg cucumbers, 1 kg potatoes, 1 kg bananas';
+      '1 kg tomatoes, 1 kg cucumbers, 1 kg potatoes, 1 kg apples, 1 kg bananas';
 
   @override
   String get assistantListBreakfast =>
-      '1 bundle bread, 1 tray eggs, 1 liter milk, 1 pack labneh';
+      '1 bundle bread, 1 tray eggs, 1 pack white cheese, 1 pack labneh, 1 liter milk, 1 pack tea';
+
+  @override
+  String get assistantListCooking =>
+      '1 kg chicken, 1 kg rice, 1 pack pasta, 1 liter olive oil, 1 kg lentils';
 
   @override
   String get assistantFound => 'Here is what I found:';

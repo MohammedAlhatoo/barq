@@ -86,6 +86,10 @@ class _AssistantScreenState extends State<AssistantScreen> {
                     onTap: () => cubit.send(l10n.assistantListBreakfast),
                   ),
                   _SuggestionChip(
+                    label: l10n.assistantChipCooking,
+                    onTap: () => cubit.send(l10n.assistantListCooking),
+                  ),
+                  _SuggestionChip(
                     label: l10n.assistantChipReorder,
                     onTap: () => cubit.reorderLast(l10n.assistantChipReorder),
                   ),
