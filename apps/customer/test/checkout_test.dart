@@ -192,6 +192,17 @@ final _cart = jsonEncode({
   ],
 });
 
+Map<String, Object?> _summary() => {
+  'id': 55,
+  'code': 'BR-000055',
+  'status': _order()['status'],
+  'created_at': '2026-10-31T10:00:00+00:00',
+  'completed_at': null,
+  'items_count': 1,
+  'total': _money(10000),
+  'rated': false,
+};
+
 Map<String, Reply> _server({
   List<Object> addresses = const [_address, _work],
   Reply? quote,
@@ -534,6 +545,43 @@ void main() {
       await _confirm(tester, app);
       expect(app.server.headers['POST /orders']!['Idempotency-Key'], key);
       expect(find.byType(OrderWaitingScreen), findsOneWidget);
+    });
+
+    _test('tells the order lists that a new order exists', (tester) async {
+      final app = await _open(tester, Routes.checkout);
+      var changes = 0;
+      final subscription = app.deps.ordersRepository.changes.listen(
+        (_) => changes++,
+      );
+      addTearDown(subscription.cancel);
+
+      app.server.replies['POST /orders'] = const Reply(
+        null,
+        status: 422,
+        error: 'vendor_closed',
+      );
+      await _confirm(tester, app);
+      expect(changes, 0);
+
+      app.server.replies['POST /orders'] = Reply(_order(), status: 201);
+      await _confirm(tester, app);
+      expect(changes, 1);
+    });
+
+    _test('the new order is on the home bar', (tester) async {
+      final app = await _open(tester, Routes.checkout);
+      app.server.replies['GET /orders'] = Reply(
+        [_summary()],
+        meta: const {'page': 1, 'per_page': 15, 'total': 1, 'last_page': 1},
+      );
+      await _confirm(tester, app);
+
+      GoRouter.of(tester.element(find.byType(OrderWaitingScreen)))
+          .go(Routes.home);
+      await app.settle(tester);
+
+      expect(find.byType(BarqActiveOrderBar), findsOneWidget);
+      expect(find.text('BR-000055'), findsOneWidget);
     });
 
     _test('a refused order takes a new key the next time', (tester) async {

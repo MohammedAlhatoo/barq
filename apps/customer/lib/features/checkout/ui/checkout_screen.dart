@@ -63,7 +63,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final id = state.placedOrderId;
     final repricing = state.repricing;
     if (id != null) {
-      context.read<AppDependencies>().accountRepository.orderPlaced();
+      final deps = context.read<AppDependencies>();
+      deps.accountRepository.orderPlaced();
+      deps.ordersRepository.ordersChanged();
       context.go(Routes.orderOf(id));
     } else if (repricing != null) {
       _showExpired(repricing);
