@@ -4,9 +4,13 @@ import 'package:barq_core/barq_core.dart';
 import 'package:barq_customer/features/assistant/state/assistant_cubit.dart';
 import 'package:barq_customer/features/auth/data/auth_repository.dart';
 import 'package:barq_customer/features/auth/data/phone_number.dart';
+import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_repository.dart';
+import 'package:barq_customer/features/browse/data/user_location.dart';
+import 'package:barq_customer/features/browse/state/search_cubit.dart';
 import 'package:barq_customer/features/cart/data/cart_repository.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
+import 'package:barq_customer/features/cart/state/shop_scope_cubit.dart';
 import 'package:barq_customer/features/orders/data/orders_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,6 +24,33 @@ const _sandboxCode = '1234';
 bool get _hasSandboxKey => BarqEnv.projectKey.startsWith('pk_test_');
 
 void main() {
+  test('the normal search finds other spellings on the sandbox', () async {
+    FlutterSecureStorage.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
+    final browse = ApiBrowseRepository(api);
+    final config = ConfigStore(api: api, app: BarqAppKind.customer);
+    final cart = CartCubit(prefs: prefs, config: config, browse: browse);
+    final cubit = SearchCubit(
+      browse,
+      prefs,
+      UserLocation(browse, GeolocatorLocationRepository()),
+      ShopScopeCubit(cart: cart, browse: browse),
+    );
+    for (final word in const ['بندوره', 'البندورة', 'ارز', 'cucumbers']) {
+      await cubit.search(word);
+      debugPrint('$word → ${cubit.state.total} results');
+      expect(cubit.state.items, isNotEmpty, reason: word);
+    }
+    // `q` stays the spelling that worked, or page 2 would be empty.
+    await cubit.search('cucumbers');
+    expect(cubit.state.total, greaterThan(20));
+    expect(cubit.state.nextPage, 2);
+    await cubit.loadMore();
+    expect(cubit.state.items.length, cubit.state.total);
+  }, skip: _hasSandboxKey ? false : 'needs a pk_test key');
+
   test('a list reaches the stores on the sandbox', () async {
     FlutterSecureStorage.setMockInitialValues({});
     SharedPreferences.setMockInitialValues({});

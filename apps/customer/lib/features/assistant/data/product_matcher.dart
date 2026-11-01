@@ -12,6 +12,10 @@ class ProductMatcher {
   static const _maxQuery = 60;
   static const _maxAlternatives = 3;
 
+  /// Cutting the last letter of "ه" would leave an empty `q`, which is the
+  /// whole catalog.
+  static const _shortestStem = 2;
+
   /// Other names people use for the same thing.
   static const _sameThing = {
     'طماطم': 'بندورة',
@@ -62,12 +66,19 @@ class ProductMatcher {
     final singular = _singular(name);
     // "cucumbers" misses the stores that sell "Cucumber 1kg", and the singular
     // is found inside both.
-    final terms = <String>{?singular, name, ?_sameThing[name]};
-    if (name.endsWith('ه')) terms.add('${_withoutLast(name)}ة');
-    if (name.endsWith('ا')) terms.add('${_withoutLast(name)}ة');
-    if (name.startsWith('ا')) terms.add('أ${name.substring(1)}');
-    // One "موزة" is sold as "موز".
-    if (name.endsWith('ة') || name.endsWith('ه')) terms.add(_withoutLast(name));
+    final terms = <String>{?singular, name};
+    // A name may really start with "ال", so it is tried as typed first.
+    final word = name.startsWith('ال') && name.length > 3
+        ? name.substring(2)
+        : name;
+    terms.addAll({word, ?_sameThing[word]});
+    final stem = _withoutLast(word);
+    if (stem.length >= _shortestStem) {
+      if (word.endsWith('ه') || word.endsWith('ا')) terms.add('$stemة');
+      // One "موزة" is sold as "موز".
+      if (word.endsWith('ة') || word.endsWith('ه')) terms.add(stem);
+    }
+    if (word.startsWith('ا')) terms.add('أ${word.substring(1)}');
     return terms.toList();
   }
 

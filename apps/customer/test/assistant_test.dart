@@ -253,6 +253,23 @@ void main() {
       expect(ProductMatcher.searchTerms('موزة'), contains('موز'));
       expect(ProductMatcher.searchTerms('حليب'), ['حليب']);
     });
+
+    test('ال is tried as typed, then without it', () {
+      expect(ProductMatcher.searchTerms('البندورة').take(2), [
+        'البندورة',
+        'بندورة',
+      ]);
+      expect(ProductMatcher.searchTerms('البندوره'), contains('بندورة'));
+      expect(ProductMatcher.searchTerms('الرز'), contains('أرز'));
+      expect(ProductMatcher.searchTerms('الأرز'), contains('أرز'));
+      expect(ProductMatcher.searchTerms('الو'), ['الو', 'ألو']);
+    });
+
+    test('a term is never empty, which would be the whole catalog', () {
+      for (final name in const ['ه', 'ة', 'ا', 'ال', 's', 'مه', 'با']) {
+        expect(ProductMatcher.searchTerms(name), isNot(contains('')));
+      }
+    });
   });
 
   group('home', () {

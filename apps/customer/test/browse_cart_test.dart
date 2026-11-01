@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:barq_customer/app/router.dart';
 import 'package:barq_customer/features/auth/data/location_repository.dart';
 import 'package:barq_customer/features/browse/data/browse_models.dart';
+import 'package:barq_customer/features/browse/state/search_cubit.dart';
+import 'package:barq_customer/features/browse/ui/search_screen.dart';
 import 'package:barq_customer/features/browse/ui/widgets/product_art.dart';
 import 'package:barq_customer/features/cart/data/cart_models.dart';
 import 'package:barq_customer/features/cart/state/cart_cubit.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 
@@ -373,6 +378,130 @@ void main() {
       await tester.testTextInput.receiveAction(TextInputAction.search);
       await app.settle(tester);
       expect(app.deps.prefs.getStringList('barq_recent_searches'), ['بندورة']);
+    });
+
+    group('search spellings', () {
+      /// Plays the exact search of the server: only these words find anything.
+      /// Every word has a second page.
+      Future<TestApp> openSearch(
+        WidgetTester tester, {
+        Map<String, List<Object>> found = const {
+          'بندورة': ['بندورة ١ كغ'],
+          'cucumber': ['Cucumber 1kg'],
+          'خبز': ['خبز عربي'],
+        },
+      }) async {
+        final app = await _open(tester);
+        await _go(tester, app, Routes.search);
+        final server = app.server;
+        server.handlers['GET /products'] = (_) {
+          final query = server.queries['GET /products']!;
+          final names = found[query['q']] ?? const <Object>[];
+          if ('${query['page']}' == '2') {
+            return Reply(
+              [_product(50, '${query['q']} صفحة 2')],
+              meta: const {
+                'page': 2,
+                'per_page': 20,
+                'last_page': 2,
+                'total': 2,
+              },
+            );
+          }
+          return Reply(
+            [
+              for (final (index, name) in names.indexed)
+                _product(40 + index, '$name'),
+            ],
+            meta: const {'page': 1, 'per_page': 20, 'last_page': 2, 'total': 2},
+          );
+        };
+        return app;
+      }
+
+      for (final (typed, product) in const [
+        ('بندوره', 'بندورة ١ كغ'),
+        ('البندورة', 'بندورة ١ كغ'),
+        ('البندوره', 'بندورة ١ كغ'),
+        ('cucumbers', 'Cucumber 1kg'),
+        ('الخبز', 'خبز عربي'),
+      ]) {
+        testWidgets('"$typed" finds the product', (tester) async {
+          final app = await openSearch(tester);
+          await tester.enterText(find.byType(TextField), typed);
+          await app.settle(tester);
+
+          expect(find.text(product), findsOneWidget);
+          expect(find.text('لا نتائج'), findsNothing);
+        });
+      }
+
+      testWidgets('a word that finds products sends one request', (
+        tester,
+      ) async {
+        final app = await openSearch(tester);
+        final before = app.server.calls.length;
+        await tester.enterText(find.byType(TextField), 'بندورة');
+        await app.settle(tester);
+        expect(
+          app.server.calls.skip(before).where((c) => c == 'GET /products'),
+          hasLength(1),
+        );
+      });
+
+      testWidgets('the next page uses the spelling that worked', (
+        tester,
+      ) async {
+        final app = await openSearch(tester);
+        await tester.enterText(find.byType(TextField), 'بندوره');
+        await app.settle(tester);
+        expect(app.server.queries['GET /products']!['q'], 'بندورة');
+
+        // Not awaited: the request needs real time, which settle gives it.
+        unawaited(
+          tester
+              .element(find.byType(SearchScreen))
+              .read<SearchCubit>()
+              .loadMore(),
+        );
+        await app.settle(tester);
+
+        final last = app.server.queries['GET /products']!;
+        expect('${last['page']}', '2');
+        expect(last['q'], 'بندورة');
+      });
+
+      testWidgets('what was typed stays what was typed', (tester) async {
+        final app = await openSearch(tester);
+        await tester.enterText(find.byType(TextField), 'بندوره');
+        await app.settle(tester);
+        await tester.testTextInput.receiveAction(TextInputAction.search);
+        await app.settle(tester);
+
+        expect(app.deps.prefs.getStringList('barq_recent_searches'), [
+          'بندوره',
+        ]);
+      });
+
+      testWidgets('a single letter never asks for the whole catalog', (
+        tester,
+      ) async {
+        final app = await openSearch(tester);
+        await tester.enterText(find.byType(TextField), 'ه');
+        await app.settle(tester);
+
+        expect(app.server.queries['GET /products']!['q'], isNotEmpty);
+        expect(find.text('لا نتائج'), findsOneWidget);
+      });
+
+      testWidgets('a word with no spelling that works has no results', (
+        tester,
+      ) async {
+        final app = await openSearch(tester);
+        await tester.enterText(find.byType(TextField), 'كمبيوتر');
+        await app.settle(tester);
+        expect(find.text('لا نتائج'), findsOneWidget);
+      });
     });
 
     testWidgets('search has a no-results state', (tester) async {

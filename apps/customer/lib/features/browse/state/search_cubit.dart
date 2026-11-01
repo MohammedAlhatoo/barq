@@ -4,6 +4,7 @@ import 'package:barq_core/barq_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../assistant/data/product_matcher.dart';
 import '../../cart/state/shop_scope_cubit.dart';
 import '../data/browse_models.dart';
 import '../data/browse_repository.dart';
@@ -92,6 +93,9 @@ class SearchCubit extends Cubit<SearchState> {
   /// Answers of an older word are ignored.
   int _request = 0;
 
+  /// The spelling that gave the results: the next pages must use it too.
+  String? _term;
+
   Future<void> loadVendors() async {
     try {
       final location = await _location.current();
@@ -139,11 +143,8 @@ class SearchCubit extends Cubit<SearchState> {
       ),
     );
     try {
-      final page = await _repository.products(
-        query: query,
-        vendorId: _vendorId,
-      );
-      if (request != _request || isClosed) return;
+      final page = await _firstFound(query, request);
+      if (page == null) return;
       emit(
         state.copyWith(
           loading: false,
@@ -158,6 +159,19 @@ class SearchCubit extends Cubit<SearchState> {
     }
   }
 
+  /// The server looks for the exact text, so other spellings of [query] are
+  /// tried until one finds something. Null if a newer word took over.
+  Future<Paged<Product>?> _firstFound(String query, int request) async {
+    late Paged<Product> page;
+    for (final term in ProductMatcher.searchTerms(query)) {
+      page = await _repository.products(query: term, vendorId: _vendorId);
+      if (request != _request || isClosed) return null;
+      _term = term;
+      if (page.items.isNotEmpty) break;
+    }
+    return page;
+  }
+
   Future<void> loadMore() async {
     final next = state.nextPage;
     if (next == null || state.loadingMore || state.loading) return;
@@ -165,7 +179,7 @@ class SearchCubit extends Cubit<SearchState> {
     emit(state.copyWith(nextPage: next, loadingMore: true));
     try {
       final page = await _repository.products(
-        query: state.query,
+        query: _term,
         vendorId: _vendorId,
         page: next,
       );
