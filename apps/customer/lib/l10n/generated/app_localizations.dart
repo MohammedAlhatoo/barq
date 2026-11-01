@@ -2233,6 +2233,24 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'استبدال السلة'**
   String get assistantReplaceConfirm;
+
+  /// No description provided for @activeOrderOffer.
+  ///
+  /// In ar, this message translates to:
+  /// **'وصلك عرض السعر'**
+  String get activeOrderOffer;
+
+  /// No description provided for @activeOrderTracking.
+  ///
+  /// In ar, this message translates to:
+  /// **'تابع طلبك على الخريطة'**
+  String get activeOrderTracking;
+
+  /// No description provided for @activeOrderWaiting.
+  ///
+  /// In ar, this message translates to:
+  /// **'رح نخبرك بكل جديد'**
+  String get activeOrderWaiting;
 }
 
 class _AppLocalizationsDelegate

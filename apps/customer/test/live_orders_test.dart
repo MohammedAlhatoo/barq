@@ -97,6 +97,12 @@ void main() {
 
       await offers.advanceInSandbox(id);
       final offer = (await offers.offer(id))!;
+      expect(offer.isOpen, isTrue);
+      final priced = await orders.orders(scope: 'active');
+      expect(
+        priced.items.firstWhere((o) => o.id == id).statusKey,
+        OrderTimelines.offerWaiting,
+      );
       await offers.approve(
         id,
         offerId: offer.id,

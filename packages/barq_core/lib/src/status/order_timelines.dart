@@ -3,6 +3,11 @@
 /// The only place status keys may be written in code (AGENTS.md rule 4).
 /// Labels and colors still come from the server config.
 abstract final class OrderTimelines {
+  /// The order has a price offer. A row of `GET /orders` has no
+  /// `available_actions`, so this is the only sign in the list; the offer
+  /// itself says whether it is still open.
+  static const offerWaiting = 'priced';
+
   /// Customer waiting screen, `04_order_status_01`.
   static const waiting = [
     'awaiting_vendor',

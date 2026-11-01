@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/router.dart';
 import '../../notifications/state/unread_cubit.dart';
+import '../../orders/state/active_order_cubit.dart';
+import '../../orders/ui/widgets/active_order_bar.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../data/browse_models.dart';
 import '../state/home_cubit.dart';
@@ -22,9 +24,24 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasActiveOrder = context.select<ActiveOrderCubit, bool>(
+      (cubit) => cubit.state.order != null,
+    );
     return DesignOverlay(
       image: 'design/02_browse_01.png',
       child: BarqScreen(
+        floating: [
+          Positioned(
+            left: BarqSpacing.page,
+            right: BarqSpacing.page,
+            // The cart button stands above the nav bar's clearance.
+            bottom:
+                BarqSpacing.navClearance +
+                BarqSpacing.sm +
+                MediaQuery.paddingOf(context).bottom,
+            child: const ActiveOrderBar(),
+          ),
+        ],
         body: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             final l10n = AppLocalizations.of(context);
@@ -46,7 +63,18 @@ class HomeScreen extends StatelessWidget {
                 SliverToBoxAdapter(child: _HomeHeader(name: state.name)),
                 const SliverToBoxAdapter(child: ShopScopeBar()),
                 if (message != null)
-                  SliverFillRemaining(hasScrollBody: false, child: message)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    // Keeps a retry button out from under the order bar.
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: hasActiveOrder
+                            ? BarqSpacing.activeOrderClearance
+                            : 0,
+                      ),
+                      child: message,
+                    ),
+                  )
                 else ...[
                   SliverToBoxAdapter(
                     child: Padding(
@@ -89,8 +117,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ],
-                  const SliverPadding(
-                    padding: EdgeInsets.only(bottom: BarqSpacing.navClearance),
+                  SliverPadding(
+                    padding: EdgeInsets.only(
+                      bottom: hasActiveOrder
+                          ? BarqSpacing.activeOrderClearance
+                          : BarqSpacing.navClearance,
+                    ),
                   ),
                 ],
               ],

@@ -422,5 +422,8 @@
   "assistantNoLastOrder": "You have no orders yet. Write your list to start.",
   "assistantReplaceTitle": "Replace your cart?",
   "assistantReplaceBody": "Your current cart is removed and this list takes its place.",
-  "assistantReplaceConfirm": "Replace cart"
+  "assistantReplaceConfirm": "Replace cart",
+  "activeOrderOffer": "Your price offer is here",
+  "activeOrderTracking": "Follow your order on the map",
+  "activeOrderWaiting": "We'll keep you posted"
 }

@@ -522,6 +522,15 @@ class _BarqGalleryState extends State<BarqGallery> {
                         onAction: () {},
                       ),
                       label('BarqScopeBar'),
+                      BarqActiveOrderBar(
+                        code: 'BR-000007',
+                        hint: 'وصلك عرض السعر',
+                        status: const BarqPill('تم التسعير'),
+                        more: 2,
+                        highlighted: true,
+                        onTap: () {},
+                      ),
+                      label('BarqActiveOrderBar'),
                       SizedBox(
                         width: BarqSizes.homeVendorCard,
                         height: BarqSizes.homeVendorCardHeight,

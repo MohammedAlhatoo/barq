@@ -109,6 +109,7 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | رسمة انتهاء عرض السعر | `BarqOfferExpiredArt(label)` |
 | رسمة انتظار المتجر · رسمة تم التوصيل · نقطة غير مقروء | `BarqWaitingArt` · `BarqDeliveredArt` · `BarqUnreadDot` |
 | شريط «تتسوّق من» فوق القوائم | `BarqScopeBar(text, action, onAction)` |
+| كرت الطلب الجاري فوق شريط التنقل | `BarqActiveOrderBar(code, hint, status, more, highlighted, onTap)` |
 | كرت متجر أفقي · صف متجر بقائمة | `BarqVendorCard(logo, name, meta)` · `BarqVendorRow(logo, name, subtitle, meta, trailing)` |
 | `.tg` / `.rad` / مربع الاختيار | `BarqToggle` / `BarqRadio` / `BarqCheckbox` |
 | `.pc` + `.gls` كرت المنتج | `BarqProductTile(name, price, compareAtPrice, vendorName, vendorMuted, badge, soldOut, tile)` |

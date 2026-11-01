@@ -225,6 +225,7 @@ abstract final class BarqSpacing {
 
   /// Bottom padding of lists, so nothing hides behind what floats over them.
   static const navClearance = 130.0;
+  static const activeOrderClearance = 225.0;
   static const cartBarClearance = 110.0;
   static const cartSheetClearance = 230.0;
 }
@@ -242,6 +243,7 @@ abstract final class BarqSizes {
   static const plusSmall = 36.0;
   static const qtyButton = 32.0;
   static const navBar = 96.0;
+  static const activeOrderStatus = 100.0;
   static const fab = 66.0;
   static const mapPin = 52.0;
   static const otpWidth = 62.0;

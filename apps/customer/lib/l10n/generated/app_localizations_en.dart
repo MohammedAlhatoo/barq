@@ -1226,4 +1226,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantReplaceConfirm => 'Replace cart';
+
+  @override
+  String get activeOrderOffer => 'Your price offer is here';
+
+  @override
+  String get activeOrderTracking => 'Follow your order on the map';
+
+  @override
+  String get activeOrderWaiting => 'We\'ll keep you posted';
 }

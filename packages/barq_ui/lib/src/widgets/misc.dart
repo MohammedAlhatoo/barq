@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../foundation/barq_asset_names.dart';
 import '../foundation/barq_assets.dart';
 import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
@@ -853,6 +854,81 @@ class BarqScopeBar extends StatelessWidget {
           ),
           Text(' · ', style: BarqText.t.copyWith(color: p.textMuted)),
           BarqLink(action, onPressed: onAction),
+        ],
+      ),
+    );
+  }
+}
+
+/// Card floating above the nav bar: the customer's running order, its status
+/// and a short hint. [highlighted] marks something waiting for the customer.
+class BarqActiveOrderBar extends StatelessWidget {
+  const BarqActiveOrderBar(
+      {super.key,
+      required this.code,
+      required this.hint,
+      required this.status,
+      this.more = 0,
+      this.highlighted = false,
+      this.onTap});
+
+  final String code;
+  final String hint;
+
+  /// The status pill. barq_ui knows nothing about order statuses.
+  final Widget status;
+
+  /// How many other orders are running, shown as "+N". 0 = hidden.
+  final int more;
+  final bool highlighted;
+  final VoidCallback? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = BarqPalette.of(context);
+    return BarqCard(
+      onTap: onTap,
+      borderColor: highlighted ? BarqColors.primary : BarqColors.primaryBorder,
+      padding: const EdgeInsets.all(BarqSpacing.gap),
+      child: Row(
+        children: [
+          BarqIconTile(highlighted ? BarqIcons.bell : BarqIcons.receipt),
+          const SizedBox(width: BarqSpacing.gap),
+          Expanded(
+            child: BarqGap(
+              gap: 0,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(code,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BarqText.h3.copyWith(color: p.text)),
+                Text(hint,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: highlighted
+                        ? BarqText.xs.copyWith(
+                            color: BarqColors.primary,
+                            fontWeight: FontWeight.w700)
+                        : BarqText.xs),
+              ],
+            ),
+          ),
+          const SizedBox(width: BarqSpacing.sm),
+          // The server writes the status, so its length is unknown.
+          ConstrainedBox(
+            constraints:
+                const BoxConstraints(maxWidth: BarqSizes.activeOrderStatus),
+            child: FittedBox(fit: BoxFit.scaleDown, child: status),
+          ),
+          if (more > 0) ...[
+            const SizedBox(width: BarqSpacing.xs),
+            // Without this, RTL text would draw it as "2+".
+            Directionality(
+              textDirection: TextDirection.ltr,
+              child: BarqPill('+$more', tone: BarqPillTone.neutral),
+            ),
+          ],
         ],
       ),
     );

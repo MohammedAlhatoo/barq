@@ -50,6 +50,7 @@ import '../features/notifications/state/notifications_cubit.dart';
 import '../features/notifications/ui/notifications_screen.dart';
 import '../features/offer/state/offer_cubit.dart';
 import '../features/offer/ui/offer_screen.dart';
+import '../features/orders/state/active_order_cubit.dart';
 import '../features/orders/state/order_waiting_cubit.dart';
 import '../features/orders/state/orders_cubit.dart';
 import '../features/orders/state/rate_cubit.dart';
@@ -441,15 +442,31 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
           routes: [
             GoRoute(
               path: Routes.home,
-              builder: (context, _) => BlocProvider(
-                create: (context) => HomeCubit(
-                  context.read<AppDependencies>().browseRepository,
-                  context.read<AppDependencies>().userLocation,
-                  context.read<AppDependencies>().scope,
-                  context.read<AppDependencies>().accountRepository.changes,
-                )..load(),
-                child: const HomeScreen(),
-              ),
+              builder: (context, _) {
+                final deps = context.read<AppDependencies>();
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (_) => HomeCubit(
+                        deps.browseRepository,
+                        deps.userLocation,
+                        deps.scope,
+                        deps.accountRepository.changes,
+                      )..load(),
+                    ),
+                    BlocProvider(
+                      create: (_) => ActiveOrderCubit(
+                        orders: deps.ordersRepository,
+                        offers: deps.offerRepository,
+                        pollSeconds:
+                            deps.config.config.polling.notificationsSeconds ??
+                            Poller.minSeconds,
+                      )..start(),
+                    ),
+                  ],
+                  child: const HomeScreen(),
+                );
+              },
             ),
           ],
         ),

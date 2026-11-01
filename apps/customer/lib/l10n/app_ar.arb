@@ -479,5 +479,8 @@
   "assistantNoLastOrder": "لسا ما عندك طلبات سابقة. اكتبلي قائمتك وبنبدأ.",
   "assistantReplaceTitle": "استبدال السلة؟",
   "assistantReplaceBody": "سلتك الحالية بتنحذف، وبتصير فيها أصناف هاي القائمة.",
-  "assistantReplaceConfirm": "استبدال السلة"
+  "assistantReplaceConfirm": "استبدال السلة",
+  "activeOrderOffer": "وصلك عرض السعر",
+  "activeOrderTracking": "تابع طلبك على الخريطة",
+  "activeOrderWaiting": "رح نخبرك بكل جديد"
 }

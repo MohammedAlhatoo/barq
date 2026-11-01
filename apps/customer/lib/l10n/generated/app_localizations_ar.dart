@@ -1223,4 +1223,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get assistantReplaceConfirm => 'استبدال السلة';
+
+  @override
+  String get activeOrderOffer => 'وصلك عرض السعر';
+
+  @override
+  String get activeOrderTracking => 'تابع طلبك على الخريطة';
+
+  @override
+  String get activeOrderWaiting => 'رح نخبرك بكل جديد';
 }
