@@ -658,6 +658,8 @@ class _BarqGalleryState extends State<BarqGallery> {
                           child: BarqCaptainSplash(
                               label: 'كابتن', tagline: 'جاهز لطلبات اليوم')),
                       label('BarqCaptainSplash'),
+                      const BarqLogoTile(captainLabel: 'كابتن'),
+                      label('BarqLogoTile(captainLabel) · BarqCaptainLogo'),
                       const BarqViewfinder(
                           height: 160,
                           child: BarqIllustration(BarqIllustrations.basket)),

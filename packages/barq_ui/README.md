@@ -91,6 +91,7 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | صفحة نموذج: المحتوى بيسكرول والزر تحت (`margin-top:auto`) | `BarqFillScroll(children, footer)` |
 | الدوائر البيضاء على الخلفية البرتقالية | `BarqDecorCircles` |
 | شعار داخل مربع (بداية / تحديث) · محتوى شاشة البداية | `BarqLogoTile(glass)` · `BarqSplashContent(tagline)` |
+| حركة شاشة البداية · شعار الكابتن | `BarqSplashIntro` · `BarqCaptainLogo(label)` |
 | دائرة بيضاء وجواها أيقونة برتقالية (رمز التحقق) | `BarqRingBadge(icon)` |
 | مبدّل ع / EN | `BarqLanguageSwitch(isArabic, onChanged)` |
 | `.card` / `.card.gl` | `BarqCard(borderColor, glass, clip)` |

@@ -14,47 +14,117 @@ class BarqWordmark extends StatelessWidget {
       {super.key,
       this.size = 40,
       this.color = BarqColors.primary,
-      this.showBolt = true});
+      this.gradient,
+      this.showBolt = true,
+      this.boltFlash = 0});
   final double size;
   final Color color;
+
+  /// Paints the letters with this gradient instead of [color].
+  final Gradient? gradient;
   final bool showBolt;
 
-  @override
-  Widget build(BuildContext context) => Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Text('برق', style: BarqText.wordmark(size, color: color)),
-          if (showBolt)
-            Positioned(
-              top: -size * .02,
-              left: -size * .2,
-              child: Transform.rotate(
-                angle: 0.21, // 12deg
-                child: BarqIllustration('boltc',
-                    width: size * .34, height: size * .46),
-              ),
-            ),
-        ],
-      );
-}
+  /// 0 is the resting bolt, 1 is the peak of its flash on the splash.
+  final double boltFlash;
 
-/// App logo in a rounded square: glass on the splash, white on forced update.
-class BarqLogoTile extends StatelessWidget {
-  const BarqLogoTile({super.key, this.glass = false});
-  final bool glass;
+  static const _flashGrowth = .22;
+  static const _glowFactor = 1.1;
 
   @override
   Widget build(BuildContext context) {
-    final size = glass ? 170.0 : 150.0;
+    final letters = Text('برق', style: BarqText.wordmark(size, color: color));
+    final fill = gradient;
+    final boltWidth = size * .34;
+    final boltHeight = size * .46;
+    final glow = size * _glowFactor;
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        if (fill == null)
+          letters
+        else
+          ShaderMask(
+            blendMode: BlendMode.srcIn,
+            shaderCallback: fill.createShader,
+            child: letters,
+          ),
+        if (showBolt && boltFlash > 0)
+          Positioned(
+            top: -size * .02 + (boltHeight - glow) / 2,
+            left: -size * .2 + (boltWidth - glow) / 2,
+            child: IgnorePointer(
+              child: Opacity(
+                opacity: boltFlash.clamp(0.0, 1.0),
+                child: Container(
+                  width: glow,
+                  height: glow,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: BarqGradients.boltGlow,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (showBolt)
+          Positioned(
+            top: -size * .02,
+            left: -size * .2,
+            child: Transform.rotate(
+              angle: 0.21, // 12deg
+              child: Transform.scale(
+                scale: 1 + boltFlash * _flashGrowth,
+                child: BarqIllustration('boltc',
+                    width: boltWidth, height: boltHeight),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+/// App logo in a rounded square: glass on the splash, white on forced update,
+/// dark with the "كابتن" pill when [captainLabel] is set (driver splash).
+class BarqLogoTile extends StatelessWidget {
+  const BarqLogoTile(
+      {super.key, this.glass = false, this.captainLabel, this.boltFlash = 0});
+  final bool glass;
+
+  /// The word on the pill, from the app's translations.
+  final String? captainLabel;
+
+  /// See [BarqWordmark.boltFlash].
+  final double boltFlash;
+
+  /// The tile on the splash. The launch screen PNGs show it at [nativeSize],
+  /// so the animation can start exactly where they stop.
+  static const splashSize = 170.0;
+  static const nativeSize = 150.0;
+  static const _captainWordmark = 80.0;
+
+  @override
+  Widget build(BuildContext context) {
+    final label = captainLabel;
+    final isSplash = glass || label != null;
+    final size = isSplash ? splashSize : 150.0;
     return Container(
       width: size,
       height: size,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: glass ? const Color(0x2EFFFFFF) : Colors.white,
-        borderRadius: BorderRadius.circular(glass ? 48 : 46),
-        border: glass ? Border.all(color: const Color(0x59FFFFFF)) : null,
-        boxShadow: glass
+        color: label != null
+            ? BarqColors.darkCard
+            : glass
+                ? const Color(0x2EFFFFFF)
+                : Colors.white,
+        borderRadius: BorderRadius.circular(isSplash ? 48 : 46),
+        border: label != null
+            ? Border.all(color: BarqColors.darkLine)
+            : glass
+                ? Border.all(color: const Color(0x59FFFFFF))
+                : null,
+        boxShadow: isSplash
             ? null
             : const [
                 BoxShadow(
@@ -64,43 +134,217 @@ class BarqLogoTile extends StatelessWidget {
                     spreadRadius: -18)
               ],
       ),
-      child: BarqWordmark(
-          size: glass ? 92 : 76,
-          color: glass ? Colors.white : BarqColors.primary),
+      child: label != null
+          ? FittedBox(
+              fit: BoxFit.scaleDown,
+              child: BarqCaptainLogo(
+                  label: label, size: _captainWordmark, boltFlash: boltFlash),
+            )
+          : BarqWordmark(
+              size: glass ? 92 : 76,
+              color: glass ? Colors.white : BarqColors.primary,
+              boltFlash: boltFlash),
     );
   }
 }
 
-/// .ph.or splash content: decor circles, glass logo, tagline and the dots.
-class BarqSplashContent extends StatelessWidget {
-  const BarqSplashContent({super.key, required this.tagline});
-  final String tagline;
+/// "برق" in the orange gradient over the "كابتن" pill: the driver's app icon
+/// and the inside of its splash tile.
+class BarqCaptainLogo extends StatelessWidget {
+  const BarqCaptainLogo(
+      {super.key, required this.label, this.size = 80, this.boltFlash = 0});
+
+  final String label;
+  final double size;
+
+  /// See [BarqWordmark.boltFlash].
+  final double boltFlash;
 
   @override
-  Widget build(BuildContext context) => Stack(
-        alignment: Alignment.center,
+  Widget build(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Positioned.fill(child: BarqDecorCircles()),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const BarqLogoTile(glass: true),
-              const SizedBox(height: 26),
-              Text(tagline,
-                  textAlign: TextAlign.center,
-                  style: BarqText.h2.copyWith(color: Colors.white)),
-            ],
-          ),
-          const Positioned(
-            bottom: 70,
-            child: BarqDots(
-                count: 3,
-                index: 0,
-                activeWidth: 8,
-                activeColor: Colors.white,
-                inactiveColor: Color(0x80FFFFFF)),
-          ),
+          BarqWordmark(
+              size: size, gradient: BarqGradients.orange, boltFlash: boltFlash),
+          SizedBox(height: size * .1),
+          BarqPill(label,
+              tone: BarqPillTone.orange,
+              fontSize: size * .19,
+              padding: EdgeInsets.symmetric(
+                  horizontal: size * .18, vertical: size * .04)),
         ],
+      );
+}
+
+/// Plays after the native launch screen, whose last picture is its first
+/// frame: [startColor] with the logo at its native size, in the exact center.
+/// The logo grows, the bolt flashes, then the real background ([decor] and
+/// whatever is behind this widget), [tagline] and the dots appear.
+///
+/// With reduced motion, or [animate] false, it shows the end at once.
+class BarqSplashIntro extends StatefulWidget {
+  const BarqSplashIntro({
+    super.key,
+    required this.startColor,
+    required this.logo,
+    required this.tagline,
+    required this.dots,
+    this.decor,
+    this.animate = true,
+    this.onFinished,
+  });
+
+  final Color startColor;
+
+  /// Builds the logo for a bolt flash from 0 to 1.
+  final Widget Function(double boltFlash) logo;
+  final Widget tagline;
+  final Widget dots;
+  final Widget? decor;
+  final bool animate;
+  final VoidCallback? onFinished;
+
+  static const _dotsBottom = 70.0;
+  static const _taglineGap = 26.0;
+
+  @override
+  State<BarqSplashIntro> createState() => _BarqSplashIntroState();
+}
+
+class _BarqSplashIntroState extends State<BarqSplashIntro>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller =
+      AnimationController(vsync: this, duration: BarqDurations.splashIntro);
+
+  late final Animation<double> _scale = Tween(
+    begin: BarqLogoTile.nativeSize / BarqLogoTile.splashSize,
+    end: 1.0,
+  ).animate(CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(0, .45, curve: Curves.easeOutBack),
+  ));
+
+  late final Animation<double> _flash = TweenSequence<double>([
+    TweenSequenceItem(tween: ConstantTween(0), weight: 25),
+    TweenSequenceItem(
+      tween: Tween<double>(begin: 0, end: 1)
+          .chain(CurveTween(curve: Curves.easeOut)),
+      weight: 12,
+    ),
+    TweenSequenceItem(
+      tween: Tween<double>(begin: 1, end: 0)
+          .chain(CurveTween(curve: Curves.easeIn)),
+      weight: 23,
+    ),
+    TweenSequenceItem(tween: ConstantTween(0), weight: 40),
+  ]).animate(_controller);
+
+  late final Animation<double> _reveal = CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(.4, .85, curve: Curves.easeInOut),
+  );
+
+  bool _started = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_started) return;
+    _started = true;
+    if (!widget.animate || MediaQuery.disableAnimationsOf(context)) {
+      _controller.value = 1;
+      WidgetsBinding.instance.addPostFrameCallback((_) => _finish());
+    } else {
+      _controller.forward().whenComplete(_finish);
+    }
+  }
+
+  void _finish() {
+    if (mounted) widget.onFinished?.call();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+        animation: _controller,
+        builder: (context, _) {
+          final reveal = _reveal.value;
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              if (widget.decor != null) Positioned.fill(child: widget.decor!),
+              if (reveal < 1)
+                Positioned.fill(
+                  child: Opacity(
+                    opacity: 1 - reveal,
+                    child: ColoredBox(color: widget.startColor),
+                  ),
+                ),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Transform.scale(
+                    scale: _scale.value,
+                    child: widget.logo(_flash.value),
+                  ),
+                  // Starts with no height, so the logo starts in the center.
+                  ClipRect(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      heightFactor: reveal,
+                      child: Opacity(
+                        opacity: reveal,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              top: BarqSplashIntro._taglineGap),
+                          child: widget.tagline,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                bottom: BarqSplashIntro._dotsBottom,
+                child: Opacity(opacity: reveal, child: widget.dots),
+              ),
+            ],
+          );
+        },
+      );
+}
+
+/// Splash body: the glass logo tile, tagline and three dots (animated).
+class BarqSplashContent extends StatelessWidget {
+  const BarqSplashContent(
+      {super.key, required this.tagline, this.animate = true, this.onFinished});
+  final String tagline;
+
+  /// See [BarqSplashIntro].
+  final bool animate;
+  final VoidCallback? onFinished;
+
+  @override
+  Widget build(BuildContext context) => BarqSplashIntro(
+        startColor: BarqColors.primary,
+        animate: animate,
+        onFinished: onFinished,
+        decor: const BarqDecorCircles(),
+        logo: (flash) => BarqLogoTile(glass: true, boltFlash: flash),
+        tagline: Text(tagline,
+            textAlign: TextAlign.center,
+            style: BarqText.h2.copyWith(color: Colors.white)),
+        dots: const BarqDots(
+            count: 3,
+            index: 0,
+            activeWidth: 8,
+            activeColor: Colors.white,
+            inactiveColor: Color(0x80FFFFFF)),
       );
 }
 

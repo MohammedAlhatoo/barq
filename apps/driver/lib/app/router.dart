@@ -1,4 +1,5 @@
 import 'package:barq_core/barq_core.dart';
+import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,6 +53,16 @@ abstract final class Routes {
   static const public = {splash, login};
 }
 
+/// Fades in: the first screen after the splash must not slide over it.
+Page<void> _fadePage(GoRouterState state, Widget child) =>
+    CustomTransitionPage<void>(
+      key: state.pageKey,
+      child: child,
+      transitionDuration: BarqDurations.normal,
+      transitionsBuilder: (_, animation, _, child) =>
+          FadeTransition(opacity: animation, child: child),
+    );
+
 GoRouter createRouter(AuthStore auth) => GoRouter(
   initialLocation: Routes.splash,
   refreshListenable: auth,
@@ -83,14 +94,18 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
     ),
     GoRoute(
       path: Routes.login,
-      builder: (context, _) => BlocProvider(
-        create: (context) =>
-            LoginCubit(context.read<AppDependencies>().authRepository),
-        child: const LoginScreen(),
+      pageBuilder: (context, state) => _fadePage(
+        state,
+        BlocProvider(
+          create: (context) =>
+              LoginCubit(context.read<AppDependencies>().authRepository),
+          child: const LoginScreen(),
+        ),
       ),
     ),
     StatefulShellRoute.indexedStack(
-      builder: (context, state, shell) => MainShell(shell: shell),
+      pageBuilder: (context, state, shell) =>
+          _fadePage(state, MainShell(shell: shell)),
       branches: [
         StatefulShellBranch(
           routes: [

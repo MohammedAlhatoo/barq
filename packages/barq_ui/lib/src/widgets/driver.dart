@@ -194,26 +194,32 @@ class BarqCaptainWordmark extends StatelessWidget {
       );
 }
 
-/// The driver app's splash: logo over a soft orange glow on the dark screen.
+/// The driver app's splash: logo tile over a soft orange glow (animated).
 class BarqCaptainSplash extends StatelessWidget {
   const BarqCaptainSplash({
     super.key,
     required this.label,
     required this.tagline,
+    this.animate = true,
+    this.onFinished,
   });
 
   final String label;
   final String tagline;
 
+  /// See [BarqSplashIntro].
+  final bool animate;
+  final VoidCallback? onFinished;
+
   static const _glow = 380.0;
-  static const _wordmark = 72.0;
-  static const _dotsBottom = 70.0;
 
   @override
-  Widget build(BuildContext context) => Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
+  Widget build(BuildContext context) => BarqSplashIntro(
+        startColor: BarqColors.ink,
+        animate: animate,
+        onFinished: onFinished,
+        decor: Center(
+          child: Container(
             width: _glow,
             height: _glow,
             decoration: const BoxDecoration(
@@ -221,29 +227,20 @@ class BarqCaptainSplash extends StatelessWidget {
               gradient: BarqGradients.captainGlow,
             ),
           ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              BarqCaptainWordmark(label: label, size: _wordmark),
-              const SizedBox(height: BarqSpacing.lg),
-              Text(
-                tagline,
-                textAlign: TextAlign.center,
-                style: BarqText.body.copyWith(color: BarqColors.darkSubtle),
-              ),
-            ],
-          ),
-          const Positioned(
-            bottom: _dotsBottom,
-            child: BarqDots(
-              count: 3,
-              index: 0,
-              activeWidth: 8,
-              activeColor: BarqColors.primary,
-              inactiveColor: BarqColors.darkLine,
-            ),
-          ),
-        ],
+        ),
+        logo: (flash) => BarqLogoTile(captainLabel: label, boltFlash: flash),
+        tagline: Text(
+          tagline,
+          textAlign: TextAlign.center,
+          style: BarqText.body.copyWith(color: BarqColors.darkSubtle),
+        ),
+        dots: const BarqDots(
+          count: 3,
+          index: 0,
+          activeWidth: 8,
+          activeColor: BarqColors.primary,
+          inactiveColor: BarqColors.darkLine,
+        ),
       );
 }
 

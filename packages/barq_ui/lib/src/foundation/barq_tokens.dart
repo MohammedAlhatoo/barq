@@ -131,6 +131,12 @@ abstract final class BarqGradients {
     stops: [0, .7],
   );
 
+  /// The flash behind the bolt on the splash.
+  static const boltGlow = RadialGradient(
+    colors: [Color(0xE6FFE28A), Color(0x00FFC21A)],
+    stops: [0, .7],
+  );
+
   /// The frame of the order photo.
   static const viewfinder = RadialGradient(
     center: Alignment(0, -0.2),
@@ -420,4 +426,7 @@ abstract final class BarqShadows {
 abstract final class BarqDurations {
   static const fast = Duration(milliseconds: 150);
   static const normal = Duration(milliseconds: 250);
+
+  /// The logo animation that follows the native launch screen.
+  static const splashIntro = Duration(milliseconds: 1400);
 }
