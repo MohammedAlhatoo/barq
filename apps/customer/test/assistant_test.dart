@@ -254,6 +254,36 @@ void main() {
       expect(ProductMatcher.searchTerms('حليب'), ['حليب']);
     });
 
+    test('other names reach the name in the catalog', () {
+      const sameThing = {
+        'مكرونة': 'معكرونة',
+        'مكرونه': 'معكرونة',
+        'معكرونه': 'معكرونة',
+        'باستا': 'معكرونة',
+        'الباستا': 'معكرونة',
+        'المكرونة': 'معكرونة',
+        'pasta': 'معكرونة',
+        'Pasta': 'معكرونة',
+        'PASTA': 'معكرونة',
+        'رز': 'أرز',
+        'بطاطس': 'بطاطا',
+        'البطاطس': 'بطاطا',
+        'طماطم': 'بندورة',
+        'لحم': 'لحمة',
+        'لحمه': 'لحمة',
+        'لحوم': 'لحمة',
+        'لحم مفروم': 'لحمة مفرومة',
+      };
+      for (final MapEntry(key: name, value: term) in sameThing.entries) {
+        expect(ProductMatcher.searchTerms(name), contains(term), reason: name);
+      }
+    });
+
+    test('the name as typed is still tried first', () {
+      expect(ProductMatcher.searchTerms('pasta').first, 'pasta');
+      expect(ProductMatcher.searchTerms('باستا').first, 'باستا');
+    });
+
     test('ال is tried as typed, then without it', () {
       expect(ProductMatcher.searchTerms('البندورة').take(2), [
         'البندورة',
@@ -836,6 +866,26 @@ void main() {
         for (final product in products) {
           _expectLine(tester, product, 1);
         }
+      });
+    }
+
+    for (final (typed, product) in const [
+      ('باكيت مكرونة', 'معكرونة ٥٠٠ غ'),
+      ('باكيت باستا', 'معكرونة ٥٠٠ غ'),
+      ('كيلو لحم مفروم', 'لحمة مفرومة ١ كغ'),
+    ]) {
+      testWidgets('$typed finds $product', (tester) async {
+        _catalog['معكرونة'] = [_product(29, 'معكرونة ٥٠٠ غ')];
+        _catalog['لحمة مفرومة'] = [_product(36, 'لحمة مفرومة ١ كغ')];
+        addTearDown(() {
+          _catalog.remove('معكرونة');
+          _catalog.remove('لحمة مفرومة');
+        });
+
+        final app = await _open(tester);
+        await _send(tester, app, typed);
+
+        _expectLine(tester, product, 1);
       });
     }
 

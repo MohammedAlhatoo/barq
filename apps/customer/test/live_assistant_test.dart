@@ -27,32 +27,52 @@ const _sandboxCode = '1234';
 bool get _hasSandboxKey => BarqEnv.projectKey.startsWith('pk_test_');
 
 void main() {
-  test('the normal search finds other spellings on the sandbox', () async {
-    FlutterSecureStorage.setMockInitialValues({});
-    SharedPreferences.setMockInitialValues({});
-    final prefs = await SharedPreferences.getInstance();
-    final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
-    final browse = ApiBrowseRepository(api);
-    final config = ConfigStore(api: api, app: BarqAppKind.customer);
-    final cart = CartCubit(prefs: prefs, config: config, browse: browse);
-    final cubit = SearchCubit(
-      browse,
-      prefs,
-      UserLocation(browse, GeolocatorLocationRepository()),
-      ShopScopeCubit(cart: cart, browse: browse),
-    );
-    for (final word in const ['بندوره', 'البندورة', 'ارز', 'cucumbers']) {
-      await cubit.search(word);
-      debugPrint('$word → ${cubit.state.total} results');
-      expect(cubit.state.items, isNotEmpty, reason: word);
-    }
-    // `q` stays the spelling that worked, or page 2 would be empty.
-    await cubit.search('cucumbers');
-    expect(cubit.state.total, greaterThan(20));
-    expect(cubit.state.nextPage, 2);
-    await cubit.loadMore();
-    expect(cubit.state.items.length, cubit.state.total);
-  }, skip: _hasSandboxKey ? false : 'needs a pk_test key');
+  test(
+    'the normal search finds other spellings on the sandbox',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({});
+      SharedPreferences.setMockInitialValues({});
+      final prefs = await SharedPreferences.getInstance();
+      final api = ApiClient(authStore: AuthStore(), appVersion: '1.0.0');
+      final browse = ApiBrowseRepository(api);
+      final config = ConfigStore(api: api, app: BarqAppKind.customer);
+      final cart = CartCubit(prefs: prefs, config: config, browse: browse);
+      final cubit = SearchCubit(
+        browse,
+        prefs,
+        UserLocation(browse, GeolocatorLocationRepository()),
+        ShopScopeCubit(cart: cart, browse: browse),
+      );
+      for (final word in const [
+        'بندوره',
+        'البندورة',
+        'ارز',
+        'cucumbers',
+        'مكرونة',
+        'مكرونه',
+        'معكرونه',
+        'باستا',
+        'pasta',
+        'بطاطس',
+        'طماطم',
+        'لحم',
+        'لحوم',
+        'لحم مفروم',
+      ]) {
+        await cubit.search(word);
+        debugPrint('$word → ${cubit.state.total} results');
+        expect(cubit.state.items, isNotEmpty, reason: word);
+      }
+      // `q` stays the spelling that worked, or page 2 would be empty.
+      await cubit.search('cucumbers');
+      expect(cubit.state.total, greaterThan(20));
+      expect(cubit.state.nextPage, 2);
+      await cubit.loadMore();
+      expect(cubit.state.items.length, cubit.state.total);
+    },
+    skip: _hasSandboxKey ? false : 'needs a pk_test key',
+    timeout: const Timeout(Duration(minutes: 2)),
+  );
 
   test(
     'a list reaches the stores on the sandbox',
@@ -128,6 +148,8 @@ void main() {
       // quantities they must end up with.
       const lists = {
         'كيلو بندوره وكيلو رز ونص كيلو البطاطا': [1, 1, 1],
+        'باكيت باستا وكيلو لحم مفروم وكيلو طماطم وكيلو بطاطس': [1, 1, 1, 1],
+        'كيلو مكرونة وكيلو لحمه': [2, 1],
         '1 kg tomatoes, 2 kg cucumbers and 1 liter milk': [1, 2, 1],
         'كيلو لبنة and a dozen eggs': [2, 1],
         'half a kilo of potatoes و 2 kg rice': [1, 2],

@@ -23,6 +23,14 @@ class ProductMatcher {
     'رز': 'أرز',
     'جلي': 'سائل جلي',
     'كعكة': 'كعك',
+    'مكرونة': 'معكرونة',
+    'مكرونه': 'معكرونة',
+    'معكرونه': 'معكرونة',
+    'باستا': 'معكرونة',
+    'pasta': 'معكرونة',
+    'لحم': 'لحمة',
+    'لحوم': 'لحمة',
+    'لحم مفروم': 'لحمة مفرومة',
   };
 
   final BrowseRepository _browse;
@@ -71,7 +79,7 @@ class ProductMatcher {
     final word = name.startsWith('ال') && name.length > 3
         ? name.substring(2)
         : name;
-    terms.addAll({word, ?_sameThing[word]});
+    terms.addAll({word, ?_sameThing[word.toLowerCase()]});
     final stem = _withoutLast(word);
     if (stem.length >= _shortestStem) {
       if (word.endsWith('ه') || word.endsWith('ا')) terms.add('$stemة');
