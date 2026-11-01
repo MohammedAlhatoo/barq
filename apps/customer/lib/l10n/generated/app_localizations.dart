@@ -2041,6 +2041,186 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'منذ {count} يوم'**
   String timeDays(int count);
+
+  /// No description provided for @homeAssistantTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب بسرعة مع مساعد برق'**
+  String get homeAssistantTitle;
+
+  /// No description provided for @homeAssistantBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب قائمتك وبنلاقيلك أوفر متجر'**
+  String get homeAssistantBody;
+
+  /// No description provided for @assistantTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مساعد برق'**
+  String get assistantTitle;
+
+  /// No description provided for @assistantGreeting.
+  ///
+  /// In ar, this message translates to:
+  /// **'أهلًا! أنا مساعد برق. اكتبلي قائمتك، وبلاقيلك أوفر متجر بيوصّل لعنوانك.'**
+  String get assistantGreeting;
+
+  /// No description provided for @assistantHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كل صنف مع كميته، مثلًا: كيلو بندورة وكيلو بطاطا ولتر حليب'**
+  String get assistantHint;
+
+  /// No description provided for @assistantInputHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب قائمتك هون…'**
+  String get assistantInputHint;
+
+  /// No description provided for @assistantChipVegetables.
+  ///
+  /// In ar, this message translates to:
+  /// **'خضار وفواكه'**
+  String get assistantChipVegetables;
+
+  /// No description provided for @assistantChipBreakfast.
+  ///
+  /// In ar, this message translates to:
+  /// **'طلبات الفطور'**
+  String get assistantChipBreakfast;
+
+  /// No description provided for @assistantChipReorder.
+  ///
+  /// In ar, this message translates to:
+  /// **'أعد آخر طلب'**
+  String get assistantChipReorder;
+
+  /// No description provided for @assistantChipWrite.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب قائمتك'**
+  String get assistantChipWrite;
+
+  /// No description provided for @assistantListVegetables.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز'**
+  String get assistantListVegetables;
+
+  /// No description provided for @assistantListBreakfast.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة'**
+  String get assistantListBreakfast;
+
+  /// No description provided for @assistantFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'هاد اللي لقيته:'**
+  String get assistantFound;
+
+  /// No description provided for @assistantNothingFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما لقيت ولا صنف من قائمتك:'**
+  String get assistantNothingFound;
+
+  /// No description provided for @assistantLine.
+  ///
+  /// In ar, this message translates to:
+  /// **'{name} × {qty}'**
+  String assistantLine(String name, int qty);
+
+  /// No description provided for @assistantNotFound.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش لاقي {name}'**
+  String assistantNotFound(String name);
+
+  /// No description provided for @assistantNotFoundPick.
+  ///
+  /// In ar, this message translates to:
+  /// **'مش لاقي {name}. يمكن بدك:'**
+  String assistantNotFoundPick(String name);
+
+  /// No description provided for @assistantRounded.
+  ///
+  /// In ar, this message translates to:
+  /// **'قرّبت كمية {name} لـ {qty}، لأن الطلب بالأعداد الكاملة بس.'**
+  String assistantRounded(String name, int qty);
+
+  /// No description provided for @assistantCapped.
+  ///
+  /// In ar, this message translates to:
+  /// **'كمية {name} صارت {qty}، وهاد أعلى حد مسموح.'**
+  String assistantCapped(String name, int qty);
+
+  /// No description provided for @assistantTooMany.
+  ///
+  /// In ar, this message translates to:
+  /// **'تركت آخر {count} من القائمة، لأن السلة وصلت للحد المسموح.'**
+  String assistantTooMany(int count);
+
+  /// No description provided for @assistantCompare.
+  ///
+  /// In ar, this message translates to:
+  /// **'تمام، قارن المتاجر'**
+  String get assistantCompare;
+
+  /// No description provided for @assistantNotUnderstood.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما فهمت القائمة. اكتبها زي: كيلو بندورة وكيلو بطاطا'**
+  String get assistantNotUnderstood;
+
+  /// No description provided for @assistantBest.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوفر متجر لقائمتك: {store}'**
+  String assistantBest(String store);
+
+  /// No description provided for @assistantNoFullStore.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في متجر عنده كل القائمة. هدول أقرب المتاجر إلها، وبنكمّل بالمتوفر:'**
+  String get assistantNoFullStore;
+
+  /// No description provided for @assistantContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكمل الطلب · {total}'**
+  String assistantContinue(String total);
+
+  /// No description provided for @assistantNoStores.
+  ///
+  /// In ar, this message translates to:
+  /// **'ما في متجر بيوصّلك عنده أصناف من هاي القائمة.'**
+  String get assistantNoStores;
+
+  /// No description provided for @assistantNoLastOrder.
+  ///
+  /// In ar, this message translates to:
+  /// **'لسا ما عندك طلبات سابقة. اكتبلي قائمتك وبنبدأ.'**
+  String get assistantNoLastOrder;
+
+  /// No description provided for @assistantReplaceTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدال السلة؟'**
+  String get assistantReplaceTitle;
+
+  /// No description provided for @assistantReplaceBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'سلتك الحالية بتنحذف، وبتصير فيها أصناف هاي القائمة.'**
+  String get assistantReplaceBody;
+
+  /// No description provided for @assistantReplaceConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'استبدال السلة'**
+  String get assistantReplaceConfirm;
 }
 
 class _AppLocalizationsDelegate

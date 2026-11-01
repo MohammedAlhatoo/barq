@@ -1085,4 +1085,118 @@ class AppLocalizationsAr extends AppLocalizations {
   String timeDays(int count) {
     return 'منذ $count يوم';
   }
+
+  @override
+  String get homeAssistantTitle => 'اطلب بسرعة مع مساعد برق';
+
+  @override
+  String get homeAssistantBody => 'اكتب قائمتك وبنلاقيلك أوفر متجر';
+
+  @override
+  String get assistantTitle => 'مساعد برق';
+
+  @override
+  String get assistantGreeting =>
+      'أهلًا! أنا مساعد برق. اكتبلي قائمتك، وبلاقيلك أوفر متجر بيوصّل لعنوانك.';
+
+  @override
+  String get assistantHint =>
+      'اكتب كل صنف مع كميته، مثلًا: كيلو بندورة وكيلو بطاطا ولتر حليب';
+
+  @override
+  String get assistantInputHint => 'اكتب قائمتك هون…';
+
+  @override
+  String get assistantChipVegetables => 'خضار وفواكه';
+
+  @override
+  String get assistantChipBreakfast => 'طلبات الفطور';
+
+  @override
+  String get assistantChipReorder => 'أعد آخر طلب';
+
+  @override
+  String get assistantChipWrite => 'اكتب قائمتك';
+
+  @override
+  String get assistantListVegetables =>
+      'كيلو بندورة وكيلو خيار وكيلو بطاطا وكيلو موز';
+
+  @override
+  String get assistantListBreakfast => 'ربطة خبز وطبق بيض ولتر حليب وعلبة لبنة';
+
+  @override
+  String get assistantFound => 'هاد اللي لقيته:';
+
+  @override
+  String get assistantNothingFound => 'ما لقيت ولا صنف من قائمتك:';
+
+  @override
+  String assistantLine(String name, int qty) {
+    return '$name × $qty';
+  }
+
+  @override
+  String assistantNotFound(String name) {
+    return 'مش لاقي $name';
+  }
+
+  @override
+  String assistantNotFoundPick(String name) {
+    return 'مش لاقي $name. يمكن بدك:';
+  }
+
+  @override
+  String assistantRounded(String name, int qty) {
+    return 'قرّبت كمية $name لـ $qty، لأن الطلب بالأعداد الكاملة بس.';
+  }
+
+  @override
+  String assistantCapped(String name, int qty) {
+    return 'كمية $name صارت $qty، وهاد أعلى حد مسموح.';
+  }
+
+  @override
+  String assistantTooMany(int count) {
+    return 'تركت آخر $count من القائمة، لأن السلة وصلت للحد المسموح.';
+  }
+
+  @override
+  String get assistantCompare => 'تمام، قارن المتاجر';
+
+  @override
+  String get assistantNotUnderstood =>
+      'ما فهمت القائمة. اكتبها زي: كيلو بندورة وكيلو بطاطا';
+
+  @override
+  String assistantBest(String store) {
+    return 'أوفر متجر لقائمتك: $store';
+  }
+
+  @override
+  String get assistantNoFullStore =>
+      'ما في متجر عنده كل القائمة. هدول أقرب المتاجر إلها، وبنكمّل بالمتوفر:';
+
+  @override
+  String assistantContinue(String total) {
+    return 'أكمل الطلب · $total';
+  }
+
+  @override
+  String get assistantNoStores =>
+      'ما في متجر بيوصّلك عنده أصناف من هاي القائمة.';
+
+  @override
+  String get assistantNoLastOrder =>
+      'لسا ما عندك طلبات سابقة. اكتبلي قائمتك وبنبدأ.';
+
+  @override
+  String get assistantReplaceTitle => 'استبدال السلة؟';
+
+  @override
+  String get assistantReplaceBody =>
+      'سلتك الحالية بتنحذف، وبتصير فيها أصناف هاي القائمة.';
+
+  @override
+  String get assistantReplaceConfirm => 'استبدال السلة';
 }

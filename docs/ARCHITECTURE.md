@@ -59,6 +59,7 @@ apps/customer/lib/
    ├─ account/           account · edit profile · delete · addresses · add address
    ├─ system/            no internet · force update · maintenance · session expired
    ├─ browse/            home · category · search · vendor · all vendors · product
+   ├─ assistant/         مساعد برق: قراءة القائمة · مطابقة المنتجات · المحادثة
    ├─ cart/              cart · compare · no single store · empty cart
    ├─ checkout/          confirm order · quote expired · out of zone
    ├─ offer/             store price offer · offer expired

@@ -120,7 +120,8 @@ class _BarqInputState extends State<BarqInput> {
     final field = AnimatedContainer(
       duration: BarqDurations.fast,
       height: widget.maxLines == 1 ? widget.height : null,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: EdgeInsets.symmetric(
+          horizontal: 16, vertical: widget.maxLines == 1 ? 0 : 14),
       decoration: BoxDecoration(
         color: grey
             ? (p.isDark ? BarqColors.darkChip : const Color(0xFFF8F3F0))
@@ -394,7 +395,8 @@ class BarqChip extends StatelessWidget {
       this.leading,
       this.icon,
       this.height = BarqSizes.chip,
-      this.trailingText});
+      this.trailingText,
+      this.maxLabelWidth});
 
   final String label;
   final bool selected;
@@ -410,10 +412,20 @@ class BarqChip extends StatelessWidget {
   /// Small extra text after the label (option price "+₪5").
   final String? trailingText;
 
+  /// Cuts a long label with "…". For names that come from the server.
+  final double? maxLabelWidth;
+
   @override
   Widget build(BuildContext context) {
     final p = BarqPalette.of(context);
     final fg = selected ? Colors.white : p.chipText;
+    final text = Text(label,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: BarqText.chip.copyWith(
+            color: fg,
+            fontWeight: selected ? FontWeight.w500 : FontWeight.w400));
+    final width = maxLabelWidth;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -438,10 +450,11 @@ class BarqChip extends StatelessWidget {
               BarqIcon(icon!, size: BarqSizes.iconS, color: fg),
               const SizedBox(width: 6)
             ],
-            Text(label,
-                style: BarqText.chip.copyWith(
-                    color: fg,
-                    fontWeight: selected ? FontWeight.w500 : FontWeight.w400)),
+            if (width == null)
+              text
+            else
+              ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: width), child: text),
             if (trailingText != null) ...[
               const SizedBox(width: 6),
               Text(trailingText!,

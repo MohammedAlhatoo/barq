@@ -1,3 +1,4 @@
+import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,6 +62,9 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  if (ConfigScope.of(context).config
+                      .hasModule('basket_compare'))
+                    const SliverToBoxAdapter(child: _AssistantBanner()),
                   SliverToBoxAdapter(
                     child: _SectionTitle(
                       title: l10n.homeBestSellers,
@@ -156,6 +160,28 @@ class _HomeHeader extends StatelessWidget {
             onPressed: () => context.push(Routes.search),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _AssistantBanner extends StatelessWidget {
+  const _AssistantBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        BarqSpacing.page,
+        BarqSpacing.sm,
+        BarqSpacing.page,
+        0,
+      ),
+      child: BarqAssistantBanner(
+        title: l10n.homeAssistantTitle,
+        subtitle: l10n.homeAssistantBody,
+        onTap: () => context.push(Routes.assistant),
       ),
     );
   }

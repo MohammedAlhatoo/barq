@@ -131,6 +131,7 @@ Navigator.push(context, MaterialPageRoute(builder: (_) => const BarqGallery()));
 | رسمة حذف الحساب · دبوس وسط الخريطة | `BarqDeleteAccountArt` · `BarqMapCenterPin(hint)` |
 | شاشات الحالات (خارج المنطقة، فارغ، صيانة…) | `BarqStateView(...)` + `BarqIconCard` |
 | بانر ملون (عرض، أرباح، النقد) | `BarqBanner(gradient: BarqGradients.orange/green/cash)` |
+| بانر مساعد برق · فقاعة محادثة · فقاعة «جاري الكتابة» · خانة الكتابة وزر الإرسال | `BarqAssistantBanner(title, subtitle, onTap)` · `BarqChatBubble(text / child, fromUser)` · `BarqTypingBubble` · `BarqChatComposer(controller, onSend, hint)` |
 | `.i.i-NAME` | `BarqIcon(BarqIcons.NAME, size: BarqSizes.iconM)` |
 | `.im.im-NAME` | `BarqIllustration(BarqIllustrations.NAME)` |
 | `.h0 .h1 .h2 .h3 .p .t .xs` | `BarqText.h0/h1/h2/h3/body/t/xs` |

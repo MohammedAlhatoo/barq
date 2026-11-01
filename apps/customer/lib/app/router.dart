@@ -14,6 +14,8 @@ import '../features/account/ui/address_form_screen.dart';
 import '../features/account/ui/addresses_screen.dart';
 import '../features/account/ui/delete_account_screen.dart';
 import '../features/account/ui/edit_profile_screen.dart';
+import '../features/assistant/state/assistant_cubit.dart';
+import '../features/assistant/ui/assistant_screen.dart';
 import '../features/auth/data/auth_models.dart';
 import '../features/auth/state/onboarding_cubit.dart';
 import '../features/auth/state/otp_cubit.dart';
@@ -77,6 +79,7 @@ abstract final class Routes {
   static const compare = '/cart/compare';
   static const checkout = '/checkout';
   static const search = '/search';
+  static const assistant = '/assistant';
   static const product = '/product/:id';
   static const vendor = '/vendor/:id';
   static const vendors = '/vendors';
@@ -305,6 +308,21 @@ GoRouter createRouter(AuthStore auth) => GoRouter(
             orderId: id,
           )..load(),
           child: const ReceiptScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: Routes.assistant,
+      builder: (context, _) {
+        final deps = context.read<AppDependencies>();
+        return BlocProvider(
+          create: (_) => AssistantCubit(
+            browse: deps.browseRepository,
+            carts: deps.cartRepository,
+            orders: deps.ordersRepository,
+            cart: deps.cart,
+          ),
+          child: const AssistantScreen(),
         );
       },
     ),

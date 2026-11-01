@@ -1101,4 +1101,118 @@ class AppLocalizationsEn extends AppLocalizations {
   String timeDays(int count) {
     return '$count d ago';
   }
+
+  @override
+  String get homeAssistantTitle => 'Order fast with Barq Assistant';
+
+  @override
+  String get homeAssistantBody => 'Write your list and we find the best store';
+
+  @override
+  String get assistantTitle => 'Barq Assistant';
+
+  @override
+  String get assistantGreeting =>
+      'Hi! I am Barq Assistant. Write your list and I will find the best store that delivers to you.';
+
+  @override
+  String get assistantHint =>
+      'Write each item with its quantity, like: 2 tomato, 1 milk';
+
+  @override
+  String get assistantInputHint => 'Write your list here…';
+
+  @override
+  String get assistantChipVegetables => 'Fruit and vegetables';
+
+  @override
+  String get assistantChipBreakfast => 'Breakfast';
+
+  @override
+  String get assistantChipReorder => 'Repeat my last order';
+
+  @override
+  String get assistantChipWrite => 'Write your list';
+
+  @override
+  String get assistantListVegetables =>
+      '1 tomato, 1 cucumber, 1 potato, 1 banana';
+
+  @override
+  String get assistantListBreakfast => '1 bread, 1 eggs, 1 milk, 1 labneh';
+
+  @override
+  String get assistantFound => 'Here is what I found:';
+
+  @override
+  String get assistantNothingFound => 'I found nothing from your list:';
+
+  @override
+  String assistantLine(String name, int qty) {
+    return '$name × $qty';
+  }
+
+  @override
+  String assistantNotFound(String name) {
+    return 'Could not find $name';
+  }
+
+  @override
+  String assistantNotFoundPick(String name) {
+    return 'Could not find $name. Maybe:';
+  }
+
+  @override
+  String assistantRounded(String name, int qty) {
+    return 'I rounded $name up to $qty, as orders take whole numbers only.';
+  }
+
+  @override
+  String assistantCapped(String name, int qty) {
+    return '$name is now $qty, the most allowed.';
+  }
+
+  @override
+  String assistantTooMany(int count) {
+    return 'I left out the last $count items, as the cart is full.';
+  }
+
+  @override
+  String get assistantCompare => 'OK, compare stores';
+
+  @override
+  String get assistantNotUnderstood =>
+      'I did not get that. Write your list like: 2 tomato, 1 milk';
+
+  @override
+  String assistantBest(String store) {
+    return 'The best store for your list: $store';
+  }
+
+  @override
+  String get assistantNoFullStore =>
+      'No store has your whole list. These come closest, and we continue with what they have:';
+
+  @override
+  String assistantContinue(String total) {
+    return 'Complete order · $total';
+  }
+
+  @override
+  String get assistantNoStores =>
+      'No store that delivers to you has items from this list.';
+
+  @override
+  String get assistantNoLastOrder =>
+      'You have no orders yet. Write your list to start.';
+
+  @override
+  String get assistantReplaceTitle => 'Replace your cart?';
+
+  @override
+  String get assistantReplaceBody =>
+      'Your current cart is removed and this list takes its place.';
+
+  @override
+  String get assistantReplaceConfirm => 'Replace cart';
 }

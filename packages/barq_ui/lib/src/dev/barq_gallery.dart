@@ -6,6 +6,7 @@ import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
 import '../widgets/account.dart';
 import '../widgets/buttons.dart';
+import '../widgets/chat.dart';
 import '../widgets/driver.dart';
 import '../widgets/indicators.dart';
 import '../widgets/inputs.dart';
@@ -36,6 +37,13 @@ class _BarqGalleryState extends State<BarqGallery> {
   int chip = 0;
   int nav = 0;
   int stars = 4;
+  final chatInput = TextEditingController();
+
+  @override
+  void dispose() {
+    chatInput.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -463,6 +471,30 @@ class _BarqGalleryState extends State<BarqGallery> {
                         ]),
                       ),
                       label('BarqBanner(gradient)'),
+                      BarqAssistantBanner(
+                          title: 'اطلب بسرعة مع مساعد برق',
+                          subtitle: 'اكتب قائمتك وبنلاقيلك أوفر متجر',
+                          onTap: () {}),
+                      label('BarqAssistantBanner'),
+                      const BarqChatBubble(text: 'أهلًا! أنا مساعد برق.'),
+                      const SizedBox(height: 8),
+                      const BarqChatBubble(
+                          text: 'كيلو بندورة ولتر حليب', fromUser: true),
+                      const SizedBox(height: 8),
+                      const BarqTypingBubble(),
+                      label('BarqChatBubble(fromUser) · BarqTypingBubble'),
+                      BarqChatComposer(
+                          controller: chatInput,
+                          hint: 'اكتب قائمتك هون…',
+                          onSend: () {}),
+                      label('BarqChatComposer'),
+                      Wrap(spacing: 8, children: [
+                        BarqChip(
+                            label: 'اسم منتج طويل جدًا جاي من السيرفر',
+                            maxLabelWidth: 120,
+                            onTap: () {}),
+                      ]),
+                      label('BarqChip(maxLabelWidth)'),
                       const BarqTileBackground(
                         tile: BarqTileColor.mint,
                         height: 90,

@@ -40,8 +40,8 @@ class CartCubit extends Cubit<Cart> {
     return const Cart();
   }
 
-  int get _maxLines => _config.isLoaded ? _config.config.cartMaxLines : 50;
-  int get _maxQty => _config.isLoaded ? _config.config.cartMaxQty : 99;
+  int get maxLines => _config.isLoaded ? _config.config.cartMaxLines : 50;
+  int get maxQty => _config.isLoaded ? _config.config.cartMaxQty : 99;
 
   @override
   void onChange(Change<Cart> change) {
@@ -71,13 +71,13 @@ class CartCubit extends Cubit<Cart> {
     final index = state.lines.indexWhere((l) => l.key == line.key);
     if (index >= 0) {
       final total = state.lines[index].qty + qty;
-      if (total > _maxQty) return AddResult.limitReached;
+      if (total > maxQty) return AddResult.limitReached;
       final lines = [...state.lines];
       lines[index] = lines[index].copyWith(qty: total);
       emit(Cart(vendorId: state.vendorId, lines: lines));
       return AddResult.added;
     }
-    if (state.count >= _maxLines || qty > _maxQty) {
+    if (state.count >= maxLines || qty > maxQty) {
       return AddResult.limitReached;
     }
     emit(Cart(vendorId: product.vendorId, lines: [...state.lines, line]));
@@ -102,7 +102,7 @@ class CartCubit extends Cubit<Cart> {
         if (line.key != key)
           line
         else if (qty > 0)
-          line.copyWith(qty: qty > _maxQty ? _maxQty : qty),
+          line.copyWith(qty: qty > maxQty ? maxQty : qty),
     ];
     emit(
       lines.isEmpty
@@ -125,9 +125,12 @@ class CartCubit extends Cubit<Cart> {
   );
 
   /// Moves the cart to [store], keeping only what it has, at its prices.
-  void switchStore(BasketStore store) {
+  void switchStore(BasketStore store) => fillFrom(store, state.lines);
+
+  /// Replaces the cart with what [store] has of [wanted], at its prices.
+  void fillFrom(BasketStore store, List<CartLine> wanted) {
     final lines = <CartLine>[];
-    for (final line in state.lines) {
+    for (final line in wanted) {
       for (final offer in store.lines) {
         if (offer.productId == line.productId && offer.available) {
           lines.add(

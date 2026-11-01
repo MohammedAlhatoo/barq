@@ -15,7 +15,7 @@ abstract class CartRepository {
     required int addressId,
   });
 
-  /// The server's price of the same items at another [store].
+  /// The server's price of what [store] has of the same items.
   Future<Quote> quoteStore({
     required BasketStore store,
     required int addressId,
@@ -65,7 +65,7 @@ class ApiCartRepository implements CartRepository {
   }) => _quote(store.vendorId, addressId, [
     // Each store sells the product under its own id.
     for (final line in store.lines)
-      {'product_id': line.storeProductId, 'qty': line.qty},
+      if (line.available) {'product_id': line.storeProductId, 'qty': line.qty},
   ]);
 
   Future<Quote> _quote(

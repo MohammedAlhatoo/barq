@@ -199,6 +199,8 @@ abstract final class BarqRadius {
   static const profileCard = 30.0;
   static const profileStat = 18.0;
   static const sheet = 34.0;
+  static const bubble = 22.0;
+  static const bubbleTail = 6.0; // the corner of a chat bubble by its sender
   static const phone = 48.0;
   static const pill = 999.0;
 }
@@ -280,6 +282,10 @@ abstract final class BarqSizes {
   static const homeVendorCard = 200.0;
   static const homeVendorCardHeight = 156.0;
   static const vendorRowLogo = 62.0;
+
+  // Assistant chat.
+  static const chatBubble = 320.0;
+  static const chatChipLabel = 220.0;
 
   // Account.
   static const profileAvatar = 58.0;
@@ -426,6 +432,9 @@ abstract final class BarqShadows {
 abstract final class BarqDurations {
   static const fast = Duration(milliseconds: 150);
   static const normal = Duration(milliseconds: 250);
+
+  /// One round of the dots in a chat's typing bubble.
+  static const typing = Duration(milliseconds: 900);
 
   /// The logo animation that follows the native launch screen.
   static const splashIntro = Duration(milliseconds: 1400);
