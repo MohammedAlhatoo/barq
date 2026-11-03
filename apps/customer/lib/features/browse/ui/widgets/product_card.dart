@@ -13,9 +13,10 @@ import 'product_art.dart';
 
 /// A product tile for grids and the home row.
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key, required this.product});
+  const ProductCard({super.key, required this.product, this.showStore = true});
 
   final Product product;
+  final bool showStore;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class ProductCard extends StatelessWidget {
       compareAtPrice: product.compareAtPrice?.formatted,
       vendorName: product.vendorName,
       vendorMuted: cartStore != null && cartStore != product.vendorId,
+      showStore: showStore,
       image: ProductArt(
         imageUrl: product.imageUrl,
         categoryIcon: product.categoryIcon,

@@ -329,6 +329,7 @@ class BarqBlob extends StatelessWidget {
   static const grey = RadialGradient(
       center: Alignment(-0.3, -0.4),
       colors: [Color(0xFFF3ECE8), Color(0xFFE3D7D0)]);
+
   /// The soft halo on the driver's dark screens.
   static const yellowGlow = RadialGradient(
     colors: [Color(0x59FFC94D), Color(0x00FFC94D)],

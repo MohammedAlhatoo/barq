@@ -389,6 +389,36 @@ class _BarqGalleryState extends State<BarqGallery> {
                         trailing: BarqPlusButton(onPressed: () {}),
                       ),
                       label('BarqProductRow + BarqThumb'),
+                      BarqHorizontalSection(
+                        title: 'منتجات متشابهة من نفس النوع',
+                        action: 'عرض الكل',
+                        onAction: () {},
+                        items: [
+                          SizedBox(
+                            width: 160,
+                            child: BarqProductTile(
+                              name: 'تفاح',
+                              price: '₪5',
+                              tile: BarqTileColor.pink,
+                              image: const BarqIllustration(
+                                  BarqIllustrations.apple),
+                              onAdd: () {},
+                            ),
+                          ),
+                          SizedBox(
+                            width: 160,
+                            child: BarqProductTile(
+                              name: 'موز',
+                              price: '₪7',
+                              tile: BarqTileColor.yellow,
+                              image: const BarqIllustration(
+                                  BarqIllustrations.banana),
+                              onAdd: () {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      label('BarqHorizontalSection'),
                       section('البطاقات والقوائم'),
                       BarqCard(
                         child: Column(children: [
@@ -670,9 +700,7 @@ class _BarqGalleryState extends State<BarqGallery> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           BarqOnlineSwitch(
-                              online: true,
-                              label: 'متصل',
-                              onChanged: (_) {}),
+                              online: true, label: 'متصل', onChanged: (_) {}),
                           BarqOnlineSwitch(
                               online: false,
                               label: 'غير متصل',

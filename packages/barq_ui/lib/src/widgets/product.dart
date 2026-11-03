@@ -7,6 +7,7 @@ import '../foundation/barq_theme.dart';
 import '../foundation/barq_tokens.dart';
 import 'buttons.dart';
 import 'indicators.dart';
+import 'layout.dart';
 import 'surfaces.dart';
 
 /// A picture from the server. [fallback] is only for an item with no [url]:
@@ -22,21 +23,24 @@ class BarqNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final link = url;
     if (link == null || link.isEmpty) return fallback;
-    return Image.network(
-      link,
-      fit: BoxFit.contain,
-      loadingBuilder: (_, child, progress) => progress == null
-          ? child
-          : const Center(
-              child: SizedBox.square(
-                dimension: BarqSizes.iconM,
-                child: CircularProgressIndicator(
-                    strokeWidth: 2, color: BarqColors.primary),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(BarqRadius.productGlass),
+      child: Image.network(
+        link,
+        fit: BoxFit.cover,
+        loadingBuilder: (_, child, progress) => progress == null
+            ? child
+            : const Center(
+                child: SizedBox.square(
+                  dimension: BarqSizes.iconM,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: BarqColors.primary),
+                ),
               ),
-            ),
-      errorBuilder: (context, error, stack) => const Center(
-        child: BarqIcon('package',
-            size: BarqSizes.iconL, color: BarqColors.placeholder),
+        errorBuilder: (context, error, stack) => const Center(
+          child: BarqIcon('package',
+              size: BarqSizes.iconL, color: BarqColors.placeholder),
+        ),
       ),
     );
   }
@@ -117,6 +121,7 @@ class BarqProductTile extends StatelessWidget {
     this.unit,
     this.vendorName,
     this.vendorMuted = false,
+    this.showStore = true,
     this.badge,
     this.topBadge,
     this.isFavorite,
@@ -149,6 +154,9 @@ class BarqProductTile extends StatelessWidget {
 
   /// Greys the store name: not the store the user is shopping from.
   final bool vendorMuted;
+
+  /// Whether to show the store line under the product name.
+  final bool showStore;
 
   /// Discount badge text, e.g. "−25%" (green pill, top-left).
   final String? badge;
@@ -190,8 +198,14 @@ class BarqProductTile extends StatelessWidget {
               right: large ? 30 : 16,
               top: large ? 30 : 8,
               // The footer is taller with the store line.
-              bottom: vendorName == null ? 70 : 88,
-              child: Opacity(opacity: soldOut ? .45 : 1, child: image),
+              bottom: (showStore && vendorName != null) ? 88 : 70,
+              child: Opacity(
+                opacity: soldOut ? .45 : 1,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(BarqRadius.productGlass),
+                  child: image,
+                ),
+              ),
             ),
             if (isFavorite != null)
               PositionedDirectional(
@@ -250,7 +264,7 @@ class BarqProductTile extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: BarqText.h3
                                     .copyWith(fontSize: large ? 16 : 15)),
-                            if (vendorName != null)
+                            if (showStore && vendorName != null)
                               Text(vendorName!,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -375,6 +389,69 @@ class BarqProductRow extends StatelessWidget {
           if (trailing != null) ...[const SizedBox(width: 8), trailing!],
         ],
       ),
+    );
+  }
+}
+
+/// A horizontal section with a header title and a horizontally scrolling list of items.
+class BarqHorizontalSection extends StatelessWidget {
+  const BarqHorizontalSection({
+    super.key,
+    required this.title,
+    this.action,
+    this.onAction,
+    required this.items,
+    this.loading = false,
+    this.error,
+    this.onRetry,
+    this.height = BarqSizes.productTile,
+  });
+
+  final String title;
+  final String? action;
+  final VoidCallback? onAction;
+  final List<Widget> items;
+  final bool loading;
+  final String? error;
+  final VoidCallback? onRetry;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    if (items.isEmpty && !loading && error == null) {
+      return const SizedBox.shrink();
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        BarqSectionHeader(title, action: action, onAction: onAction),
+        const SizedBox(height: BarqSpacing.gap),
+        SizedBox(
+          height: height,
+          child: loading
+              ? const Center(
+                  child: CircularProgressIndicator(color: BarqColors.primary),
+                )
+              : error != null
+                  ? Center(
+                      child: Text(error!,
+                          style:
+                              BarqText.body.copyWith(color: BarqColors.danger)),
+                    )
+                  : items.isEmpty
+                      ? const SizedBox.shrink()
+                      : ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: BarqSpacing.page),
+                          itemCount: items.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: BarqSpacing.gap),
+                          itemBuilder: (_, index) => items[index],
+                        ),
+        ),
+      ],
     );
   }
 }
