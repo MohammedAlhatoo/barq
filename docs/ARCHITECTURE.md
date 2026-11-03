@@ -15,7 +15,7 @@ barq/
 │  └─ driver/                ← تطبيق السائق (برق كابتن)
 ├─ packages/
 │  ├─ barq_ui/               ← الشكل: ألوان، خطوط، أيقونات، widgets (جاهزة ✅)
-│  └─ barq_core/             ← المنطق المشترك: API، الدخول، الإعدادات، الرفع، التحديث الدوري، عرض الحالة
+│  └─ barq_core/             ← المنطق المشترك: API، الدخول، الإعدادات، الرفع، FCM، التحديث الدوري، عرض الحالة
 └─ docs/
    ├─ design/screens  html  overlay
    ├─ api/            openapi.json · postman · API_NOTES.md

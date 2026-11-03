@@ -217,6 +217,7 @@ Map<String, Reply> _server({
   'POST /orders': Reply(_order(), status: 201),
   'GET /orders/55': Reply(_order()),
   'GET /orders/55/offer': const Reply(null, status: 404, error: 'not_found'),
+  'PUT /me/fcm-token': const Reply(null),
 };
 
 Future<TestApp> _open(
@@ -840,6 +841,34 @@ void main() {
       };
       await _tap(tester, app, 'الموافقة على العرض');
       expect(find.byType(OfferExpiredView), findsOneWidget);
+    });
+
+    _test('offer_changed shows the new offer and approves it anew', (
+      tester,
+    ) async {
+      final app = await _open(tester, Routes.offerOf(55), replies: priced());
+      app.server.handlers['POST /orders/55/offer/approve'] = (_) {
+        app.server.replies['GET /orders/55/offer'] = Reply({
+          ..._offer(),
+          'id': 49,
+        });
+        return const Reply(null, status: 409, error: 'offer_changed');
+      };
+      await _tap(tester, app, 'الموافقة على العرض');
+      final firstKey = app
+          .server
+          .headers['POST /orders/55/offer/approve']!['Idempotency-Key'];
+      expect(find.byType(OfferScreen), findsOneWidget);
+      expect(find.text('رسالة السيرفر'), findsOneWidget);
+
+      app.server.handlers.remove('POST /orders/55/offer/approve');
+      app.server.replies['POST /orders/55/offer/approve'] = Reply(_offer());
+      await _tap(tester, app, 'الموافقة على العرض');
+      expect(_bodyOf(app, 'POST /orders/55/offer/approve'), {'offer_id': 49});
+      expect(
+        app.server.headers['POST /orders/55/offer/approve']!['Idempotency-Key'],
+        isNot(firstKey),
+      );
     });
   });
 

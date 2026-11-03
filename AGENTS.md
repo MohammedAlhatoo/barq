@@ -18,7 +18,7 @@ API base: `https://masar.toldpath.com/api/v1` · OpenAPI: `docs/api/openapi.json
 apps/customer/            customer app
 apps/driver/              driver app
 packages/barq_ui/         design system — ALL visuals (colors, fonts, icons, widgets)
-packages/barq_core/       API client, auth, config, uploads, polling, status widgets
+packages/barq_core/       API client, auth, config, uploads, FCM, polling, status widgets
 docs/PLAN.md              the build order (phases) — always work from here
 docs/tasks/0N_*.md        detailed specs per area (screens, endpoints, notes)
 docs/notes/phase-N.md     Arabic explanation of each finished phase (written by you)
@@ -49,7 +49,7 @@ docs/ARCHITECTURE.md      folder structure, state management, barq_core contract
 - `delivery_confirmation = "photo"`: driver photo → `POST /uploads` (purpose `proof_photo`) → `POST /driver/orders/{id}/deliver` with `upload_ids`. **No delivery code/OTP is shown to the customer.**
 - Driver login = **phone + password**. Customer login = phone + OTP.
 - Payment: `cash_on_delivery` only.
-- No push notifications and no Firebase (instructor decision). Notifications are the in-app list from the API.
+- Push notifications: FCM through `PushService` (barq_core). Firebase is connected from the Masar dashboard (Notifications Lab); each app needs its own `android/app/google-services.json` (package `com.barq.barq_customer` / `com.barq.barq_driver`). The service account key goes on the dashboard only, never in the repo. The in-app list from the API stays, because a push is not guaranteed.
 - Weighed products: `awaiting_pricing` → `priced`; customer approves/rejects the offer before `expires_at`.
 - Brand: barq_ui colors (orange `#FF7A21`). Ignore `project.colors` from config.
 

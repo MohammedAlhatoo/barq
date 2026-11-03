@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "500139598432",
+    "project_id": "barq-aaf29",
+    "storage_bucket": "barq-aaf29.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:500139598432:android:b2e9664dbdf10cdeed1905",
+        "android_client_info": {
+          "package_name": "com.barq.barq_customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqSXtOKJvfNOFw91jlgFXrgp85CxpGEbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

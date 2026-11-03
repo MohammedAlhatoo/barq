@@ -1,4 +1,5 @@
 import 'package:barq_core/barq_core.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class AuthRepository {
   /// Keeps the token on success. Throws [ApiException] on a wrong password.
@@ -27,6 +28,13 @@ class ApiAuthRepository implements AuthRepository {
 
   @override
   Future<void> logout() async {
+    // The phone stops receiving this driver's notifications first, while the
+    // token still works.
+    try {
+      await _api.put('/driver/me/fcm-token', body: {'token': null});
+    } on ApiException catch (e) {
+      debugPrint('FCM token not removed: ${e.code}');
+    }
     try {
       await _api.post('/driver/auth/logout');
     } finally {

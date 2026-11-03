@@ -155,6 +155,12 @@ class OfferCubit extends Cubit<OfferState> {
   Future<void> _failed(ApiException e) async {
     if (e.code == 'offer_expired') {
       await load();
+    } else if (e.code == 'offer_changed') {
+      // The store changed the price after the user saw it: show the new offer
+      // and let the user approve again, as a new request.
+      _approveKey = null;
+      await load();
+      emit(state.copyWith(actionError: e.userMessage));
     } else if (e.code == 'invalid_transition') {
       await load();
       emit(state.copyWith(actionRefused: true));
