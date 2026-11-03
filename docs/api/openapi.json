@@ -2,7 +2,7 @@
     "openapi": "3.1.0",
     "info": {
         "title": "برق API",
-        "version": "config v3",
+        "version": "config v7",
         "description": "واجهة برق على مسار. كل طلب يحتاج ترويسة X-Project-Key؛ والطلبات بعد الدخول تحتاج أيضًا توكن Bearer."
     },
     "servers": [
@@ -951,6 +951,17 @@
                         "in": "query",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "kind",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "product",
+                                "service"
+                            ]
                         }
                     },
                     {
@@ -4174,7 +4185,7 @@
                     "user"
                 ],
                 "summary": "الموافقة على السعر",
-                "description": "وحدة التسعير والموافقة. ينسخ العرض إلى الطلب وينقله للخطوة التالية (عادة للسائقين). أرسل Idempotency-Key. يرجع 409 offer_expired إذا انتهت مدة العرض.",
+                "description": "وحدة التسعير والموافقة. ينسخ العرض إلى الطلب وينقله للخطوة التالية (عادة للسائقين). أرسل Idempotency-Key. أرسل offer_id، رقم العرض الذي رآه المستخدم (GET …/offer). يرجع 409 offer_changed إذا تعدّل السعر بعدها (في details رقم العرض الحالي وإجماليه): اعرض العرض الجديد واطلب الموافقة من جديد. ويرجع 409 offer_expired إذا انتهت مدة العرض.",
                 "parameters": [
                     {
                         "name": "order",
@@ -4201,6 +4212,24 @@
                         "$ref": "#/components/parameters/IdempotencyKey"
                     }
                 ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "offer_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "required": [
+                                    "offer_id"
+                                ]
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
                         "description": "نجاح",
@@ -4236,6 +4265,9 @@
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/Error"
                     },
                     "404": {
                         "$ref": "#/components/responses/Error"
@@ -4298,6 +4330,12 @@
                                             "null"
                                         ],
                                         "maxLength": 60
+                                    },
+                                    "offer_id": {
+                                        "type": [
+                                            "integer",
+                                            "null"
+                                        ]
                                     }
                                 }
                             }
@@ -4818,6 +4856,17 @@
                         "in": "query",
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "kind",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "product",
+                                "service"
+                            ]
                         }
                     },
                     {
@@ -6128,6 +6177,13 @@
                             "null"
                         ],
                         "maxLength": 40
+                    },
+                    "payment_gateway_id": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "description": "Store payments: the store's gateway for a transfer (the module checks it belongs to the cart's store)."
                     }
                 },
                 "title": "QuoteRequest"
@@ -6350,7 +6406,8 @@
                 "type": "object",
                 "properties": {
                     "amount": {
-                        "type": "integer"
+                        "type": "integer",
+                        "example": 890
                     },
                     "formatted": {
                         "type": "string",
@@ -7172,12 +7229,53 @@
                                     "string",
                                     "null"
                                 ]
+                            },
+                            "gateway": {
+                                "type": [
+                                    "object",
+                                    "null"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "holder": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "account_number": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    },
+                                    "qr_url": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name",
+                                    "holder",
+                                    "account_number",
+                                    "qr_url"
+                                ],
+                                "additionalProperties": false
                             }
                         },
                         "required": [
                             "method",
                             "status",
-                            "review_note"
+                            "review_note",
+                            "gateway"
                         ],
                         "additionalProperties": false
                     },
@@ -8583,6 +8681,20 @@
                             "null"
                         ]
                     },
+                    "kind": {
+                        "type": "string",
+                        "enum": [
+                            "product",
+                            "service"
+                        ]
+                    },
+                    "price_mode": {
+                        "type": "string",
+                        "enum": [
+                            "fixed",
+                            "inspection"
+                        ]
+                    },
                     "options": {
                         "type": "array",
                         "items": {
@@ -8605,6 +8717,8 @@
                     "stock",
                     "category_id",
                     "vendor_id",
+                    "kind",
+                    "price_mode",
                     "options",
                     "fields"
                 ],
@@ -8667,6 +8781,9 @@
                     "is_open_now": {
                         "type": "boolean"
                     },
+                    "is_open": {
+                        "type": "boolean"
+                    },
                     "prep_minutes": {
                         "type": "integer"
                     },
@@ -8690,6 +8807,7 @@
                     "address",
                     "distance_km",
                     "is_open_now",
+                    "is_open",
                     "prep_minutes",
                     "rating",
                     "opening_hours"
@@ -9406,7 +9524,7 @@
     },
     "x-masar": {
         "project": "mind-crafters-4",
-        "config_version": 3,
+        "config_version": 7,
         "locale": "ar"
     }
 }

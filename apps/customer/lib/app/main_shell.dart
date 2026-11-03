@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,19 +26,32 @@ class _MainShellState extends State<MainShell> {
   static const _ordersTab = 2;
 
   late final UnreadCubit _unread;
+  StreamSubscription<PushMessage>? _pushReceived;
 
   @override
   void initState() {
     super.initState();
+    _startPush();
     final deps = context.read<AppDependencies>();
     deps.scope.loadName();
     _unread = deps.unread..start();
+    // A push while the app is open is not shown by the phone: update the dot.
+    _pushReceived = deps.push.onForeground.listen((_) => _unread.refresh());
   }
 
   @override
   void dispose() {
+    _pushReceived?.cancel();
     _unread.stop();
     super.dispose();
+  }
+
+  /// Only after login, because the token is saved on the user's account.
+  Future<void> _startPush() async {
+    final deps = context.read<AppDependencies>();
+    if (!await deps.authRepository.notificationsEnabled()) return;
+    await deps.push.init();
+    await deps.push.registerToken();
   }
 
   @override

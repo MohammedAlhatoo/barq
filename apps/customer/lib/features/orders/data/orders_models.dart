@@ -292,7 +292,8 @@ class CancelReason {
   final String label;
 }
 
-/// The order a notification is about. The number may arrive as a string.
+/// The order a notification or a push message is about. FCM sends every value
+/// as text, so the number may arrive as a string.
 int? orderIdOf(Map<String, dynamic> data) =>
     int.tryParse('${data['order_id']}');
 

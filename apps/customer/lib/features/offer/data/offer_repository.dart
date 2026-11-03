@@ -40,7 +40,8 @@ class ApiOfferRepository implements OfferRepository {
     }
   }
 
-  /// `openapi.json` shows no body, but the server requires `offer_id`.
+  /// `offer_id` is the offer the user saw. If the price changed since, the
+  /// server answers 409 `offer_changed`.
   @override
   Future<void> approve(
     int orderId, {

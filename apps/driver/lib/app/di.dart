@@ -36,6 +36,7 @@ class AppDependencies {
     required this.auth,
     required this.api,
     required this.config,
+    required this.push,
     required this.locale,
     required this.system,
     required this.authRepository,
@@ -54,6 +55,7 @@ class AppDependencies {
   final AuthStore auth;
   final ApiClient api;
   final ConfigStore config;
+  final PushService push;
   final LocaleCubit locale;
   final SystemCubit system;
   final AuthRepository authRepository;
@@ -113,6 +115,7 @@ class AppDependencies {
       auth: auth,
       api: api,
       config: config,
+      push: PushService(api: api, app: BarqAppKind.driver),
       locale: locale,
       system: system,
       authRepository: ApiAuthRepository(api, auth),

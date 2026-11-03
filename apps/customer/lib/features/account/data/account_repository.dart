@@ -154,9 +154,15 @@ class ApiAccountRepository implements AccountRepository {
     }
   }
 
-  /// A 401 means the session is already over.
+  /// The phone stops receiving this user's notifications first, while the
+  /// token still works. A 401 means the session is already over.
   @override
   Future<void> logout() async {
+    try {
+      await _api.put('/me/fcm-token', body: {'token': null});
+    } on ApiException catch (e) {
+      debugPrint('FCM token not removed: ${e.code}');
+    }
     try {
       await _api.post('/auth/logout');
     } on ApiException catch (e) {

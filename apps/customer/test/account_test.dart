@@ -66,6 +66,7 @@ Map<String, Reply> _server({List<Object> addresses = const [_home, _work]}) => {
   'DELETE /addresses/2': const Reply(null),
   'GET /orders': const Reply(<Object>[], meta: {'total': 12}),
   'GET /notifications': const Reply(<Object>[], meta: {'total': 2}),
+  'PUT /me/fcm-token': const Reply(null),
   'POST /auth/logout': const Reply(null),
   'POST /uploads': const Reply({'upload_id': 77}, status: 201),
 };
@@ -182,7 +183,11 @@ void main() {
       expect(app.server.calls, isNot(contains('POST /auth/logout')));
       await _tap(tester, app, find.text('تسجيل الخروج').last);
 
-      expect(app.server.calls, contains('POST /auth/logout'));
+      expect(app.server.bodies['PUT /me/fcm-token'], {'token': null});
+      expect(
+        app.server.calls.indexOf('PUT /me/fcm-token'),
+        lessThan(app.server.calls.indexOf('POST /auth/logout')),
+      );
       expect(app.deps.auth.isLoggedIn, isFalse);
       expect(app.deps.cart.state.isEmpty, isTrue);
       expect(app.deps.prefs.getStringList(SearchCubit.recentKey), isNull);

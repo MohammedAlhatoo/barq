@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/profile/state/driver_cubit.dart';
 import '../l10n/generated/app_localizations.dart';
+import 'di.dart';
 import 'router.dart';
 
 /// The logged-in part of the app: 4 tabs + the middle button, which opens the
@@ -25,6 +26,14 @@ class _MainShellState extends State<MainShell> {
   void initState() {
     super.initState();
     context.read<DriverCubit>().load();
+    _startPush();
+  }
+
+  /// Only after login, because the token is saved on the driver's account.
+  Future<void> _startPush() async {
+    final push = context.read<AppDependencies>().push;
+    await push.init();
+    await push.registerToken();
   }
 
   void _goOnline() {

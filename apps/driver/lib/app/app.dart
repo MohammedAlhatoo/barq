@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:barq_core/barq_core.dart';
 import 'package:barq_ui/barq_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/notifications/data/notifications_repository.dart';
 import '../features/system/ui/system_gate.dart';
 import '../l10n/generated/app_localizations.dart';
 import 'di.dart';
@@ -22,6 +25,25 @@ class BarqDriverApp extends StatefulWidget {
 
 class _BarqDriverAppState extends State<BarqDriverApp> {
   late final GoRouter _router = createRouter(widget.deps.auth);
+  StreamSubscription<PushMessage>? _pushOpened;
+
+  @override
+  void initState() {
+    super.initState();
+    _pushOpened = widget.deps.push.onOpen.listen(_openPush);
+  }
+
+  Future<void> _openPush(PushMessage message) async {
+    final orderId = orderIdOf(message.data);
+    if (orderId == null) return;
+    _router.go(Routes.jobs);
+    try {
+      final current = await widget.deps.jobsRepository.current();
+      if (current?.id == orderId) await _router.push(Routes.task);
+    } on ApiException catch (e) {
+      debugPrint('Current job not checked: $e');
+    }
+  }
 
   /// Labels from the server depend on the language.
   Future<void> _reloadConfig() async {
@@ -34,6 +56,7 @@ class _BarqDriverAppState extends State<BarqDriverApp> {
 
   @override
   void dispose() {
+    _pushOpened?.cancel();
     _router.dispose();
     super.dispose();
   }
