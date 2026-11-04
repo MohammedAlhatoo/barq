@@ -10,6 +10,7 @@ import '../../cart/ui/add_to_cart.dart';
 import '../data/browse_models.dart';
 import '../state/product_cubit.dart';
 import 'widgets/product_art.dart';
+import 'widgets/product_card.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
@@ -76,85 +77,99 @@ class _ProductView extends StatelessWidget {
     final cartMax = config.isLoaded ? config.config.cartMaxQty : 99;
     final stock = product.stock;
     final description = product.description;
-    return BarqFillScroll(
-      footer: Padding(
-        padding: const EdgeInsets.fromLTRB(
-          BarqSpacing.page,
-          BarqSpacing.section,
-          BarqSpacing.page,
-          BarqSpacing.stateBottom,
-        ),
-        child: BarqButton(
-          label: state.showsPrice
-              ? l10n.addToCartPrice(product.price.formatted)
-              : l10n.addToCart,
-          onPressed: state.canAdd ? () => _add(context) : null,
-        ),
+    return BarqScreen(
+      bottomSheet: BarqSheet(
+        showGrab: false,
+        gap: 0,
+        children: [
+          BarqButton(
+            label: state.showsPrice
+                ? l10n.addToCartPrice(product.price.formatted)
+                : l10n.addToCart,
+            onPressed: state.canAdd ? () => _add(context) : null,
+          ),
+        ],
       ),
-      children: [
-        BarqHeader(
-          title: l10n.productTitle,
-          back: true,
-          trailing: BarqIconButton(
-            icon: BarqIcons.bag,
-            onPressed: () => context.push(Routes.cart),
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: BarqSpacing.cartSheetClearance),
+        children: [
+          BarqHeader(
+            title: l10n.productTitle,
+            back: true,
+            trailing: BarqIconButton(
+              icon: BarqIcons.bag,
+              onPressed: () => context.push(Routes.cart),
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(
-            BarqSpacing.page,
-            BarqSpacing.section,
-            BarqSpacing.page,
-            0,
-          ),
-          child: BarqGap(
-            children: [
-              BarqTileBackground(
-                tile: ProductArt.tileOf(product.categoryIcon),
-                height: BarqSizes.productHero,
-                padding: const EdgeInsets.all(BarqSpacing.lg),
-                child: Center(
-                  child: ProductArt(
-                    imageUrl: product.imageUrl,
-                    categoryIcon: product.categoryIcon,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(
+              BarqSpacing.page,
+              BarqSpacing.section,
+              BarqSpacing.page,
+              0,
+            ),
+            child: BarqGap(
+              children: [
+                BarqTileBackground(
+                  tile: ProductArt.tileOf(product.categoryIcon),
+                  height: BarqSizes.productHero,
+                  padding: const EdgeInsets.all(BarqSpacing.lg),
+                  child: Center(
+                    child: ProductArt(
+                      imageUrl: product.imageUrl,
+                      categoryIcon: product.categoryIcon,
+                    ),
                   ),
                 ),
-              ),
-              Text(product.name, style: BarqText.h1),
-              Row(
-                children: [
-                  Expanded(
-                    child: BarqPrice(
-                      product.price.formatted,
-                      compareAt: product.compareAtPrice?.formatted,
-                      style: BarqText.h1,
-                    ),
-                  ),
-                  if (product.inStock)
-                    BarqQtyStepper(
-                      value: state.qty,
-                      min: 1,
-                      max: stock != null && stock < cartMax ? stock : cartMax,
-                      large: true,
-                      onChanged: cubit.qtyChanged,
-                    ),
-                ],
-              ),
-              _StoreRow(vendor: state.vendor, inStock: product.inStock),
-              for (final option in product.options)
-                _OptionPicker(option: option, state: state),
-              if (description != null && description.isNotEmpty)
-                BarqGap(
-                  gap: BarqSpacing.xxs,
+                Text(product.name, style: BarqText.h1),
+                Row(
                   children: [
-                    Text(l10n.productDescription, style: BarqText.h3),
-                    Text(description, style: BarqText.body),
+                    Expanded(
+                      child: BarqPrice(
+                        product.price.formatted,
+                        compareAt: product.compareAtPrice?.formatted,
+                        style: BarqText.h1,
+                      ),
+                    ),
+                    if (product.inStock)
+                      BarqQtyStepper(
+                        value: state.qty,
+                        min: 1,
+                        max: stock != null && stock < cartMax ? stock : cartMax,
+                        large: true,
+                        onChanged: cubit.qtyChanged,
+                      ),
                   ],
+                ),
+                _StoreRow(vendor: state.vendor, inStock: product.inStock),
+                for (final option in product.options)
+                  _OptionPicker(option: option, state: state),
+                if (description != null && description.isNotEmpty)
+                  BarqGap(
+                    gap: BarqSpacing.xxs,
+                    children: [
+                      Text(l10n.productDescription, style: BarqText.h3),
+                      Text(description, style: BarqText.body),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: BarqSpacing.section),
+          BarqHorizontalSection(
+            title: 'منتجات متشابهة من نفس النوع',
+            loading: state.similarLoading,
+            error: state.similarError,
+            items: [
+              for (final p in state.similarProducts)
+                SizedBox(
+                  width: BarqSizes.homeProductTile,
+                  child: ProductCard(product: p, showStore: false),
                 ),
             ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

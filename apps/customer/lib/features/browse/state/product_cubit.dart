@@ -12,6 +12,9 @@ class ProductState {
     this.selected = const {},
     this.qty = 1,
     this.error,
+    this.similarLoading = true,
+    this.similarProducts = const [],
+    this.similarError,
   });
 
   final bool loading;
@@ -22,6 +25,9 @@ class ProductState {
   final Map<String, Set<String>> selected;
   final int qty;
   final String? error;
+  final bool similarLoading;
+  final List<Product> similarProducts;
+  final String? similarError;
 
   bool isSelected(ProductOption option, ProductChoice choice) =>
       selected[option.key]?.contains(choice.key) ?? false;
@@ -63,14 +69,22 @@ class ProductState {
     return labels.isEmpty ? null : labels.join('، ');
   }
 
-  ProductState copyWith({Map<String, Set<String>>? selected, int? qty}) =>
-      ProductState(
-        loading: false,
-        product: product,
-        vendor: vendor,
-        selected: selected ?? this.selected,
-        qty: qty ?? this.qty,
-      );
+  ProductState copyWith({
+    Map<String, Set<String>>? selected,
+    int? qty,
+    bool? similarLoading,
+    List<Product>? similarProducts,
+    String? similarError,
+  }) => ProductState(
+    loading: false,
+    product: product,
+    vendor: vendor,
+    selected: selected ?? this.selected,
+    qty: qty ?? this.qty,
+    similarLoading: similarLoading ?? this.similarLoading,
+    similarProducts: similarProducts ?? this.similarProducts,
+    similarError: similarError ?? this.similarError,
+  );
 }
 
 class ProductCubit extends Cubit<ProductState> {
@@ -95,6 +109,7 @@ class ProductCubit extends Cubit<ProductState> {
           loading: false,
           product: product,
           vendor: vendor,
+          similarLoading: true,
           selected: {
             for (final option in product.options)
               if (option.isRequired &&
@@ -104,6 +119,21 @@ class ProductCubit extends Cubit<ProductState> {
           },
         ),
       );
+      try {
+        if (product.categoryId != null) {
+          final page = await _repository.products(
+            categoryId: product.categoryId,
+          );
+          final similar = page.items.where((p) => p.id != product.id).toList();
+          emit(state.copyWith(similarLoading: false, similarProducts: similar));
+        } else {
+          emit(
+            state.copyWith(similarLoading: false, similarProducts: const []),
+          );
+        }
+      } on ApiException catch (e) {
+        emit(state.copyWith(similarLoading: false, similarError: e.messageAr));
+      }
     } on ApiException catch (e) {
       emit(ProductState(loading: false, error: e.messageAr));
     }

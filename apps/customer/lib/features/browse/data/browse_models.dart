@@ -75,6 +75,7 @@ class Product {
     required this.compareAtPrice,
     required this.inStock,
     required this.stock,
+    required this.categoryId,
     required this.vendorId,
     required this.options,
     this.categoryIcon,
@@ -98,6 +99,7 @@ class Product {
           : null,
       inStock: json['in_stock'] as bool,
       stock: json['stock'] as int?,
+      categoryId: json['category_id'] as int?,
       vendorId: json['vendor_id'] as int?,
       options: ((json['options'] as List?) ?? const [])
           .map(
@@ -119,6 +121,7 @@ class Product {
 
   /// Null means the store does not count this product.
   final int? stock;
+  final int? categoryId;
   final int? vendorId;
   final List<ProductOption> options;
 

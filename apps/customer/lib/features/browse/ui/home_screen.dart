@@ -254,7 +254,7 @@ class _Products extends StatelessWidget {
       separatorBuilder: (_, _) => const SizedBox(width: BarqSpacing.gap),
       itemBuilder: (_, index) => SizedBox(
         width: BarqSizes.homeProductTile,
-        child: ProductCard(product: products[index]),
+        child: ProductCard(product: products[index], showStore: false),
       ),
     ),
   );
