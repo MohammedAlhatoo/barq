@@ -22,3 +22,6 @@ pubspec_overrides.yaml
 **/*.jks
 **/*.keystore
 keys.json
+
+# Built APKs to share (too big for git)
+apk/
