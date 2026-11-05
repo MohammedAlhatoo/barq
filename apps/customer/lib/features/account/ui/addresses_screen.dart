@@ -106,15 +106,20 @@ class _AddressList extends StatelessWidget {
                 icon: BarqIcons.alert,
                 tone: BarqNoteTone.danger,
               ),
-            for (final address in state.addresses)
-              BarqAddressCard(
-                icon: addressIcon(l10n, address),
-                title: addressTitle(l10n, address),
-                subtitle: address.details,
-                badge: address.isDefault ? l10n.addressesDefault : null,
-                selected: address.isDefault,
-                onEdit: () => context.push(Routes.addressEdit, extra: address),
-                onDelete: () => _confirmDelete(context, address),
+            for (final (index, address) in state.addresses.indexed)
+              BarqStaggerItem(
+                group: 'addresses',
+                index: index,
+                child: BarqAddressCard(
+                  icon: addressIcon(l10n, address),
+                  title: addressTitle(l10n, address),
+                  subtitle: address.details,
+                  badge: address.isDefault ? l10n.addressesDefault : null,
+                  selected: address.isDefault,
+                  onEdit: () =>
+                      context.push(Routes.addressEdit, extra: address),
+                  onDelete: () => _confirmDelete(context, address),
+                ),
               ),
             BarqButton(
               label: l10n.addressesAdd,

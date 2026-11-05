@@ -115,8 +115,15 @@ class ReceiptScreen extends StatelessWidget {
                       ),
                       if (store != null) Text(store, style: BarqText.tBold),
                       const BarqDivider(dashed: true),
-                      for (final item in receipt.items)
-                        BarqSummaryRow('${item.name} × ${item.qty}', ''),
+                      for (final (index, item) in receipt.items.indexed)
+                        BarqStaggerItem(
+                          group: 'receipt-items',
+                          index: index,
+                          child: BarqSummaryRow(
+                            '${item.name} × ${item.qty}',
+                            '',
+                          ),
+                        ),
                       const BarqDivider(dashed: true),
                       for (final line in receipt.lines)
                         BarqSummaryRow(

@@ -12,13 +12,13 @@
 | `apps/*/lib/app/app.dart` | لما ينضغط إشعار، بيفتح الطلب حسب `order_id` |
 | `apps/customer/.../account_repository.dart` و `apps/driver/.../auth_repository.dart` | بيحذفوا التوكن قبل الخروج |
 | `apps/*/android/settings.gradle.kts` و `app/build.gradle.kts` | إضافة `google-services` اللي بتقرأ `google-services.json` |
-| `apps/*/android/app/src/main/AndroidManifest.xml` | `firebase_messaging_installation_id_enabled = true`: بدونه `register()` بيرفض يعطي توكن (`API disabled`) |
+| `apps/*/android/app/src/main/AndroidManifest.xml` | ممنوع نضيف `firebase_messaging_installation_id_enabled`: معه `getToken()` بيفشل (`API disabled`) |
 | `apps/*/android/gradle.properties` | `kotlin.incremental=false`: المشروع على `D:` ومكتبات Flutter على `C:`، فـ Kotlin ما بيقدر يسكّر ملفاته المؤقتة على Windows والبناء بيفشل |
 | `apps/customer/.../offer_cubit.dart` | الـ API الجديد (config v7): `409 offer_changed` لما السعر يتغيّر بعد ما شافه الزبون، فبنعرض العرض الجديد وبنطلب موافقة جديدة بمفتاح جديد |
 
 ## كيف بتمشي البيانات؟
 1. المستخدم بيسجّل دخول ← `MainShell` بينادي `push.init()` ثم `push.registerToken()`.
-2. Firebase بيعطينا توكن ← بنبعته `PUT /me/fcm-token` (السائق: `/driver/me/fcm-token`). وإذا Firebase غيّره، `onRegistered` بيبعته من جديد.
+2. Firebase بيعطينا توكن بـ `getToken()` ← بنبعته `PUT /me/fcm-token` (السائق: `/driver/me/fcm-token`) بعد كل دخول. وإذا Firebase غيّره، `onTokenRefresh` بيبعته من جديد.
 3. صار حدث (تغيّر حالة طلب، رسالة جماعية...) ← مسار بيبعت الإشعار لـ Firebase ← بيوصل للموبايل.
 4. المستخدم ضغط عليه ← بنبعت `POST /notifications/{id}/opened` (بتظهر «فُتح» باللوحة) ← التطبيق بيفتح الطلب.
 5. التطبيق مفتوح ← الموبايل ما بيعرض الإشعار ← بنحدّث نقطة الإشعارات عند الزبون.
@@ -27,6 +27,7 @@
 ## ليش هيك؟
 - **بدون `google-services.json` التطبيق بيضل يشتغل:** `init()` بيفشل بهدوء، وإضافة Gradle بتشتغل بس إذا الملف موجود. فأي واحد بالفريق بيقدر يبني التطبيق حتى لو ما عنده الملف.
 - **القائمة داخل التطبيق ضلت:** الـ push مش مضمون يوصل، فشاشة الإشعارات هي المصدر الأكيد.
+- **ليش `getToken()` مع إنها deprecated؟** `register()` و`onRegistered` بيعطوا Firebase Installation ID مش توكن، وإرساله بيحتاج سيرفر بيبعت على `fid`. الـ API موثّق إنه بيخزّن توكن FCM، فبنضل عالتوكن لحد ما مسار يدعم `fid`.
 - **ما استخدمنا `firebase_options.dart`:** على Android، `Firebase.initializeApp()` بيقرأ الإعدادات من `google-services.json` لحاله.
 
 ## شو لازم الفريق يعمل؟

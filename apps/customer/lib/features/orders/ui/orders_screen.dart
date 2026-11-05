@@ -99,10 +99,13 @@ class OrdersScreen extends StatelessWidget {
                             itemCount: items.length,
                             separatorBuilder: (_, _) =>
                                 const SizedBox(height: BarqSpacing.gap),
-                            itemBuilder: (context, index) =>
-                                state.tab == OrdersTab.current
-                                ? _CurrentCard(order: items[index])
-                                : _PastCard(order: items[index]),
+                            itemBuilder: (context, index) => BarqStaggerItem(
+                              group: 'orders-${state.tab.name}',
+                              index: index,
+                              child: state.tab == OrdersTab.current
+                                  ? _CurrentCard(order: items[index])
+                                  : _PastCard(order: items[index]),
+                            ),
                           ),
                         ),
                       ),

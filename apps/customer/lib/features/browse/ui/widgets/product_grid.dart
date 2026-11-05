@@ -21,7 +21,11 @@ class ProductGrid extends StatelessWidget {
         mainAxisExtent: BarqSizes.productTile,
       ),
       itemCount: products.length,
-      itemBuilder: (_, index) => ProductCard(product: products[index]),
+      itemBuilder: (_, index) => BarqStaggerItem(
+        group: 'product-grid',
+        index: index,
+        child: ProductCard(product: products[index]),
+      ),
     ),
   );
 }

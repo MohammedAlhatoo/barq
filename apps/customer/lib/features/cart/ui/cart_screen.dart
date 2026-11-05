@@ -76,7 +76,12 @@ class CartScreen extends StatelessWidget {
                     0,
                   ),
                   children: [
-                    for (final line in cart.lines) _CartLineRow(line: line),
+                    for (final (index, line) in cart.lines.indexed)
+                      BarqStaggerItem(
+                        group: 'cart-lines',
+                        index: index,
+                        child: _CartLineRow(line: line),
+                      ),
                     if (compare) const _CompareCard(),
                   ],
                 ),

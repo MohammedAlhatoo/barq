@@ -128,7 +128,10 @@ class NotificationsScreen extends StatelessWidget {
         ),
       );
     }
-    return rows;
+    return [
+      for (final (index, row) in rows.indexed)
+        BarqStaggerItem(group: 'notifications', index: index, child: row),
+    ];
   }
 }
 

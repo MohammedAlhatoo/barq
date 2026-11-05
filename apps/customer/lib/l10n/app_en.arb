@@ -427,5 +427,10 @@
   "assistantReplaceConfirm": "Replace cart",
   "activeOrderOffer": "Your price offer is here",
   "activeOrderTracking": "Follow your order on the map",
-  "activeOrderWaiting": "We'll keep you posted"
+  "activeOrderWaiting": "We'll keep you posted",
+  "homeHowTitle": "How Barq works",
+  "homeHowBody": "Order from nearby stores, and we bring it to your door",
+  "homeHowStep1": "Fill your cart and compare stores",
+  "homeHowStep2": "Confirm and follow your order",
+  "homeHowStep3": "Receive it and pay at the door"
 }

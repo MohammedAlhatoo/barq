@@ -2263,6 +2263,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'رح نخبرك بكل جديد'**
   String get activeOrderWaiting;
+
+  /// No description provided for @homeHowTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'كيف يعمل برق؟'**
+  String get homeHowTitle;
+
+  /// No description provided for @homeHowBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'اطلب من المتاجر القريبة، ونوصّل طلبك لبابك'**
+  String get homeHowBody;
+
+  /// No description provided for @homeHowStep1.
+  ///
+  /// In ar, this message translates to:
+  /// **'عبّي سلتك وقارن المتاجر'**
+  String get homeHowStep1;
+
+  /// No description provided for @homeHowStep2.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكّد طلبك وتابعه خطوة بخطوة'**
+  String get homeHowStep2;
+
+  /// No description provided for @homeHowStep3.
+  ///
+  /// In ar, this message translates to:
+  /// **'استلمه وادفع عند الباب'**
+  String get homeHowStep3;
 }
 
 class _AppLocalizationsDelegate

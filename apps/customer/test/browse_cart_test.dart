@@ -145,11 +145,15 @@ Map<String, Reply> _server({Reply? compare, Reply? products}) => {
       }),
 };
 
+/// Tall enough to build every home section, which sit below the fold on a
+/// real phone since the "how it works" card.
+const _tallPhone = Size(390, 1200);
+
 Future<TestApp> _open(
   WidgetTester tester, {
   Map<String, Reply>? replies,
   Map<String, Object> prefs = const {},
-  Size size = phone,
+  Size size = _tallPhone,
 }) async {
   final app = await TestApp.create(
     replies ?? _server(),

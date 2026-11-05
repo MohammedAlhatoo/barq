@@ -1240,4 +1240,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get activeOrderWaiting => 'رح نخبرك بكل جديد';
+
+  @override
+  String get homeHowTitle => 'كيف يعمل برق؟';
+
+  @override
+  String get homeHowBody => 'اطلب من المتاجر القريبة، ونوصّل طلبك لبابك';
+
+  @override
+  String get homeHowStep1 => 'عبّي سلتك وقارن المتاجر';
+
+  @override
+  String get homeHowStep2 => 'أكّد طلبك وتابعه خطوة بخطوة';
+
+  @override
+  String get homeHowStep3 => 'استلمه وادفع عند الباب';
 }

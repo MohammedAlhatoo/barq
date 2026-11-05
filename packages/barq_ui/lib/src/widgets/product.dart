@@ -14,17 +14,21 @@ import 'surfaces.dart';
 /// loading shows a small spinner, and a broken link a neutral icon.
 class BarqNetworkImage extends StatelessWidget {
   const BarqNetworkImage(
-      {super.key, required this.url, required this.fallback});
+      {super.key,
+      required this.url,
+      required this.fallback,
+      this.radius = BarqRadius.productGlass});
 
   final String? url;
   final Widget fallback;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
     final link = url;
     if (link == null || link.isEmpty) return fallback;
     return ClipRRect(
-      borderRadius: BorderRadius.circular(BarqRadius.productGlass),
+      borderRadius: BorderRadius.circular(radius),
       child: Image.network(
         link,
         fit: BoxFit.cover,
@@ -194,15 +198,16 @@ class BarqProductTile extends StatelessWidget {
         child: Stack(
           children: [
             Positioned(
-              left: large ? 30 : 16,
-              right: large ? 30 : 16,
+              left: large ? 30 : 8,
+              right: large ? 30 : 8,
               top: large ? 30 : 8,
               // The footer is taller with the store line.
               bottom: (showStore && vendorName != null) ? 88 : 70,
               child: Opacity(
                 opacity: soldOut ? .45 : 1,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(BarqRadius.productGlass),
+                  borderRadius: BorderRadius.circular(
+                      large ? BarqRadius.productGlass : BarqRadius.productImage),
                   child: image,
                 ),
               ),

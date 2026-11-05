@@ -90,6 +90,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SliverToBoxAdapter(child: _HowItWorks()),
                   if (ConfigScope.of(context).config
                       .hasModule('basket_compare'))
                     const SliverToBoxAdapter(child: _AssistantBanner()),
@@ -197,6 +198,28 @@ class _HomeHeader extends StatelessWidget {
   }
 }
 
+class _HowItWorks extends StatelessWidget {
+  const _HowItWorks();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(
+        BarqSpacing.page,
+        BarqSpacing.gap,
+        BarqSpacing.page,
+        0,
+      ),
+      child: BarqHowItWorks(
+        title: l10n.homeHowTitle,
+        subtitle: l10n.homeHowBody,
+        steps: [l10n.homeHowStep1, l10n.homeHowStep2, l10n.homeHowStep3],
+      ),
+    );
+  }
+}
+
 class _AssistantBanner extends StatelessWidget {
   const _AssistantBanner();
 
@@ -252,9 +275,13 @@ class _Products extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.page),
       itemCount: products.length,
       separatorBuilder: (_, _) => const SizedBox(width: BarqSpacing.gap),
-      itemBuilder: (_, index) => SizedBox(
-        width: BarqSizes.homeProductTile,
-        child: ProductCard(product: products[index], showStore: false),
+      itemBuilder: (_, index) => BarqStaggerItem(
+        group: 'home-products',
+        index: index,
+        child: SizedBox(
+          width: BarqSizes.homeProductTile,
+          child: ProductCard(product: products[index], showStore: false),
+        ),
       ),
     ),
   );
@@ -279,13 +306,17 @@ class _Vendors extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(width: BarqSpacing.gap),
         itemBuilder: (context, index) {
           final vendor = vendors[index];
-          return SizedBox(
-            width: BarqSizes.homeVendorCard,
-            child: BarqVendorCard(
-              logo: VendorLogo(url: vendor.logoUrl),
-              name: vendor.name,
-              meta: vendorMeta(l10n, vendor),
-              onTap: () => context.push(Routes.vendorOf(vendor.id)),
+          return BarqStaggerItem(
+            group: 'home-vendors',
+            index: index,
+            child: SizedBox(
+              width: BarqSizes.homeVendorCard,
+              child: BarqVendorCard(
+                logo: VendorLogo(url: vendor.logoUrl),
+                name: vendor.name,
+                meta: vendorMeta(l10n, vendor),
+                onTap: () => context.push(Routes.vendorOf(vendor.id)),
+              ),
             ),
           );
         },

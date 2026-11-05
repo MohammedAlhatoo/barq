@@ -59,13 +59,20 @@ class PushService {
   }
 
   /// Call after login. Also sends every new token Firebase gives us.
+  ///
+  /// The API stores an FCM registration token. `register()` and `onRegistered`
+  /// give a Firebase Installation ID instead, which needs a server that sends
+  /// to `fid`, so we stay on the token until the API supports that.
   Future<void> registerToken() async {
     if (!_ready) return;
     final messaging = FirebaseMessaging.instance;
-    // onRegistered gives the token now, and again whenever Firebase changes it.
-    _refreshed ??= messaging.onRegistered.listen(_sendToken);
+    // ignore: deprecated_member_use
+    _refreshed ??= messaging.onTokenRefresh.listen(_sendToken);
     try {
-      await messaging.register();
+      // Sent after every login, because logout removes it from the server.
+      // ignore: deprecated_member_use
+      final token = await messaging.getToken();
+      if (token != null) await _sendToken(token);
     } on Object catch (e) {
       debugPrint('FCM token not received: $e');
     }

@@ -484,5 +484,10 @@
   "assistantReplaceConfirm": "استبدال السلة",
   "activeOrderOffer": "وصلك عرض السعر",
   "activeOrderTracking": "تابع طلبك على الخريطة",
-  "activeOrderWaiting": "رح نخبرك بكل جديد"
+  "activeOrderWaiting": "رح نخبرك بكل جديد",
+  "homeHowTitle": "كيف يعمل برق؟",
+  "homeHowBody": "اطلب من المتاجر القريبة، ونوصّل طلبك لبابك",
+  "homeHowStep1": "عبّي سلتك وقارن المتاجر",
+  "homeHowStep2": "أكّد طلبك وتابعه خطوة بخطوة",
+  "homeHowStep3": "استلمه وادفع عند الباب"
 }

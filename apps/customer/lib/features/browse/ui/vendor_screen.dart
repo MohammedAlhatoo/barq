@@ -115,10 +115,14 @@ class _VendorView extends StatelessWidget {
                         itemCount: state.items.length,
                         separatorBuilder: (_, _) =>
                             const SizedBox(height: BarqSpacing.md),
-                        itemBuilder: (_, index) => ProductRowCard(
-                          product: state.items[index],
-                          // `products_when_closed` is false: no orders then.
-                          canOrder: vendor.isOpen,
+                        itemBuilder: (_, index) => BarqStaggerItem(
+                          group: 'vendor-products',
+                          index: index,
+                          child: ProductRowCard(
+                            product: state.items[index],
+                            // `products_when_closed` is false: no orders then.
+                            canOrder: vendor.isOpen,
+                          ),
                         ),
                       ),
                     ),

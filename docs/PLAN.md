@@ -139,6 +139,7 @@ Claude Code بيبني المشروع **مرحلة مرحلة** بالترتيب
 - [x] `google-services.json` لكل تطبيق من مشروع Firebase `barq-aaf29`.
 - [x] التوكن بيوصل لمختبر الإشعارات من تطبيق الزبون على جهاز حقيقي (بعد إضافة `firebase_messaging_installation_id_enabled` بالـ manifest).
 - [x] `409 offer_changed` من الـ API الجديد (config v7) بعرض العرض الجديد وبطلب موافقة جديدة.
+- [x] رجعنا لـ `getToken()` و`onTokenRefresh` بدل `register()`، لأنه الأخيرة بتعطي Installation ID مش توكن FCM، وشلنا `firebase_messaging_installation_id_enabled`.
 - [ ] تجربة من مختبر الإشعارات على جهاز حقيقي: مفتوح، بالخلفية، مسكّر، وتطبيق السائق.
 
 ---

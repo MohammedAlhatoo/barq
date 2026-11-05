@@ -37,7 +37,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       context.push(Routes.login);
       return;
     }
-    _pages.nextPage(duration: BarqDurations.normal, curve: Curves.easeOut);
+    _pages.nextPage(
+      duration: BarqDurations.onboardingPage,
+      curve: Curves.easeInOutCubic,
+    );
   }
 
   @override
@@ -77,16 +80,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       art: const ShopArt(),
                       title: l10n.onboardingShopTitle,
                       body: l10n.onboardingShopBody,
+                      index: 0,
+                      pages: _pages,
+                      playIntro: true,
                     ),
                     OnboardingPage(
                       art: const CompareArt(),
                       title: l10n.onboardingCompareTitle,
                       body: l10n.onboardingCompareBody,
+                      index: 1,
+                      pages: _pages,
                     ),
                     OnboardingPage(
                       art: const DeliveryArt(),
                       title: l10n.onboardingDeliveryTitle,
                       body: l10n.onboardingDeliveryBody,
+                      index: 2,
+                      pages: _pages,
                     ),
                   ],
                 ),

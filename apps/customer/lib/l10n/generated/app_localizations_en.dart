@@ -1242,4 +1242,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get activeOrderWaiting => 'We\'ll keep you posted';
+
+  @override
+  String get homeHowTitle => 'How Barq works';
+
+  @override
+  String get homeHowBody =>
+      'Order from nearby stores, and we bring it to your door';
+
+  @override
+  String get homeHowStep1 => 'Fill your cart and compare stores';
+
+  @override
+  String get homeHowStep2 => 'Confirm and follow your order';
+
+  @override
+  String get homeHowStep3 => 'Receive it and pay at the door';
 }

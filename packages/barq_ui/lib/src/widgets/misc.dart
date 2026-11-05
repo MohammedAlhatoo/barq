@@ -1120,3 +1120,151 @@ class BarqMetaRow extends StatelessWidget {
     );
   }
 }
+
+/// How the app works: numbered steps joined by a line.
+class BarqHowItWorks extends StatelessWidget {
+  const BarqHowItWorks({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.steps,
+  });
+
+  final String title;
+  final String subtitle;
+  final List<String> steps;
+
+  @override
+  Widget build(BuildContext context) {
+    final p = BarqPalette.of(context);
+    return BarqCard(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(title, style: BarqText.h3.copyWith(color: p.text)),
+          Text(subtitle, style: BarqText.xs.copyWith(color: p.textMuted)),
+          const SizedBox(height: BarqSpacing.gap),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var i = 0; i < steps.length; i++)
+                Expanded(
+                  child: _HowItWorksStep(
+                    number: i + 1,
+                    label: steps[i],
+                    lineBefore: i > 0,
+                    lineAfter: i < steps.length - 1,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HowItWorksStep extends StatelessWidget {
+  const _HowItWorksStep({
+    required this.number,
+    required this.label,
+    required this.lineBefore,
+    required this.lineAfter,
+  });
+
+  final int number;
+  final String label;
+  final bool lineBefore;
+  final bool lineAfter;
+
+  static const _numberSize = 30.0;
+  static const _lineHeight = 2.0;
+
+  Widget _line(bool visible) => Expanded(
+    child: Container(
+      height: _lineHeight,
+      color: visible ? BarqColors.primaryBorder : null,
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    final p = BarqPalette.of(context);
+    return Column(
+      children: [
+        Row(
+          children: [
+            _line(lineBefore),
+            Container(
+              width: _numberSize,
+              height: _numberSize,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: BarqColors.primaryTint,
+                shape: BoxShape.circle,
+                border: Border.all(color: BarqColors.primaryBorder),
+              ),
+              child: Text(
+                '$number',
+                style: BarqText.xs.copyWith(
+                  color: BarqColors.primaryText,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            _line(lineAfter),
+          ],
+        ),
+        const SizedBox(height: BarqSpacing.xs),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.xxs),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: BarqText.xs.copyWith(
+              color: p.text,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Two soft bars beside an illustration, to suggest speed.
+class BarqSpeedLines extends StatelessWidget {
+  const BarqSpeedLines({
+    super.key,
+    this.alignment = CrossAxisAlignment.start,
+  });
+
+  /// Which side the bars line up on.
+  final CrossAxisAlignment alignment;
+
+  static const _longWidth = 56.0;
+  static const _shortWidth = 42.0;
+  static const _height = 9.0;
+
+  Widget _bar(double width) => Container(
+    width: width,
+    height: _height,
+    decoration: BoxDecoration(
+      color: BarqColors.primaryBorder,
+      borderRadius: BorderRadius.circular(_height),
+    ),
+  );
+
+  @override
+  Widget build(BuildContext context) => Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: alignment,
+    children: [
+      _bar(_longWidth),
+      const SizedBox(height: BarqSpacing.sm),
+      _bar(_shortWidth),
+    ],
+  );
+}

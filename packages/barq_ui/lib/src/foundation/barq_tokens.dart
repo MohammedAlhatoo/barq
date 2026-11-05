@@ -193,6 +193,7 @@ abstract final class BarqRadius {
   static const card = 24.0;
   static const productTile = 28.0;
   static const productGlass = 22.0;
+  static const productImage = 14.0;
   static const input = 20.0;
   static const otp = 20.0;
   static const iconTile = 16.0;
@@ -258,6 +259,12 @@ abstract final class BarqSizes {
   static const onboardingImageTop = 40.0;
   static const onboardingScooterWidth = 360.0;
   static const onboardingScooterHeight = 300.0;
+  static const onboardingWorkerHeight = 400.0;
+  static const onboardingPhotoHeight = 440.0;
+  static const onboardingPhotoBlobTop = 61.0;
+  static const onboardingWorkerBlobTop = 78.0;
+  static const onboardingSpeedLinesStartTop = 210.0;
+  static const onboardingSpeedLinesEndTop = 300.0;
   static const compareImage = 46.0;
   static const phoneArt = 230.0;
   static const phoneBlob = 190.0;
@@ -434,6 +441,22 @@ abstract final class BarqShadows {
 abstract final class BarqDurations {
   static const fast = Duration(milliseconds: 150);
   static const normal = Duration(milliseconds: 250);
+
+  /// Moving to the next onboarding slide with the button.
+  static const onboardingPage = Duration(milliseconds: 450);
+
+  /// The wait between two list items, and how long each takes to appear.
+  static const staggerInterval = Duration(milliseconds: 80);
+  static const staggerItem = Duration(milliseconds: 320);
+
+  /// The first onboarding slide's entrance.
+  static const onboardingIntro = Duration(milliseconds: 800);
+
+  /// One way of the slow floating on the onboarding pictures.
+  static const onboardingFloat = Duration(milliseconds: 1800);
+
+  /// The savings badge growing into place.
+  static const onboardingPop = Duration(milliseconds: 600);
 
   /// One round of the dots in a chat's typing bubble.
   static const typing = Duration(milliseconds: 900);

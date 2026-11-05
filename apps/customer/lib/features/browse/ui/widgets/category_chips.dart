@@ -13,6 +13,8 @@ class CategoryChips extends StatelessWidget {
     required this.onSelected,
   });
 
+  static const _group = 'category-chips';
+
   final List<Category> categories;
   final int? selected;
   final ValueChanged<int?> onSelected;
@@ -20,16 +22,24 @@ class CategoryChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BarqChipsRow(
     children: [
-      BarqChip(
-        label: AppLocalizations.of(context).homeAll,
-        selected: selected == null,
-        onTap: () => onSelected(null),
+      BarqStaggerItem(
+        group: _group,
+        index: 0,
+        child: BarqChip(
+          label: AppLocalizations.of(context).homeAll,
+          selected: selected == null,
+          onTap: () => onSelected(null),
+        ),
       ),
-      for (final category in categories)
-        BarqChip(
-          label: category.name,
-          selected: selected == category.id,
-          onTap: () => onSelected(category.id),
+      for (final (index, category) in categories.indexed)
+        BarqStaggerItem(
+          group: _group,
+          index: index + 1,
+          child: BarqChip(
+            label: category.name,
+            selected: selected == category.id,
+            onTap: () => onSelected(category.id),
+          ),
         ),
     ],
   );

@@ -80,6 +80,9 @@ flutter:
   uses-material-design: true
   generate: true
 
+  assets:
+    - assets/onboarding/
+
   # design/ (the DesignOverlay images) is not listed, to keep it out of release
   # builds. To compare a screen with its design, add under flutter: while working
   #   assets:

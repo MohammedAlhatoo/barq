@@ -97,7 +97,12 @@ class HistoryScreen extends StatelessWidget {
                         horizontal: BarqSpacing.page,
                       ),
                       children: [
-                        for (final order in shown) _OrderRow(order: order),
+                        for (final (index, order) in shown.indexed)
+                          BarqStaggerItem(
+                            group: 'history',
+                            index: index,
+                            child: _OrderRow(order: order),
+                          ),
                         if (state.loadingMore) const BarqLoadingView(),
                       ],
                     ),

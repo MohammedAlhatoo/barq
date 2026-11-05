@@ -3,10 +3,16 @@ import 'package:flutter/material.dart';
 
 /// The product's picture, or an illustration of its category when it has none.
 class ProductArt extends StatelessWidget {
-  const ProductArt({super.key, this.imageUrl, this.categoryIcon});
+  const ProductArt({
+    super.key,
+    this.imageUrl,
+    this.categoryIcon,
+    this.radius = BarqRadius.productGlass,
+  });
 
   final String? imageUrl;
   final String? categoryIcon;
+  final double radius;
 
   /// Category icon names from `GET /categories`.
   static String _illustration(String? icon) => switch (icon) {
@@ -30,6 +36,7 @@ class ProductArt extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BarqNetworkImage(
     url: imageUrl,
+    radius: radius,
     fallback: BarqIllustration(_illustration(categoryIcon)),
   );
 }

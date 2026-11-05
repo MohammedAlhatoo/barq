@@ -168,20 +168,30 @@ class _Results extends StatelessWidget {
             gap: BarqSpacing.md,
             children: [
               Text(l10n.searchCount(state.total), style: BarqText.xs),
-              for (final vendor in vendors)
-                BarqProductRow(
-                  thumb: const BarqIconTile(
-                    BarqIcons.store,
-                    tone: BarqTileTone.neutral,
+              for (final (index, vendor) in vendors.indexed)
+                BarqStaggerItem(
+                  group: 'search-vendors-${state.query}',
+                  index: index,
+                  child: BarqProductRow(
+                    thumb: const BarqIconTile(
+                      BarqIcons.store,
+                      tone: BarqTileTone.neutral,
+                    ),
+                    title: vendor.name,
+                    subtitle: vendor.isOpen
+                        ? l10n.vendorOpen
+                        : l10n.vendorClosed,
+                    onTap: () => context.push(Routes.vendorOf(vendor.id)),
                   ),
-                  title: vendor.name,
-                  subtitle: vendor.isOpen ? l10n.vendorOpen : l10n.vendorClosed,
-                  onTap: () => context.push(Routes.vendorOf(vendor.id)),
                 ),
-              for (final product in state.items)
-                ProductRowCard(
-                  product: product,
-                  subtitle: _subtitle(l10n, product),
+              for (final (index, product) in state.items.indexed)
+                BarqStaggerItem(
+                  group: 'search-products-${state.query}',
+                  index: index,
+                  child: ProductRowCard(
+                    product: product,
+                    subtitle: _subtitle(l10n, product),
+                  ),
                 ),
               if (state.loadingMore) const BarqLoadingView(),
             ],

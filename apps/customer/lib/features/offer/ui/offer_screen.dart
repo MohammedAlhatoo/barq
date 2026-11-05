@@ -170,7 +170,12 @@ class OfferScreen extends StatelessWidget {
           ),
           children: [
             _PricedCard(storeName: order.vendorName),
-            for (final item in offer.items) OfferItemRow(item: item),
+            for (final (index, item) in offer.items.indexed)
+              BarqStaggerItem(
+                group: 'offer-items',
+                index: index,
+                child: OfferItemRow(item: item),
+              ),
             if (note != null && note.isNotEmpty)
               BarqNote(l10n.offerStoreNote(note), icon: BarqIcons.chat),
             BarqCard(

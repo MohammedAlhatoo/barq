@@ -310,14 +310,18 @@ class _OnlineView extends StatelessWidget {
                     horizontal: BarqSpacing.page,
                   ),
                   children: [
-                    for (final job in jobs.jobs)
-                      JobCard(
-                        job: job,
-                        accepting: jobs.acceptingId == job.id,
-                        onOpen: () => _open(context, job),
-                        onAccept: jobs.acceptingId == null
-                            ? () => cubit.accept(job)
-                            : null,
+                    for (final (index, job) in jobs.jobs.indexed)
+                      BarqStaggerItem(
+                        group: 'jobs',
+                        index: index,
+                        child: JobCard(
+                          job: job,
+                          accepting: jobs.acceptingId == job.id,
+                          onOpen: () => _open(context, job),
+                          onAccept: jobs.acceptingId == null
+                              ? () => cubit.accept(job)
+                              : null,
+                        ),
                       ),
                   ],
                 ),

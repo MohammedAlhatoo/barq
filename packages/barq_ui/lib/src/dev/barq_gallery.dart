@@ -14,6 +14,7 @@ import '../widgets/layout.dart';
 import '../widgets/misc.dart';
 import '../widgets/nav_bar.dart';
 import '../widgets/product.dart';
+import '../widgets/stagger.dart';
 import '../widgets/surfaces.dart';
 import '../widgets/vendor.dart';
 
@@ -506,6 +507,23 @@ class _BarqGalleryState extends State<BarqGallery> {
                           subtitle: 'اكتب قائمتك وبنلاقيلك أوفر متجر',
                           onTap: () {}),
                       label('BarqAssistantBanner'),
+                      const BarqHowItWorks(
+                          title: 'كيف يعمل برق؟',
+                          subtitle: 'اطلب من المتاجر القريبة، ونوصّل طلبك لبابك',
+                          steps: [
+                            'عبّي سلتك وقارن المتاجر',
+                            'أكّد طلبك وتابعه خطوة بخطوة',
+                            'استلمه وادفع عند الباب',
+                          ]),
+                      label('BarqHowItWorks'),
+                      const BarqSpeedLines(),
+                      label('BarqSpeedLines'),
+                      for (var index = 0; index < 3; index++)
+                        BarqStaggerItem(
+                            group: 'gallery',
+                            index: index,
+                            child: BarqChip(label: 'عنصر ${index + 1}')),
+                      label('BarqStaggerItem'),
                       const BarqChatBubble(text: 'أهلًا! أنا مساعد برق.'),
                       const SizedBox(height: 8),
                       const BarqChatBubble(

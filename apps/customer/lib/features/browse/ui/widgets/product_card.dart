@@ -36,6 +36,7 @@ class ProductCard extends StatelessWidget {
       image: ProductArt(
         imageUrl: product.imageUrl,
         categoryIcon: product.categoryIcon,
+        radius: BarqRadius.productImage,
       ),
       tile: ProductArt.tileOf(product.categoryIcon),
       height: BarqSizes.productTile,

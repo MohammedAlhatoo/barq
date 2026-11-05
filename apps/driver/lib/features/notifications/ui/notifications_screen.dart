@@ -92,14 +92,18 @@ class NotificationsScreen extends StatelessWidget {
                                   icon: BarqIcons.alert,
                                   tone: BarqNoteTone.danger,
                                 ),
-                              for (final item in state.items)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    bottom: BarqSpacing.md,
-                                  ),
-                                  child: _NotificationRow(
-                                    item: item,
-                                    onTap: () => _open(context, item),
+                              for (final (index, item) in state.items.indexed)
+                                BarqStaggerItem(
+                                  group: 'notifications',
+                                  index: index,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: BarqSpacing.md,
+                                    ),
+                                    child: _NotificationRow(
+                                      item: item,
+                                      onTap: () => _open(context, item),
+                                    ),
                                   ),
                                 ),
                               if (state.loadingMore) const BarqLoadingView(),

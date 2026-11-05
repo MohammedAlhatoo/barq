@@ -86,7 +86,11 @@ class _VendorsBody extends StatelessWidget {
         separatorBuilder: (_, _) => const SizedBox(height: BarqSpacing.md),
         itemBuilder: (_, index) {
           if (index < state.items.length) {
-            return _VendorRow(vendor: state.items[index]);
+            return BarqStaggerItem(
+              group: 'vendors',
+              index: index,
+              child: _VendorRow(vendor: state.items[index]),
+            );
           }
           return state.loadingMore
               ? const BarqLoadingView()

@@ -191,12 +191,16 @@ class _StoresView extends StatelessWidget {
                         ),
                       if (others.isNotEmpty)
                         Text(l10n.compareOthers, style: BarqText.h3),
-                      for (final store in others)
-                        _StoreRow(
-                          store: store,
-                          total: state.totals[store.vendorId],
-                          selected: selected == store,
-                          onTap: () => cubit.select(store.vendorId),
+                      for (final (index, store) in others.indexed)
+                        BarqStaggerItem(
+                          group: 'compare-stores',
+                          index: index,
+                          child: _StoreRow(
+                            store: store,
+                            total: state.totals[store.vendorId],
+                            selected: selected == store,
+                            onTap: () => cubit.select(store.vendorId),
+                          ),
                         ),
                     ],
                   ),

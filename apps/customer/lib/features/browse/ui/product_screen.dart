@@ -161,10 +161,14 @@ class _ProductView extends StatelessWidget {
             loading: state.similarLoading,
             error: state.similarError,
             items: [
-              for (final p in state.similarProducts)
-                SizedBox(
-                  width: BarqSizes.homeProductTile,
-                  child: ProductCard(product: p, showStore: false),
+              for (final (index, p) in state.similarProducts.indexed)
+                BarqStaggerItem(
+                  group: 'similar-products',
+                  index: index,
+                  child: SizedBox(
+                    width: BarqSizes.homeProductTile,
+                    child: ProductCard(product: p, showStore: false),
+                  ),
                 ),
             ],
           ),

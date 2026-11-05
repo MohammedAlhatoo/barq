@@ -67,12 +67,16 @@ class AddressPickerSheet extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: BarqGap(
                     children: [
-                      for (final address in state.addresses)
-                        _Row(
-                          address: address,
-                          selected: selectedId == null
-                              ? address.isDefault
-                              : address.id == selectedId,
+                      for (final (index, address) in state.addresses.indexed)
+                        BarqStaggerItem(
+                          group: 'address-picker',
+                          index: index,
+                          child: _Row(
+                            address: address,
+                            selected: selectedId == null
+                                ? address.isDefault
+                                : address.id == selectedId,
+                          ),
                         ),
                     ],
                   ),
