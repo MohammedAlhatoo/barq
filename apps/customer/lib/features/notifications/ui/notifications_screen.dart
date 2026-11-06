@@ -72,7 +72,7 @@ class NotificationsScreen extends StatelessWidget {
                   ),
                 Expanded(
                   child: state.loading
-                      ? const BarqLoadingView()
+                      ? const _NotificationsSkeleton()
                       : error != null
                       ? BarqMessageView(
                           title: error,
@@ -187,4 +187,31 @@ class _NotificationCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The notification cards while they load, under a day title.
+class _NotificationsSkeleton extends StatelessWidget {
+  const _NotificationsSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeletonPage(
+    padding: EdgeInsets.fromLTRB(
+      BarqSpacing.page,
+      BarqSpacing.md,
+      BarqSpacing.page,
+      0,
+    ),
+    gap: 0,
+    children: [
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: BarqSpacing.sm),
+        child: BarqTextBone(BarqText.xs, width: 60),
+      ),
+      BarqSkeletonList(
+        item: BarqTileRowSkeleton(lines: 2),
+        count: 6,
+        gap: BarqSpacing.sm,
+      ),
+    ],
+  );
 }

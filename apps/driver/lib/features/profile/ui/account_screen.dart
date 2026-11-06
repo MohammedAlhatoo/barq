@@ -64,7 +64,7 @@ class AccountScreen extends StatelessWidget {
               BarqHeader(large: true, title: l10n.navAccount),
               if (driver == null)
                 state.error == null
-                    ? const BarqLoadingView()
+                    ? const _AccountSkeleton()
                     : BarqMessageView(
                         title: state.error!,
                         icon: BarqIcons.alert,
@@ -176,4 +176,35 @@ class AccountScreen extends StatelessWidget {
       },
     );
   }
+}
+
+/// The profile while it loads: the card with the photo, name and status,
+/// then the settings rows.
+class _AccountSkeleton extends StatelessWidget {
+  const _AccountSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeleton(
+    child: Padding(
+      padding: EdgeInsets.fromLTRB(BarqSpacing.page, 14, BarqSpacing.page, 0),
+      child: BarqSkeletonColumn(
+        children: [
+          BarqCardBone(
+            padding: EdgeInsets.all(BarqSpacing.page),
+            child: BarqSkeletonColumn(
+              gap: 14,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BarqBone.circle(84),
+                BarqTextBone(BarqText.h2, width: 140, center: true),
+                BarqTextBone(BarqText.xs, width: 100, center: true),
+                BarqPillBone(width: 80),
+              ],
+            ),
+          ),
+          BarqListCardSkeleton(rows: 5),
+        ],
+      ),
+    ),
+  );
 }

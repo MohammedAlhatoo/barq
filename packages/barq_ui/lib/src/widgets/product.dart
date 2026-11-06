@@ -8,10 +8,11 @@ import '../foundation/barq_tokens.dart';
 import 'buttons.dart';
 import 'indicators.dart';
 import 'layout.dart';
+import 'skeleton.dart';
 import 'surfaces.dart';
 
 /// A picture from the server. [fallback] is only for an item with no [url]:
-/// loading shows a small spinner, and a broken link a neutral icon.
+/// loading shows a shimmering placeholder, and a broken link a neutral icon.
 class BarqNetworkImage extends StatelessWidget {
   const BarqNetworkImage(
       {super.key,
@@ -34,13 +35,7 @@ class BarqNetworkImage extends StatelessWidget {
         fit: BoxFit.cover,
         loadingBuilder: (_, child, progress) => progress == null
             ? child
-            : const Center(
-                child: SizedBox.square(
-                  dimension: BarqSizes.iconM,
-                  child: CircularProgressIndicator(
-                      strokeWidth: 2, color: BarqColors.primary),
-                ),
-              ),
+            : const BarqSkeleton(child: BarqBone(radius: 0)),
         errorBuilder: (context, error, stack) => const Center(
           child: BarqIcon('package',
               size: BarqSizes.iconL, color: BarqColors.placeholder),
@@ -435,8 +430,13 @@ class BarqHorizontalSection extends StatelessWidget {
         SizedBox(
           height: height,
           child: loading
-              ? const Center(
-                  child: CircularProgressIndicator(color: BarqColors.primary),
+              ? BarqSkeleton(
+                  child: BarqHorizontalSkeleton(
+                    height: height,
+                    itemWidth: BarqSizes.homeProductTile,
+                    item: BarqProductTileSkeleton(
+                        height: height, showStore: false),
+                  ),
                 )
               : error != null
                   ? Center(

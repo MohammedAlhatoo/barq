@@ -55,7 +55,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   header,
                   Expanded(
                     child: loadError == null
-                        ? const BarqLoadingView()
+                        ? const _EditProfileSkeleton()
                         : BarqMessageView(
                             title: loadError,
                             icon: BarqIcons.alert,
@@ -202,4 +202,27 @@ class _ProfileForm extends StatelessWidget {
       ],
     );
   }
+}
+
+/// The profile form while it loads: the photo, the two fields, the language
+/// switch and the addresses row.
+class _EditProfileSkeleton extends StatelessWidget {
+  const _EditProfileSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeletonPage(
+    gap: BarqSpacing.section,
+    children: [
+      SizedBox(
+        height: BarqSizes.profileAvatarArea,
+        child: Center(child: BarqBone.circle(BarqSizes.profileAvatarLarge)),
+      ),
+      BarqInputSkeleton(),
+      BarqInputSkeleton(),
+      BarqInputSkeleton(),
+      BarqTileRowSkeleton(
+        padding: EdgeInsets.symmetric(horizontal: 14, vertical: BarqSpacing.gap),
+      ),
+    ],
+  );
 }

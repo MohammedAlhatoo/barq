@@ -60,7 +60,19 @@ class _VendorsBody extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final cubit = context.read<VendorsCubit>();
     final error = state.error;
-    if (state.loading) return const BarqLoadingView();
+    if (state.loading) {
+      return const BarqSkeletonPage(
+        padding: EdgeInsets.fromLTRB(
+          BarqSpacing.page,
+          BarqSpacing.sm,
+          BarqSpacing.page,
+          0,
+        ),
+        children: [
+          BarqSkeletonList(item: BarqVendorRowSkeleton(), count: 7),
+        ],
+      );
+    }
     if (error != null) {
       return BarqMessageView(
         title: error,
@@ -93,7 +105,7 @@ class _VendorsBody extends StatelessWidget {
             );
           }
           return state.loadingMore
-              ? const BarqLoadingView()
+              ? const BarqSkeleton(child: BarqVendorRowSkeleton())
               : BarqMessageView(
                   title: l10n.commonRetry,
                   icon: BarqIcons.refresh,

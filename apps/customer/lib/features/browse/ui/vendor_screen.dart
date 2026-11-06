@@ -29,20 +29,21 @@ class VendorScreen extends StatelessWidget {
           final vendor = state.vendor;
           final error = state.error;
           if (vendor != null) return _VendorView(vendor: vendor);
+          if (error == null) {
+            return const BarqScreen(body: _VendorSkeleton());
+          }
           return BarqScreen(
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const BarqHeader(back: true),
                 Expanded(
-                  child: error == null
-                      ? const BarqLoadingView()
-                      : BarqMessageView(
-                          title: error,
-                          icon: BarqIcons.alert,
-                          actionLabel: l10n.commonRetry,
-                          onAction: context.read<VendorCubit>().load,
-                        ),
+                  child: BarqMessageView(
+                    title: error,
+                    icon: BarqIcons.alert,
+                    actionLabel: l10n.commonRetry,
+                    onAction: context.read<VendorCubit>().load,
+                  ),
                 ),
               ],
             ),
@@ -84,10 +85,7 @@ class _VendorView extends StatelessWidget {
                     ),
                   ),
                   if (state.loading)
-                    const SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: BarqLoadingView(),
-                    )
+                    const SliverToBoxAdapter(child: _ProductsSkeleton())
                   else if (error != null)
                     SliverFillRemaining(
                       hasScrollBody: false,
@@ -131,7 +129,9 @@ class _VendorView extends StatelessWidget {
                       padding: const EdgeInsets.only(
                         bottom: BarqSpacing.cartBarClearance,
                       ),
-                      child: state.loadingMore ? const BarqLoadingView() : null,
+                      child: state.loadingMore
+                          ? const _ProductsSkeleton(count: 1)
+                          : null,
                     ),
                   ),
                 ],
@@ -286,5 +286,90 @@ class _CartBar extends StatelessWidget {
         onPressed: () => context.push(Routes.cart),
       ),
     );
+  }
+}
+
+/// The store page before the store arrives: the hero, the card over it, the
+/// chips and the product rows. The header stays live so back works.
+class _VendorSkeleton extends StatelessWidget {
+  const _VendorSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const Stack(
+    children: [
+      BarqSkeleton(
+        child: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Stack(
+                children: [
+                  BarqBone(height: BarqSizes.storeHero, radius: 0),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(
+                      BarqSpacing.page,
+                      BarqSizes.storeHeroCardTop,
+                      BarqSpacing.page,
+                      0,
+                    ),
+                    child: BarqCardBone(
+                      child: BarqSkeletonColumn(
+                        gap: BarqSpacing.md,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: BarqTextBone(
+                                  BarqText.h2,
+                                  widthFactor: .5,
+                                ),
+                              ),
+                              BarqPillBone(),
+                            ],
+                          ),
+                          BarqMetaSkeleton(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: BarqSpacing.sm),
+                child: BarqChipsSkeleton(),
+              ),
+              _ProductsSkeleton(shimmer: false),
+            ],
+          ),
+        ),
+      ),
+      BarqHeader(back: true),
+    ],
+  );
+}
+
+/// Product rows of the store page while they load.
+class _ProductsSkeleton extends StatelessWidget {
+  const _ProductsSkeleton({this.count = 5, this.shimmer = true});
+
+  final int count;
+
+  /// False inside a part that already shimmers.
+  final bool shimmer;
+
+  @override
+  Widget build(BuildContext context) {
+    final list = BarqSkeletonList(
+      item: const BarqProductRowSkeleton(subtitle: false),
+      count: count,
+      padding: const EdgeInsets.fromLTRB(
+        BarqSpacing.page,
+        BarqSpacing.sm,
+        BarqSpacing.page,
+        0,
+      ),
+    );
+    return shimmer ? BarqSkeleton(child: list) : list;
   }
 }

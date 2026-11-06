@@ -31,7 +31,17 @@ class OfferScreen extends StatelessWidget {
                 const BarqHeader(back: true),
                 Expanded(
                   child: state.loading
-                      ? const BarqLoadingView()
+                      ? const BarqMapSheetSkeleton(
+                          children: [
+                            BarqTileRowSkeleton(
+                              card: false,
+                              padding: EdgeInsets.zero,
+                              trailing: BarqTextBone(BarqText.h2, width: 56),
+                            ),
+                            BarqSummaryCardSkeleton(rows: 2),
+                            BarqButtonSkeleton(),
+                          ],
+                        )
                       : BarqMessageView(
                           title: state.error ?? '',
                           icon: BarqIcons.alert,

@@ -67,7 +67,7 @@ class EarningsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: BarqSpacing.section),
                 if (state.loading)
-                  const BarqLoadingView()
+                  const _EarningsSkeleton()
                 else if (state.error != null)
                   BarqMessageView(
                     title: state.error!,
@@ -205,4 +205,69 @@ class EarningsScreen extends StatelessWidget {
       },
     );
   }
+}
+
+/// The earnings while they load: the total with its bar chart, and the cash
+/// card with its limit bar.
+class _EarningsSkeleton extends StatelessWidget {
+  const _EarningsSkeleton();
+
+  static const _bars = [.45, .7, .35, .9, .6, .8, .5];
+
+  @override
+  Widget build(BuildContext context) => BarqSkeleton(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: BarqSpacing.page),
+      child: BarqSkeletonColumn(
+        children: [
+          BarqCardBone(
+            padding: const EdgeInsets.all(18),
+            child: BarqSkeletonColumn(
+              gap: BarqSpacing.section,
+              children: [
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BarqTextBone(BarqText.xs, widthFactor: .3),
+                    BarqTextBone(BarqText.h0, widthFactor: .45),
+                  ],
+                ),
+                SizedBox(
+                  height: 120,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      for (var i = 0; i < _bars.length; i++) ...[
+                        if (i > 0) const SizedBox(width: BarqSpacing.sm),
+                        Expanded(
+                          child: FractionallySizedBox(
+                            heightFactor: _bars[i],
+                            alignment: Alignment.bottomCenter,
+                            child: const BarqBone(radius: 10),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const BarqCardBone(
+            child: BarqSkeletonColumn(
+              gap: BarqSpacing.md,
+              children: [
+                BarqTileRowSkeleton(
+                  card: false,
+                  padding: EdgeInsets.zero,
+                  trailing: BarqTextBone(BarqText.h2, width: 56),
+                ),
+                BarqBone(height: 8, radius: 9),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

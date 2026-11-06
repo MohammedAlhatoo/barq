@@ -69,7 +69,7 @@ class OrdersScreen extends StatelessWidget {
                 ),
               Expanded(
                 child: state.loading
-                    ? const BarqLoadingView()
+                    ? _OrdersSkeleton(current: state.tab == OrdersTab.current)
                     : error != null
                     ? BarqMessageView(
                         title: error,
@@ -223,4 +223,51 @@ class _PastCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The order cards while they load, in the style of the open tab.
+class _OrdersSkeleton extends StatelessWidget {
+  const _OrdersSkeleton({required this.current});
+
+  final bool current;
+
+  @override
+  Widget build(BuildContext context) => BarqSkeletonPage(
+    padding: const EdgeInsets.fromLTRB(
+      BarqSpacing.page,
+      BarqSpacing.section,
+      BarqSpacing.page,
+      0,
+    ),
+    children: [
+      BarqSkeletonList(
+        gap: BarqSpacing.gap,
+        count: current ? 3 : 6,
+        item: current
+            ? const _CurrentCardSkeleton()
+            : const BarqTileRowSkeleton(trailing: BarqPillBone(width: 64)),
+      ),
+    ],
+  );
+}
+
+/// Stands for [_CurrentCard]: store, code and total, status, the progress
+/// and the follow button.
+class _CurrentCardSkeleton extends StatelessWidget {
+  const _CurrentCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqCardBone(
+    child: BarqSkeletonColumn(
+      children: [
+        BarqTileRowSkeleton(
+          card: false,
+          padding: EdgeInsets.zero,
+          trailing: BarqPillBone(width: 70),
+        ),
+        BarqStepProgressSkeleton(),
+        BarqButtonSkeleton(),
+      ],
+    ),
+  );
 }

@@ -31,7 +31,17 @@ class ReceiptScreen extends StatelessWidget {
                   BarqHeader(title: l10n.receiptTitle, back: true),
                   Expanded(
                     child: state.loading
-                        ? const BarqLoadingView()
+                        ? const BarqSkeletonPage(
+                            padding: EdgeInsets.fromLTRB(
+                              BarqSpacing.page,
+                              BarqSpacing.section,
+                              BarqSpacing.page,
+                              0,
+                            ),
+                            children: [
+                              BarqSummaryCardSkeleton(header: true, rows: 5),
+                            ],
+                          )
                         : BarqMessageView(
                             title: error ?? l10n.commonRetry,
                             icon: BarqIcons.alert,

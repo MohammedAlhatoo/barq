@@ -31,6 +31,7 @@ export 'src/widgets/layout.dart';
 export 'src/widgets/misc.dart';
 export 'src/widgets/nav_bar.dart';
 export 'src/widgets/product.dart';
+export 'src/widgets/skeleton.dart';
 export 'src/widgets/stagger.dart';
 export 'src/widgets/surfaces.dart';
 export 'src/widgets/vendor.dart';

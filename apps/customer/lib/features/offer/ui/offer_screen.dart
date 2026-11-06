@@ -74,7 +74,24 @@ class OfferScreen extends StatelessWidget {
                 BarqHeader(title: l10n.offerTitle, back: true),
                 Expanded(
                   child: state.loading
-                      ? const BarqLoadingView()
+                      ? const BarqSkeletonPage(
+                          padding: EdgeInsets.fromLTRB(
+                            BarqSpacing.page,
+                            BarqSpacing.section,
+                            BarqSpacing.page,
+                            0,
+                          ),
+                          children: [
+                            BarqSkeletonList(
+                              item: BarqProductRowSkeleton(
+                                thumb: BarqSizes.cartThumb,
+                                trailing: false,
+                              ),
+                              count: 3,
+                            ),
+                            BarqSummaryCardSkeleton(rows: 3),
+                          ],
+                        )
                       : error != null
                       ? BarqMessageView(
                           title: error,

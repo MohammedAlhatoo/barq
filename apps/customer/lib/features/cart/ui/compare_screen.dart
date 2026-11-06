@@ -71,7 +71,7 @@ class _MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final Widget body = switch (state.status) {
-      CompareStatus.loading => const BarqLoadingView(),
+      CompareStatus.loading => const _CompareSkeleton(),
       CompareStatus.noAddress => BarqMessageView(
         title: l10n.noAddressTitle,
         message: l10n.noAddressBody,
@@ -411,4 +411,59 @@ class _StoreRow extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The store baskets while the comparison loads: the colored top with the
+/// store, its total, and the lines under it.
+class _CompareSkeleton extends StatelessWidget {
+  const _CompareSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeletonPage(
+    padding: EdgeInsets.fromLTRB(
+      BarqSpacing.page,
+      BarqSpacing.section,
+      BarqSpacing.page,
+      0,
+    ),
+    children: [
+      BarqTextBlockSkeleton(title: BarqText.h2, lines: 1),
+      BarqSkeletonList(item: _BasketSkeleton(), count: 3, gap: BarqSpacing.gap),
+    ],
+  );
+}
+
+class _BasketSkeleton extends StatelessWidget {
+  const _BasketSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqCardBone(
+    padding: EdgeInsets.zero,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        BarqTileRowSkeleton(
+          card: false,
+          tile: BarqSizes.compareBasket,
+          padding: EdgeInsets.all(BarqSpacing.section),
+          trailing: BarqPillBone(width: 64),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            BarqSpacing.section,
+            0,
+            BarqSpacing.section,
+            BarqSpacing.section,
+          ),
+          child: BarqSkeletonColumn(
+            gap: BarqSpacing.sm,
+            children: [
+              BarqMetaSkeleton(),
+              BarqButtonSkeleton(height: BarqSizes.buttonSmall),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
 }

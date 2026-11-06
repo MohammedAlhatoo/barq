@@ -66,10 +66,7 @@ class CategoryScreen extends StatelessWidget {
                     ),
                   ),
                   if (state.loading)
-                    const SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: BarqLoadingView(),
-                    )
+                    const BarqProductGridSkeleton()
                   else if (error != null)
                     SliverFillRemaining(
                       hasScrollBody: false,
@@ -93,7 +90,7 @@ class CategoryScreen extends StatelessWidget {
                         bottom: BarqSpacing.navClearance,
                       ),
                       child: state.loadingMore
-                          ? const BarqLoadingView()
+                          ? const BarqProductPairSkeleton()
                           : state.moreFailed
                           ? BarqMessageView(
                               title: l10n.commonRetry,

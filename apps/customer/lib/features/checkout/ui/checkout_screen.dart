@@ -95,7 +95,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           );
         }
         final Widget body = switch (state) {
-          CheckoutState(loading: true) => const BarqLoadingView(),
+          CheckoutState(loading: true) => const _CheckoutSkeleton(),
           CheckoutState(noAddress: true) => BarqMessageView(
             title: l10n.noAddressTitle,
             message: l10n.checkoutNoAddressBody,
@@ -402,6 +402,39 @@ class _PriceHeld extends StatelessWidget {
           fontWeight: FontWeight.w700,
         ),
       ),
+    ],
+  );
+}
+
+/// The checkout form while the quote loads: the address card with its map,
+/// the payment choice, the note field and the totals.
+class _CheckoutSkeleton extends StatelessWidget {
+  const _CheckoutSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeletonPage(
+    padding: EdgeInsets.fromLTRB(
+      BarqSpacing.page,
+      BarqSpacing.section,
+      BarqSpacing.page,
+      0,
+    ),
+    children: [
+      BarqTextBone(BarqText.h3, widthFactor: .3),
+      BarqCardBone(
+        padding: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            BarqBone(height: BarqSizes.checkoutMap, radius: 0),
+            BarqTileRowSkeleton(card: false, lines: 1),
+          ],
+        ),
+      ),
+      BarqTextBone(BarqText.h3, widthFactor: .3),
+      BarqTileRowSkeleton(lines: 0, tile: 24),
+      BarqBone(height: BarqSizes.inputCompact, radius: BarqRadius.input),
+      BarqSummaryCardSkeleton(rows: 3),
     ],
   );
 }

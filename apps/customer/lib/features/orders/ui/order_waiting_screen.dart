@@ -80,7 +80,7 @@ class OrderWaitingScreen extends StatelessWidget {
                   ),
                 Expanded(
                   child: state.loading
-                      ? const BarqLoadingView()
+                      ? const BarqStatePageSkeleton()
                       : order == null
                       ? BarqMessageView(
                           title: error ?? l10n.commonRetry,

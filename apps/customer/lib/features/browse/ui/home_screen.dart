@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
             final l10n = AppLocalizations.of(context);
             final error = state.error;
             final Widget? message = state.loading
-                ? const BarqLoadingView()
+                ? null
                 : error != null
                 ? BarqMessageView(
                     title: error,
@@ -62,7 +62,9 @@ class HomeScreen extends StatelessWidget {
               slivers: [
                 SliverToBoxAdapter(child: _HomeHeader(name: state.name)),
                 const SliverToBoxAdapter(child: ShopScopeBar()),
-                if (message != null)
+                if (state.loading)
+                  const SliverToBoxAdapter(child: _HomeSkeleton())
+                else if (message != null)
                   SliverFillRemaining(
                     hasScrollBody: false,
                     // Keeps a retry button out from under the order bar.
@@ -90,7 +92,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SliverToBoxAdapter(child: _HowItWorks()),
                   if (ConfigScope.of(context).config
                       .hasModule('basket_compare'))
                     const SliverToBoxAdapter(child: _AssistantBanner()),
@@ -118,6 +119,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ],
+                  const SliverToBoxAdapter(child: _HowItWorks()),
                   SliverPadding(
                     padding: EdgeInsets.only(
                       bottom: hasActiveOrder
@@ -323,4 +325,44 @@ class _Vendors extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The home content while it loads: chips, the best sellers row and the
+/// stores row, at the same places and sizes.
+class _HomeSkeleton extends StatelessWidget {
+  const _HomeSkeleton();
+
+  static const _title = Padding(
+    padding: EdgeInsets.only(
+      top: BarqSpacing.section,
+      bottom: BarqSpacing.gap,
+    ),
+    child: BarqSectionHeaderSkeleton(),
+  );
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeleton(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: BarqSpacing.sm),
+          child: BarqChipsSkeleton(),
+        ),
+        _title,
+        BarqHorizontalSkeleton(
+          height: BarqSizes.productTile,
+          itemWidth: BarqSizes.homeProductTile,
+          item: BarqProductTileSkeleton(showStore: false),
+        ),
+        _title,
+        BarqHorizontalSkeleton(
+          height: BarqSizes.homeVendorCardHeight,
+          itemWidth: BarqSizes.homeVendorCard,
+          count: 2,
+          item: BarqVendorCardSkeleton(),
+        ),
+      ],
+    ),
+  );
 }

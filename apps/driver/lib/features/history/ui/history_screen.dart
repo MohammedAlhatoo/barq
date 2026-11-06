@@ -76,7 +76,15 @@ class HistoryScreen extends StatelessWidget {
                     ),
                   const SizedBox(height: BarqSpacing.sm),
                   if (state.loading)
-                    const BarqLoadingView()
+                    const BarqSkeleton(
+                      child: BarqSkeletonList(
+                        item: _rowSkeleton,
+                        count: 6,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: BarqSpacing.page,
+                        ),
+                      ),
+                    )
                   else if (state.error != null)
                     BarqMessageView(
                       title: state.error!,
@@ -103,7 +111,8 @@ class HistoryScreen extends StatelessWidget {
                             index: index,
                             child: _OrderRow(order: order),
                           ),
-                        if (state.loadingMore) const BarqLoadingView(),
+                        if (state.loadingMore)
+                          const BarqSkeleton(child: _rowSkeleton),
                       ],
                     ),
                 ],
@@ -173,3 +182,8 @@ class _OrderRow extends StatelessWidget {
     );
   }
 }
+
+/// Stands for [_OrderRow].
+const _rowSkeleton = BarqTileRowSkeleton(
+  padding: EdgeInsets.symmetric(horizontal: 14, vertical: BarqSpacing.gap),
+);

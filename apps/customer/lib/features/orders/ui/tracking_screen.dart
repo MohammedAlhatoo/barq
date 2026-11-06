@@ -91,7 +91,18 @@ class TrackingScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: state.loading
-                        ? const BarqLoadingView()
+                        ? const BarqMapSheetSkeleton(
+                            children: [
+                              BarqTextBone(BarqText.h2, widthFactor: .5),
+                              BarqStepProgressSkeleton(),
+                              BarqTileRowSkeleton(
+                                card: false,
+                                padding: EdgeInsets.zero,
+                                trailing: BarqBone.circle(BarqSizes.iconButton),
+                              ),
+                              BarqButtonSkeleton(),
+                            ],
+                          )
                         : BarqMessageView(
                             title: error ?? l10n.commonRetry,
                             icon: BarqIcons.alert,

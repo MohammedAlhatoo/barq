@@ -133,7 +133,21 @@ class _Results extends StatelessWidget {
     final cubit = context.read<SearchCubit>();
     final error = state.error;
     if (state.query.isEmpty) return const SizedBox.shrink();
-    if (state.loading) return const BarqLoadingView();
+    if (state.loading) {
+      return const BarqSkeletonPage(
+        padding: EdgeInsets.fromLTRB(
+          BarqSpacing.page,
+          BarqSpacing.section,
+          BarqSpacing.page,
+          0,
+        ),
+        gap: BarqSpacing.md,
+        children: [
+          BarqTextBone(BarqText.xs, width: 80),
+          BarqSkeletonList(item: BarqProductRowSkeleton(), count: 6),
+        ],
+      );
+    }
     if (error != null && state.items.isEmpty) {
       return BarqMessageView(
         title: error,
@@ -193,7 +207,8 @@ class _Results extends StatelessWidget {
                     subtitle: _subtitle(l10n, product),
                   ),
                 ),
-              if (state.loadingMore) const BarqLoadingView(),
+              if (state.loadingMore)
+                const BarqSkeleton(child: BarqProductRowSkeleton()),
             ],
           ),
         ],

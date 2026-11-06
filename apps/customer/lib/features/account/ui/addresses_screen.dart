@@ -26,7 +26,24 @@ class AddressesScreen extends StatelessWidget {
               child: BlocBuilder<AddressesCubit, AddressesState>(
                 builder: (context, state) {
                   final error = state.error;
-                  if (state.loading) return const BarqLoadingView();
+                  if (state.loading) {
+                    return const BarqSkeletonPage(
+                      padding: EdgeInsets.fromLTRB(
+                        BarqSpacing.page,
+                        18,
+                        BarqSpacing.page,
+                        0,
+                      ),
+                      children: [
+                        BarqSkeletonList(
+                          item: BarqAddressCardSkeleton(),
+                          count: 3,
+                          gap: BarqSpacing.gap,
+                        ),
+                        BarqButtonSkeleton(),
+                      ],
+                    );
+                  }
                   if (error != null) {
                     return BarqMessageView(
                       title: error,

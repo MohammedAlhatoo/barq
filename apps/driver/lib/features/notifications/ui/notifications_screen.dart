@@ -54,7 +54,17 @@ class NotificationsScreen extends StatelessWidget {
               ),
               Expanded(
                 child: state.loading
-                    ? const BarqLoadingView()
+                    ? const BarqSkeletonPage(
+                        padding: EdgeInsets.fromLTRB(
+                          BarqSpacing.page,
+                          18,
+                          BarqSpacing.page,
+                          0,
+                        ),
+                        children: [
+                          BarqSkeletonList(item: _rowSkeleton, count: 7),
+                        ],
+                      )
                     : state.error != null
                     ? BarqMessageView(
                         title: state.error!,
@@ -106,7 +116,8 @@ class NotificationsScreen extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                              if (state.loadingMore) const BarqLoadingView(),
+                              if (state.loadingMore)
+                                const BarqSkeleton(child: _rowSkeleton),
                             ],
                           ),
                         ),
@@ -173,3 +184,8 @@ class _NotificationRow extends StatelessWidget {
     );
   }
 }
+
+/// Stands for [_NotificationRow].
+const _rowSkeleton = BarqTileRowSkeleton(
+  padding: EdgeInsets.symmetric(horizontal: 14, vertical: BarqSpacing.gap),
+);

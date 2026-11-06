@@ -59,7 +59,7 @@ class _RateScreenState extends State<RateScreen> {
                   ),
                   Expanded(
                     child: state.loading
-                        ? const BarqLoadingView()
+                        ? const BarqStatePageSkeleton()
                         : BarqMessageView(
                             title: error ?? l10n.commonRetry,
                             icon: BarqIcons.alert,

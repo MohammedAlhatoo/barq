@@ -30,7 +30,7 @@ class CashLimitScreen extends StatelessWidget {
                 const BarqHeader(back: true),
                 Expanded(
                   child: state.loading
-                      ? const BarqLoadingView()
+                      ? const BarqStatePageSkeleton(art: 110)
                       : BarqMessageView(
                           title: state.error ?? '',
                           icon: BarqIcons.alert,

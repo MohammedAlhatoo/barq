@@ -34,7 +34,7 @@ class ProductScreen extends StatelessWidget {
                 BarqHeader(title: l10n.productTitle, back: true),
                 Expanded(
                   child: error == null
-                      ? const BarqLoadingView()
+                      ? const _ProductSkeleton()
                       : BarqMessageView(
                           title: error,
                           icon: BarqIcons.alert,
@@ -275,4 +275,31 @@ class _OptionPicker extends StatelessWidget {
       ],
     );
   }
+}
+
+/// The product page while it loads: the picture, name, price with the
+/// quantity stepper, and the description.
+class _ProductSkeleton extends StatelessWidget {
+  const _ProductSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqSkeletonPage(
+    padding: EdgeInsets.fromLTRB(
+      BarqSpacing.page,
+      BarqSpacing.section,
+      BarqSpacing.page,
+      0,
+    ),
+    children: [
+      BarqBone(height: BarqSizes.productHero, radius: BarqRadius.productTile),
+      BarqTextBone(BarqText.h1, widthFactor: .7),
+      Row(
+        children: [
+          Expanded(child: BarqTextBone(BarqText.h1, widthFactor: .3)),
+          BarqBone(width: 128, height: 48, radius: BarqRadius.pill),
+        ],
+      ),
+      BarqTextBlockSkeleton(title: BarqText.h3, lines: 3),
+    ],
+  );
 }

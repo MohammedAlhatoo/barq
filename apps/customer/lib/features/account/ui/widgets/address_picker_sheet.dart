@@ -51,7 +51,13 @@ class AddressPickerSheet extends StatelessWidget {
           children: [
             Text(l10n.addressPickerTitle, style: BarqText.h2),
             if (state.loading)
-              const BarqLoadingView()
+              const BarqSkeleton(
+                child: BarqSkeletonList(
+                  item: BarqAddressCardSkeleton(radio: true),
+                  count: 2,
+                  gap: BarqSpacing.gap,
+                ),
+              )
             else if (error != null)
               BarqMessageView(
                 title: error,

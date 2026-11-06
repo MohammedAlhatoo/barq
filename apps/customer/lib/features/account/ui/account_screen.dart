@@ -25,7 +25,18 @@ class AccountScreen extends StatelessWidget {
             final profile = state.profile;
             final error = state.error;
             final Widget? message = state.loading
-                ? const BarqLoadingView()
+                ? const BarqSkeletonPage(
+                    padding: EdgeInsets.fromLTRB(
+                      BarqSpacing.page,
+                      BarqSpacing.gap,
+                      BarqSpacing.page,
+                      0,
+                    ),
+                    children: [
+                      BarqProfileCardSkeleton(stats: 2),
+                      BarqListCardSkeleton(rows: 5),
+                    ],
+                  )
                 : profile == null
                 ? BarqMessageView(
                     title: error ?? '',

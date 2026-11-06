@@ -72,7 +72,7 @@ class _DriverStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     final error = state.error;
-    if (error == null) return const BarqLoadingView();
+    if (error == null) return const _DriverSkeleton();
     return BarqMessageView(
       title: error,
       icon: BarqIcons.alert,
@@ -289,7 +289,13 @@ class _OnlineView extends StatelessWidget {
                 ),
               ),
               if (jobs.loading)
-                const BarqLoadingView()
+                const BarqSkeleton(
+                  child: BarqSkeletonList(
+                    item: _JobCardSkeleton(),
+                    count: 3,
+                    padding: EdgeInsets.symmetric(horizontal: BarqSpacing.page),
+                  ),
+                )
               else if (jobs.error != null)
                 BarqMessageView(
                   title: jobs.error!,
@@ -439,4 +445,82 @@ class _OfflineStat extends StatelessWidget {
       ),
     );
   }
+}
+
+/// The jobs tab before the profile arrives: the header, the earnings banner
+/// and the job cards.
+class _DriverSkeleton extends StatelessWidget {
+  const _DriverSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const SafeArea(
+    bottom: false,
+    child: BarqSkeletonPage(
+      padding: EdgeInsets.fromLTRB(
+        BarqSpacing.page,
+        BarqSpacing.section,
+        BarqSpacing.page,
+        0,
+      ),
+      children: [
+        Row(
+          children: [
+            BarqBone.circle(BarqSizes.iconButton),
+            SizedBox(width: BarqSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BarqTextBone(BarqText.xs, widthFactor: .3),
+                  BarqTextBone(BarqText.h3, widthFactor: .5),
+                ],
+              ),
+            ),
+            BarqBone(width: 96, height: BarqSizes.iconButton, radius: 24),
+          ],
+        ),
+        BarqBone(height: 150, radius: 28),
+        BarqTextBone(BarqText.h2, widthFactor: .45),
+        BarqSkeletonList(item: _JobCardSkeleton(), count: 3),
+      ],
+    ),
+  );
+}
+
+/// Stands for [JobCard]: store, address and fare, then the distance pill and
+/// the accept button.
+class _JobCardSkeleton extends StatelessWidget {
+  const _JobCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) => const BarqCardBone(
+    padding: EdgeInsets.all(14),
+    child: BarqSkeletonColumn(
+      gap: BarqSpacing.md,
+      children: [
+        BarqTileRowSkeleton(
+          card: false,
+          padding: EdgeInsets.zero,
+          trailing: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              BarqTextBone(BarqText.h2, width: 56),
+              BarqTextBone(BarqText.xs, width: 36),
+            ],
+          ),
+        ),
+        Row(
+          children: [
+            BarqPillBone(width: 90),
+            Spacer(),
+            BarqBone(
+              width: 120,
+              height: BarqSizes.buttonSmall,
+              radius: BarqRadius.pill,
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
